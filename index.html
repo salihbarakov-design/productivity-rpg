@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LevelUp">
+  <title>Productivity RPG</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #6366f1;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --success: #10b981;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Roboto, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .level-badge {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .xp-bar {
+      height: 10px;
+      background: #334155;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #6366f1);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #0f172a;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .task.done {
+      opacity: 0.55;
+      text-decoration: line-through;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .day-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background: #334155;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    .day-cell.completed { background: var(--success); color: #fff; font-weight: bold; }
+    .day-cell.today { border: 2px solid var(--accent); }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h2 style="margin: 0; font-size: 1.3rem;">Прокачка Героя</h2>
+      <small style="color: var(--muted);" id="dateStr"></small>
+    </div>
+    <div class="level-badge" id="lvlBadge">LVL 1</div>
+  </header>
+
+  <!-- Прогресс игрока -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+      <span id="xpText">XP: 0 / 100</span>
+      <span id="streakText">🔥 Серия: 0 дн.</span>
+    </div>
+    <div class="xp-bar">
+      <div class="xp-fill" id="xpFill"></div>
+    </div>
+  </div>
+
+  <!-- Привычки на сегодня -->
+  <div class="card">
+    <h3 style="margin-top: 0; font-size: 1.05rem;">Задания на сегодня</h3>
+    <div id="taskList"></div>
+  </div>
+
+  <!-- Календарь активности -->
+  <div class="card">
+    <h3 style="margin-top: 0; font-size: 1.05rem;">Календарь (последние 14 дней)</h3>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <script>
+    // Шаблон привычек (название и опыт)
+    const HABIT_TEMPLATES = [
+      { id: 'english', title: '🇬🇧 Английский язык (30 мин)', xp: 30 },
+      { id: 'coding', title: '💻 Кодинг / Проект (1 час)', xp: 40 },
+      { id: 'sport', title: '🏃 Спорт / Зарядка / Прогулка', xp: 25 },
+      { id: 'reading', title: '📚 Чтение (15 страниц)', xp: 20 },
+      { id: 'water', title: '💧 Водный баланс (2л)', xp: 15 }
+    ];
+
+    const todayKey = new Date().toISOString().split('T')[0];
+
+    let state = JSON.parse(localStorage.getItem('rpg_habits_state')) || {
+      xp: 0,
+      history: {} // 'YYYY-MM-DD': ['id1', 'id2']
+    };
+
+    function save() {
+      localStorage.setItem('rpg_habits_state', JSON.stringify(state));
+      render();
+    }
+
+    function toggleHabit(id, habitXp) {
+      if (!state.history[todayKey]) state.history[todayKey] = [];
+      const index = state.history[todayKey].indexOf(id);
+
+      if (index === -1) {
+        state.history[todayKey].push(id);
+        state.xp += habitXp;
+      } else {
+        state.history[todayKey].splice(index, 1);
+        state.xp = Math.max(0, state.xp - habitXp);
+      }
+      save();
+    }
+
+    function render() {
+      // Уровень и XP (100 XP на каждый уровень)
+      const level = Math.floor(state.xp / 100) + 1;
+      const currentLevelXp = state.xp % 100;
+      document.getElementById('lvlBadge').innerText = `LVL ${level}`;
+      document.getElementById('xpText').innerText = `XP: ${currentLevelXp} / 100`;
+      document.getElementById('xpFill').style.width = `${currentLevelXp}%`;
+
+      // Дата
+      const d = new Date();
+      document.getElementById('dateStr').innerText = d.toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'short' });
+
+      // Задачи
+      const todayDone = state.history[todayKey] || [];
+      const listEl = document.getElementById('taskList');
+      listEl.innerHTML = '';
+      HABIT_TEMPLATES.forEach(h => {
+        const isDone = todayDone.includes(h.id);
+        const item = document.createElement('div');
+        item.className = `task ${isDone ? 'done' : ''}`;
+        item.innerHTML = `<span>${h.title}</span><span style="color: #a855f7; font-weight: bold;">+${h.xp} XP</span>`;
+        item.onclick = () => toggleHabit(h.id, h.xp);
+        listEl.appendChild(item);
+      });
+
+      // Календарь на 14 дней
+      const calEl = document.getElementById('calendarGrid');
+      calEl.innerHTML = '';
+      for (let i = 13; i >= 0; i--) {
+        const day = new Date();
+        day.setDate(d.getDate() - i);
+        const key = day.toISOString().split('T')[0];
+        const doneCount = (state.history[key] || []).length;
+        const cell = document.createElement('div');
+        cell.className = `day-cell ${doneCount >= 3 ? 'completed' : ''} ${key === todayKey ? 'today' : ''}`;
+        cell.innerHTML = `<span>${day.getDate()}</span><span style="font-size: 0.6rem;">${doneCount}/${HABIT_TEMPLATES.length}</span>`;
+        calEl.appendChild(cell);
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
