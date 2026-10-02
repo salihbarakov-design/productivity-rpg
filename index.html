@@ -5,21 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="LevelUp RPG">
-  <meta name="theme-color" content="#0d1117">
-  <title>Productivity RPG</title>
+  <meta name="apple-mobile-web-app-title" content="LevelUp World">
+  <meta name="theme-color" content="#070a12">
+  <title>Productivity RPG: World Edition</title>
   <style>
     :root {
-      --bg: #090d16;
-      --panel: #131b2a;
-      --card: #1c2638;
-      --card-border: #2a374f;
+      --bg: #070a12;
+      --panel: #0f172a;
+      --card: #182234;
+      --card-border: #223249;
       --accent: #6366f1;
       --accent-gold: #f59e0b;
       --accent-red: #ef4444;
       --accent-green: #10b981;
       --accent-purple: #8b5cf6;
-      --text: #f1f5f9;
+      --accent-cyan: #06b6d4;
+      --text: #f8fafc;
       --text-muted: #94a3b8;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -38,41 +39,41 @@
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
-      padding-top: calc(var(--safe-top) + 12px);
-      padding-bottom: calc(var(--safe-bottom) + 75px);
-      padding-left: 14px;
-      padding-right: 14px;
+      padding-top: calc(var(--safe-top) + 10px);
+      padding-bottom: calc(var(--safe-bottom) + 76px);
+      padding-left: 12px;
+      padding-right: 12px;
       overflow-x: hidden;
     }
 
-    /* Typography & Utilities */
     h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
     .muted { color: var(--text-muted); }
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
     .badge-gold { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
     .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
 
-    /* HUD Header */
+    /* Top HUD */
     .hud-header {
       background: var(--panel);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      gap: 10px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
     .hud-top {
       display: flex;
@@ -82,21 +83,20 @@
     .hero-meta {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .hero-avatar {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--accent), var(--accent-purple));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      border: 2px solid rgba(255,255,255,0.2);
+      font-size: 1.25rem;
+      border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer;
     }
-    .hero-info h2 { font-size: 1.05rem; }
     .hero-resources {
       display: flex;
       align-items: center;
@@ -104,29 +104,19 @@
       font-size: 0.85rem;
       font-weight: 700;
     }
-    .hud-progress-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .hud-bar-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-    }
     .progress-bar-bg {
-      height: 9px;
-      background: #0f1623;
+      height: 8px;
+      background: #090e17;
       border-radius: 99px;
       overflow: hidden;
-      border: 1px solid #1a2536;
+      border: 1px solid #1a2538;
       position: relative;
     }
     .progress-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), #a855f7);
       border-radius: 99px;
-      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Cards */
@@ -134,44 +124,37 @@
       background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
     .card-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    /* Navigation */
-    .views-container > .view-pane {
-      display: none;
-    }
-    .views-container > .view-pane.active {
-      display: block;
-      animation: fadeIn 0.2s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Views */
+    .views-container > .view-pane { display: none; }
+    .views-container > .view-pane.active { display: block; animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(15, 23, 38, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(11, 16, 26, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border-top: 1px solid var(--card-border);
       display: flex;
       justify-content: space-around;
-      padding-top: 8px;
-      padding-bottom: calc(var(--safe-bottom) + 8px);
+      padding-top: 7px;
+      padding-bottom: calc(var(--safe-bottom) + 7px);
       z-index: 1000;
     }
     .nav-btn {
@@ -181,49 +164,77 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      font-size: 0.65rem;
+      gap: 3px;
+      font-size: 0.62rem;
       font-weight: 600;
       cursor: pointer;
-      width: 20%;
+      width: 16.6%;
     }
-    .nav-btn svg {
-      width: 20px;
-      height: 20px;
-      stroke-width: 2;
-      stroke: currentColor;
-      fill: none;
-    }
-    .nav-btn.active {
-      color: var(--accent);
-    }
-    .nav-btn.active svg {
-      stroke: var(--accent);
-    }
+    .nav-btn svg { width: 19px; height: 19px; stroke-width: 2; stroke: currentColor; fill: none; }
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn.active svg { stroke: var(--accent); }
 
-    /* Attributes Grid */
-    .attributes-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .attribute-box {
-      background: var(--panel);
+    /* Interactive World Map */
+    .map-viewport-wrapper {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      background: #060911;
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      touch-action: none;
+    }
+    #worldMapCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    .map-hud-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .map-biome-tag {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 10px;
+      pointer-events: auto;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .map-controls-dock {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      pointer-events: auto;
     }
-    .attr-header {
+    .map-dock-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      color: #fff;
       display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      font-weight: 700;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
     }
 
-    /* Lists: Quests & Habits */
+    /* Segments, Lists, Buttons */
     .segment-bar {
       display: flex;
       background: var(--panel);
@@ -235,9 +246,9 @@
     }
     .segment-item {
       flex: 1;
-      padding: 7px;
+      padding: 6px 4px;
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       color: var(--text-muted);
       border-radius: 8px;
@@ -246,34 +257,23 @@
     .segment-item.active {
       background: var(--card);
       color: var(--text);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
     .item-card {
       background: var(--panel);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      transition: all 0.2s ease;
+      gap: 10px;
     }
-    .item-card.completed {
-      opacity: 0.55;
-      border-color: rgba(16, 185, 129, 0.3);
-    }
-    .item-card.completed .item-title {
-      text-decoration: line-through;
-    }
-    .item-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-    }
+    .item-card.completed { opacity: 0.55; }
+    .item-card.completed .item-title { text-decoration: line-through; }
+    .item-left { display: flex; align-items: center; gap: 10px; flex: 1; }
     .check-circle {
       width: 24px;
       height: 24px;
@@ -286,35 +286,16 @@
       cursor: pointer;
       flex-shrink: 0;
     }
-    .item-card.completed .check-circle {
-      background: var(--accent-green);
-      border-color: var(--accent-green);
-    }
-    .item-info {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .item-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-    }
-    .item-meta {
-      font-size: 0.72rem;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .item-card.completed .check-circle { background: var(--accent-green); border-color: var(--accent-green); }
 
-    /* Buttons & Inputs */
     .btn {
       background: var(--accent);
       color: #fff;
       border: none;
-      padding: 10px 16px;
+      padding: 9px 14px;
       border-radius: 10px;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -324,90 +305,61 @@
     .btn:active { transform: scale(0.98); }
     .btn-secondary { background: var(--panel); border: 1px solid var(--card-border); color: var(--text); }
     .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); }
-    .btn-sm { padding: 5px 10px; font-size: 0.72rem; border-radius: 6px; }
+    .btn-sm { padding: 5px 9px; font-size: 0.7rem; border-radius: 6px; }
     .btn-block { width: 100%; }
 
-    /* Modals */
+    /* Modals & Inputs */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(6px);
       z-index: 2000;
       display: none;
       align-items: flex-end;
     }
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
     .modal-sheet {
       background: var(--panel);
       width: 100%;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
       border-top: 1px solid var(--card-border);
-      padding: 20px 16px calc(var(--safe-bottom) + 20px) 16px;
-      max-height: 85vh;
+      padding: 18px 16px calc(var(--safe-bottom) + 20px) 16px;
+      max-height: 86vh;
       overflow-y: auto;
-      animation: slideUp 0.25s ease-out;
+      animation: slideUp 0.22s ease-out;
     }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    .form-group {
-      margin-bottom: 14px;
-    }
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
     .input-control, select.input-control, textarea.input-control {
       width: 100%;
       background: var(--card);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 9px 12px;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       outline: none;
       font-family: inherit;
     }
-    .input-control:focus {
-      border-color: var(--accent);
-    }
 
-    /* Charts */
-    .chart-box {
-      width: 100%;
-      height: 200px;
-      position: relative;
-      margin-top: 8px;
-    }
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
+    .chart-box { width: 100%; height: 190px; position: relative; margin-top: 6px; }
+    canvas { width: 100% !important; height: 100% !important; }
 
-    /* Contribution Grid */
-    .calendar-matrix {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-    }
+    /* Matrix */
+    .calendar-matrix { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
     .cal-cell {
       aspect-ratio: 1;
       border-radius: 6px;
-      background: #141b27;
-      border: 1px solid #1a2538;
+      background: #101622;
+      border: 1px solid #182234;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       cursor: pointer;
     }
     .cal-cell.today { border: 2px solid var(--accent); font-weight: 700; }
@@ -416,96 +368,80 @@
     .cal-cell.lvl-3 { background: #3b82f6; }
     .cal-cell.lvl-4 { background: #60a5fa; color: #000; }
 
-    /* Timer Widget */
-    .timer-display {
-      font-size: 3rem;
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      text-align: center;
-      margin: 16px 0;
-      font-variant-numeric: tabular-nums;
+    /* Build selector cards */
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
     }
-    .timer-controls {
+    .build-card {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
       display: flex;
-      justify-content: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .build-card.active {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.1);
     }
 
-    /* Boss Bar */
-    .boss-card {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--card));
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-    .boss-hp-bar {
-      height: 12px;
-      background: #1e1115;
-      border-radius: 99px;
-      overflow: hidden;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      margin: 10px 0;
-    }
-    .boss-hp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #f87171, #ef4444);
-      width: 100%;
-      transition: width 0.3s;
-    }
-
-    /* Toast Notification */
     #toast-container {
       position: fixed;
-      top: calc(var(--safe-top) + 16px);
-      left: 14px;
-      right: 14px;
+      top: calc(var(--safe-top) + 14px);
+      left: 12px;
+      right: 12px;
       z-index: 3000;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       pointer-events: none;
     }
     .toast {
-      background: rgba(19, 27, 42, 0.95);
+      background: rgba(15, 23, 42, 0.96);
       border: 1px solid var(--accent);
       backdrop-filter: blur(8px);
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.82rem;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
       font-weight: 600;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-      animation: toastIn 0.25s ease-out forwards;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+      animation: toastIn 0.2s ease-out forwards;
     }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <!-- Toast Feed -->
   <div id="toast-container"></div>
 
-  <!-- HUD Status Bar -->
+  <!-- HUD STATUS BAR -->
   <div class="hud-header">
     <div class="hud-top">
       <div class="hero-meta">
-        <div class="hero-avatar" id="heroAvatar">⚔️</div>
-        <div class="hero-info">
-          <h2 id="heroName">Герой</h2>
-          <span class="badge badge-purple" id="heroLevelBadge">LVL 1</span>
+        <div class="hero-avatar" id="heroAvatar" onclick="switchTab('hero')">⚔️</div>
+        <div>
+          <h2 style="font-size: 1rem;" id="heroName">Герой</h2>
+          <div style="display:flex; gap: 4px; align-items:center;">
+            <span class="badge badge-purple" id="heroLevelBadge">LVL 1</span>
+            <span class="badge badge-cyan" id="heroBuildBadge">Berserker</span>
+          </div>
         </div>
       </div>
       <div class="hero-resources">
-        <div style="display:flex; align-items:center; gap:4px; color: var(--accent-gold);">
+        <div style="display:flex; align-items:center; gap:3px; color: var(--accent-gold);">
           <span>🪙</span><span id="heroCoins">0</span>
         </div>
-        <div style="display:flex; align-items:center; gap:4px; color: #f97316;">
+        <div style="display:flex; align-items:center; gap:3px; color: #f97316;">
           <span>🔥</span><span id="heroStreak">0 дн.</span>
         </div>
       </div>
     </div>
-    <div class="hud-progress-wrap">
-      <div class="hud-bar-meta">
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="display:flex; justify-content:space-between; font-size:0.72rem;">
         <span class="muted">XP Прогресс</span>
         <span id="heroXpText">0 / 100</span>
       </div>
@@ -515,51 +451,48 @@
     </div>
   </div>
 
-  <!-- VIEWS CONTAINER -->
   <div class="views-container">
 
-    <!-- VIEW 1: HOME (Dashboard) -->
+    <!-- 1. HOME DASHBOARD -->
     <div class="view-pane active" id="view-home">
-      <!-- Quick Focus & Daily Summary Card -->
       <div class="card">
         <div class="card-title">
-          <span>Фокус & Сводка Дня</span>
-          <span class="badge badge-gold" id="currentDateStr">Сегодня</span>
+          <span>Сводка за Сегодня</span>
+          <span class="badge badge-gold" id="currentDateStr">2026</span>
         </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
-            <div class="muted" style="font-size: 0.68rem;">Квесты дня</div>
-            <div style="font-size: 1.1rem; font-weight: 700;" id="homeDailyDoneCount">0 / 0</div>
+        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Квесты дня</div>
+            <div style="font-size: 1.05rem; font-weight: 700;" id="homeDailyDoneCount">0 / 0</div>
           </div>
-          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
-            <div class="muted" style="font-size: 0.68rem;">XP за сегодня</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent);" id="homeTodayXp">+0</div>
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Опыт (XP)</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent);" id="homeTodayXp">+0</div>
           </div>
-          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
-            <div class="muted" style="font-size: 0.68rem;">Часы фокуса</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-green);" id="homeFocusHours">0.0 ч</div>
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Мир открыт</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-cyan);" id="homeExplorationPct">0%</div>
           </div>
         </div>
-        <button class="btn btn-block" onclick="openModal('modal-add-task')">＋ Добавить задание</button>
+        <button class="btn btn-block" onclick="openModal('modal-add-task')">＋ Быстрый Квест</button>
       </div>
 
-      <!-- Quick Active Quests -->
       <div class="card">
         <div class="card-title">
-          <span>Срочные задачи на сегодня</span>
+          <span>Ближайшие Задачи</span>
           <button class="btn btn-sm btn-secondary" onclick="switchTab('quests')">Все →</button>
         </div>
         <div id="homeUrgentList"></div>
       </div>
 
-      <!-- Focus Pomodoro Widget -->
+      <!-- Pomodoro -->
       <div class="card">
         <div class="card-title">
-          <span>Таймер Продуктивности</span>
+          <span>Pomodoro Фокус</span>
           <span class="badge badge-purple" id="timerStatusLabel">Готов</span>
         </div>
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <div class="timer-controls">
+        <div style="font-size: 2.6rem; font-weight: 800; text-align:center; margin: 10px 0; font-variant-numeric: tabular-nums;" id="timerDisplay">25:00</div>
+        <div style="display: flex; justify-content: center; gap: 8px;">
           <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(15)">15м</button>
           <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(25)">25м</button>
           <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(50)">50м</button>
@@ -569,7 +502,43 @@
       </div>
     </div>
 
-    <!-- VIEW 2: QUESTS & HABITS -->
+    <!-- 2. WORLD MAP (NEW 2D Canvas Interactive Exploration) -->
+    <div class="view-pane" id="view-world">
+      <div class="card" style="padding: 10px;">
+        <div class="map-viewport-wrapper" id="mapWrapper">
+          <canvas id="worldMapCanvas"></canvas>
+          <div class="map-hud-overlay">
+            <div class="map-biome-tag" id="mapBiomeNameTag">Земля: Forgotten Outskirts</div>
+            <div class="map-biome-tag" id="mapDiscoveredTag">Исследовано: 1/8</div>
+          </div>
+          <div class="map-controls-dock">
+            <button class="map-dock-btn" onclick="mapZoom(1.2)">＋</button>
+            <button class="map-dock-btn" onclick="mapZoom(0.8)">−</button>
+            <button class="map-dock-btn" onclick="mapCenterHero()">🎯</button>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items:center; margin-top: 10px;">
+          <div style="font-size: 0.75rem;" class="muted">Перемещайте карту пальцем. Нажимайте на локации.</div>
+          <button class="btn btn-sm btn-secondary" onclick="openBiomeSelector()">Биомы (8)</button>
+        </div>
+      </div>
+
+      <!-- Current Location Mission Card -->
+      <div class="card" id="locationDetailCard">
+        <div class="card-title">
+          <span id="locNodeTitle">Текущая позиция: Лагерь Странника</span>
+          <span class="badge badge-green" id="locNodeStatus">Безопасно</span>
+        </div>
+        <p class="muted" style="font-size: 0.78rem; margin-bottom: 10px;" id="locNodeDesc">
+          Здесь можно восстановить силы и сверить журнал приключений.
+        </p>
+        <div id="locNodeActionArea">
+          <!-- Dynamic Action / Fight / Loot -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. QUESTS & HABITS -->
     <div class="view-pane" id="view-quests">
       <div class="segment-bar">
         <div class="segment-item active" onclick="switchQuestSubTab('tasks', this)">Задачи</div>
@@ -577,200 +546,183 @@
         <div class="segment-item" onclick="switchQuestSubTab('archive', this)">Архив</div>
       </div>
 
-      <!-- Tasks Tab -->
       <div id="subtab-tasks">
-        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
           <input type="text" id="taskSearchInput" class="input-control" placeholder="Поиск задания..." oninput="renderQuestsView()">
           <button class="btn" onclick="openModal('modal-add-task')">＋</button>
         </div>
         <div id="tasksListContainer"></div>
       </div>
 
-      <!-- Habits Tab -->
       <div id="subtab-habits" style="display: none;">
-        <button class="btn btn-block" style="margin-bottom: 12px;" onclick="openModal('modal-add-habit')">＋ Новая привычка</button>
+        <button class="btn btn-block" style="margin-bottom: 10px;" onclick="openModal('modal-add-habit')">＋ Новая привычка</button>
         <div id="habitsListContainer"></div>
       </div>
 
-      <!-- Archive Tab -->
       <div id="subtab-archive" style="display: none;">
         <div id="archiveListContainer"></div>
       </div>
     </div>
 
-    <!-- VIEW 3: GOALS & BOSSES -->
+    <!-- 4. GOALS & PROJECTS -->
     <div class="view-pane" id="view-goals">
-      <div class="card boss-card">
+      <div class="card" style="background: linear-gradient(135deg, rgba(239,68,68,0.1), var(--card)); border-color: rgba(239,68,68,0.3);">
         <div class="card-title">
-          <span>Текущий Рейд-Босс</span>
+          <span>Мировой Рейд-Босс</span>
           <span class="badge badge-gold" id="bossRewardTag">+500 XP</span>
         </div>
-        <h3 id="bossTitle" style="margin-bottom: 4px;">Великий Прокрастинатор</h3>
-        <p class="muted" style="font-size: 0.75rem;" id="bossDesc">Закрывайте связанные этапы проектов для нанесения урона.</p>
-        <div class="boss-hp-bar">
-          <div class="boss-hp-fill" id="bossHpFill"></div>
+        <h3 id="bossTitle">Архидемон Прокрастинации</h3>
+        <p class="muted" style="font-size: 0.75rem; margin: 4px 0;" id="bossDesc">Каждый выполненный квест наносит урон боссу.</p>
+        <div style="height: 10px; background: #1a0f12; border-radius:99px; overflow:hidden; border:1px solid rgba(239,68,68,0.3); margin: 8px 0;">
+          <div style="height:100%; background: linear-gradient(90deg, #f87171, #ef4444); width: 100%; transition: width 0.3s;" id="bossHpFill"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700;">
-          <span id="bossHpText">HP: 100 / 100</span>
-          <span id="bossStageText">0/4 Этапов</span>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight:700;">
+          <span id="bossHpText">HP: 20 / 20</span>
+          <span id="bossPhaseText">Фаза 1/3</span>
         </div>
-        <button class="btn btn-secondary btn-sm btn-block" style="margin-top: 10px;" onclick="openModal('modal-edit-boss')">Настроить цель-босса</button>
       </div>
 
       <div class="card">
         <div class="card-title">
-          <span>Крупные Цели & Проекты</span>
+          <span>Крупные Проекты & Этапы</span>
           <button class="btn btn-sm" onclick="openModal('modal-add-project')">＋ Проект</button>
         </div>
         <div id="projectsListContainer"></div>
       </div>
     </div>
 
-    <!-- VIEW 4: STATS & ANALYTICS -->
+    <!-- 5. STATS & ANALYTICS -->
     <div class="view-pane" id="view-stats">
-      <!-- Period Selector -->
       <div class="segment-bar">
         <div class="segment-item active" onclick="setAnalyticsPeriod(7, this)">7 Дней</div>
         <div class="segment-item" onclick="setAnalyticsPeriod(30, this)">30 Дней</div>
         <div class="segment-item" onclick="setAnalyticsPeriod(90, this)">90 Дней</div>
       </div>
 
-      <!-- Chart 1: Tasks Velocity -->
       <div class="card">
         <div class="card-title">
-          <span>Динамика выполнения задач</span>
+          <span>Динамика Задач</span>
           <span class="badge badge-green" id="statTasksTotal">0 шт</span>
         </div>
-        <div class="chart-box">
-          <canvas id="chartTasks"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="chartTasks"></canvas></div>
       </div>
 
-      <!-- Chart 2: Cumulative XP Growth -->
       <div class="card">
         <div class="card-title">
-          <span>Рост Опыта (XP)</span>
+          <span>Рост Опыта</span>
           <span class="badge badge-purple" id="statXpTotal">+0 XP</span>
         </div>
-        <div class="chart-box">
-          <canvas id="chartXp"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="chartXp"></canvas></div>
       </div>
 
-      <!-- Chart 3: Radar Attributes -->
       <div class="card">
-        <div class="card-title">
-          <span>Баланс Сфер Жизни</span>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartAttributes"></canvas>
-        </div>
+        <div class="card-title"><span>Баланс Атрибутов</span></div>
+        <div class="chart-box"><canvas id="chartAttributes"></canvas></div>
       </div>
 
-      <!-- Activity Calendar Matrix -->
       <div class="card">
-        <div class="card-title">
-          <span>Матрица Активности (4 недели)</span>
-        </div>
+        <div class="card-title"><span>Матрица Активности (4 недели)</span></div>
         <div class="calendar-matrix" id="calendarMatrix"></div>
-        <div id="matrixLogDetail" style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);">
-          Нажмите на ячейку для просмотра лога.
+        <div id="matrixLogDetail" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-muted);">
+          Нажмите на ячейку для деталей.
         </div>
       </div>
 
-      <!-- Time Tracking Manual Input & Chart -->
       <div class="card">
         <div class="card-title">
-          <span>Учет времени по сферам</span>
-          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-timelog')">＋ Записать часы</button>
+          <span>Часы по Сферам</span>
+          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-timelog')">＋ Записать</button>
         </div>
-        <div class="chart-box">
-          <canvas id="chartTime"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="chartTime"></canvas></div>
       </div>
 
-      <!-- Real Finances Tracker -->
-      <div class="card">
-        <div class="card-title">
-          <span>Реальные Финансы</span>
-          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-finance')">＋ Операция</button>
-        </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Доход</div>
-            <div style="color: var(--accent-green); font-weight:700;" id="finIncomeText">$0</div>
-          </div>
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Расход</div>
-            <div style="color: var(--accent-red); font-weight:700;" id="finExpenseText">$0</div>
-          </div>
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Баланс</div>
-            <div style="font-weight:700;" id="finBalanceText">$0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Export CSV -->
-      <button class="btn btn-secondary btn-block" style="margin-bottom: 20px;" onclick="exportStatsCSV()">Экспорт статистики в CSV</button>
+      <button class="btn btn-secondary btn-block" style="margin-bottom: 14px;" onclick="exportStatsCSV()">Экспорт статистики в CSV</button>
     </div>
 
-    <!-- VIEW 5: HERO PROFILE & SETTINGS -->
+    <!-- 6. HERO, BUILDS, FORGE & JOURNAL -->
     <div class="view-pane" id="view-hero">
-      <!-- Attributes breakdown -->
-      <div class="card">
-        <div class="card-title">
-          <span>Характеристики Персонажа</span>
-        </div>
-        <div class="attributes-grid" id="heroAttributesGrid"></div>
+      <div class="segment-bar">
+        <div class="segment-item active" onclick="switchHeroSubTab('builds', this)">Билды</div>
+        <div class="segment-item" onclick="switchHeroSubTab('forge', this)">Кузница</div>
+        <div class="segment-item" onclick="switchHeroSubTab('journal', this)">Журнал</div>
+        <div class="segment-item" onclick="switchHeroSubTab('settings', this)">Опции</div>
       </div>
 
-      <!-- Rewards Shop -->
-      <div class="card">
-        <div class="card-title">
-          <span>Лавка Наград (За монеты)</span>
-          <button class="btn btn-sm" onclick="openModal('modal-add-reward')">＋ Награда</button>
+      <!-- Sub: Builds & Classes -->
+      <div id="subtab-hero-builds">
+        <div class="card">
+          <div class="card-title"><span>Специализация Персонажа</span></div>
+          <div class="build-grid" id="buildSelectionGrid"></div>
         </div>
-        <div id="rewardShopContainer"></div>
-      </div>
 
-      <!-- Achievements -->
-      <div class="card">
-        <div class="card-title">
-          <span>Достижения</span>
-          <span class="badge badge-purple" id="achievementsCounter">0 / 0</span>
+        <div class="card">
+          <div class="card-title"><span>Атрибуты Героя</span></div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 8px;" id="heroAttributesGrid"></div>
         </div>
-        <div id="achievementsContainer"></div>
-      </div>
 
-      <!-- Settings & Data Management -->
-      <div class="card">
-        <div class="card-title">
-          <span>Настройки & Резервная Копия</span>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Имя героя</label>
-          <div style="display:flex; gap: 8px;">
-            <input type="text" id="settingHeroName" class="input-control">
-            <button class="btn btn-sm" onclick="updateHeroProfile()">OK</button>
+        <div class="card">
+          <div class="card-title">
+            <span>Лавка Наград</span>
+            <button class="btn btn-sm" onclick="openModal('modal-add-reward')">＋</button>
           </div>
+          <div id="rewardShopContainer"></div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
-          <button class="btn btn-secondary btn-block" onclick="exportDataJSON()">Резервная копия (Экспорт JSON)</button>
-          <button class="btn btn-secondary btn-block" onclick="document.getElementById('importFileInput').click()">Восстановить из JSON</button>
-          <input type="file" id="importFileInput" style="display: none;" accept=".json" onchange="importDataJSON(event)">
-          <button class="btn btn-danger btn-block" onclick="resetAllProgress()">Сбросить весь прогресс</button>
+      </div>
+
+      <!-- Sub: Forge & Equipment -->
+      <div id="subtab-hero-forge" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span>Кузница Снаряжения</span>
+            <span class="badge badge-gold" id="forgeMaterialText">🔩 0 Ресурсов</span>
+          </div>
+          <div id="forgeEquipmentContainer"></div>
+        </div>
+      </div>
+
+      <!-- Sub: Adventure Journal -->
+      <div id="subtab-hero-journal" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span>Хроника Приключений</span>
+            <button class="btn btn-sm" onclick="openModal('modal-add-journal-note')">＋ Заметка</button>
+          </div>
+          <div id="adventureJournalList"></div>
+        </div>
+      </div>
+
+      <!-- Sub: Settings & Backup -->
+      <div id="subtab-hero-settings" style="display: none;">
+        <div class="card">
+          <div class="card-title"><span>Профиль & Бэкап</span></div>
+          <div class="form-group">
+            <label class="form-label">Имя героя</label>
+            <div style="display:flex; gap: 8px;">
+              <input type="text" id="settingHeroName" class="input-control">
+              <button class="btn btn-sm" onclick="updateHeroProfile()">OK</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-secondary btn-block" onclick="exportDataJSON()">Резервная копия (JSON)</button>
+            <button class="btn btn-secondary btn-block" onclick="document.getElementById('importFileInput').click()">Импорт из JSON</button>
+            <input type="file" id="importFileInput" style="display: none;" accept=".json" onchange="importDataJSON(event)">
+            <button class="btn btn-danger btn-block" onclick="resetAllProgress()">Сбросить прогресс</button>
+          </div>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- BOTTOM NAVIGATION DOCK -->
+  <!-- BOTTOM NAVIGATION -->
   <div class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('home')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       <span>Главная</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('world')">
+      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+      <span>Мир</span>
     </button>
     <button class="nav-btn" onclick="switchTab('quests')">
       <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -790,13 +742,13 @@
     </button>
   </div>
 
-  <!-- MODAL: ADD TASK -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="modal-add-task">
     <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Новый Квест</h3>
+      <h3 style="margin-bottom: 10px;">Новый Квест</h3>
       <div class="form-group">
         <label class="form-label">Название задания</label>
-        <input type="text" id="newTaskTitle" class="input-control" placeholder="Например: Решить 3 задачи LeetCode">
+        <input type="text" id="newTaskTitle" class="input-control" placeholder="Например: Изучить Docker контейнеры">
       </div>
       <div class="form-group">
         <label class="form-label">Категория / Атрибут</label>
@@ -819,28 +771,27 @@
           </select>
         </div>
         <div class="form-group" style="flex:1;">
-          <label class="form-label">Сложность (XP / 🪙)</label>
+          <label class="form-label">Сложность</label>
           <select id="newTaskDiff" class="input-control">
-            <option value="easy">Легко (+20 XP / 5 🪙)</option>
-            <option value="medium" selected>Средне (+40 XP / 15 🪙)</option>
-            <option value="hard">Сложно (+80 XP / 30 🪙)</option>
+            <option value="easy">Легко (+20 XP)</option>
+            <option value="medium" selected>Средне (+40 XP)</option>
+            <option value="hard">Сложно (+80 XP)</option>
           </select>
         </div>
       </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
         <button class="btn btn-block" onclick="saveNewTask()">Создать Квест</button>
         <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-task')">Отмена</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: ADD HABIT -->
   <div class="modal-overlay" id="modal-add-habit">
     <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Новая Привычка</h3>
+      <h3 style="margin-bottom: 10px;">Новая Привычка</h3>
       <div class="form-group">
         <label class="form-label">Название привычки</label>
-        <input type="text" id="newHabitTitle" class="input-control" placeholder="Например: Чтение 20 страниц">
+        <input type="text" id="newHabitTitle" class="input-control" placeholder="Например: Чтение книги 30 минут">
       </div>
       <div class="form-group">
         <label class="form-label">Категория</label>
@@ -853,139 +804,107 @@
           <option value="creativity">Creativity</option>
         </select>
       </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveNewHabit()">Добавить Привычку</button>
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
+        <button class="btn btn-block" onclick="saveNewHabit()">Создать Привычку</button>
         <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-habit')">Отмена</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: EDIT BOSS -->
-  <div class="modal-overlay" id="modal-edit-boss">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Настройка Рейд-Босса</h3>
-      <div class="form-group">
-        <label class="form-label">Имя Босса (Главная Цель)</label>
-        <input type="text" id="bossNameInput" class="input-control">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Количество этапов (Всего HP)</label>
-        <input type="number" id="bossHpInput" class="input-control" min="1" max="50">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Награда за победу (Монеты)</label>
-        <input type="number" id="bossRewardInput" class="input-control" min="50" max="5000">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveBossConfig()">Сохранить Босса</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-edit-boss')">Закрыть</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADD REWARD -->
-  <div class="modal-overlay" id="modal-add-reward">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Новая Награда в Лавку</h3>
-      <div class="form-group">
-        <label class="form-label">Название награды</label>
-        <input type="text" id="newRewardTitle" class="input-control" placeholder="Например: 1 час видеоигр">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Цена в монетах 🪙</label>
-        <input type="number" id="newRewardCost" class="input-control" placeholder="100">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveNewReward()">Добавить в Магазин</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-reward')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADD TIME LOG -->
-  <div class="modal-overlay" id="modal-add-timelog">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Записать потраченное время</h3>
-      <div class="form-group">
-        <label class="form-label">Категория</label>
-        <select id="timeLogCategory" class="input-control">
-          <option value="intelligence">Учеба / Кодинг</option>
-          <option value="wealth">Работа / Проекты</option>
-          <option value="strength">Спорт / Тренировка</option>
-          <option value="creativity">Творчество</option>
-          <option value="social">Общение</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Затрачено часов</label>
-        <input type="number" id="timeLogHours" step="0.5" min="0.5" max="24" class="input-control" placeholder="1.5">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveTimeLog()">Сохранить Часы</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-timelog')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADD FINANCE -->
-  <div class="modal-overlay" id="modal-add-finance">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Финансовая операция</h3>
-      <div class="form-group">
-        <label class="form-label">Тип</label>
-        <select id="finType" class="input-control">
-          <option value="expense">Расход</option>
-          <option value="income">Доход</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Сумма</label>
-        <input type="number" id="finAmount" class="input-control" placeholder="1000">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Описание</label>
-        <input type="text" id="finDesc" class="input-control" placeholder="Курсы / Зарплата">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveFinanceLog()">Записать</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-finance')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADD PROJECT -->
   <div class="modal-overlay" id="modal-add-project">
     <div class="modal-sheet">
-      <h3 style="margin-bottom: 12px;">Новый Проект / Цель</h3>
+      <h3 style="margin-bottom: 10px;">Новый Проект</h3>
       <div class="form-group">
-        <label class="form-label">Название Проекта</label>
-        <input type="text" id="projTitle" class="input-control" placeholder="Запуск Pet-проекта">
+        <label class="form-label">Название</label>
+        <input type="text" id="projTitle" class="input-control" placeholder="Запуск нового сервиса">
       </div>
       <div class="form-group">
-        <label class="form-label">Всего шагов / этапов</label>
-        <input type="number" id="projTotalSteps" class="input-control" value="5" min="1" max="100">
+        <label class="form-label">Всего этапов</label>
+        <input type="number" id="projTotalSteps" class="input-control" value="5" min="1" max="50">
       </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn btn-block" onclick="saveNewProject()">Создать Проект</button>
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
+        <button class="btn btn-block" onclick="saveNewProject()">Создать</button>
         <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-project')">Отмена</button>
       </div>
     </div>
   </div>
 
+  <div class="modal-overlay" id="modal-add-reward">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 10px;">Награда в Лавку</h3>
+      <div class="form-group">
+        <label class="form-label">Название</label>
+        <input type="text" id="newRewardTitle" class="input-control" placeholder="Билет в кино / Игра">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Стоимость (🪙)</label>
+        <input type="number" id="newRewardCost" class="input-control" placeholder="100">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
+        <button class="btn btn-block" onclick="saveNewReward()">Добавить</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-reward')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-add-journal-note">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 10px;">Заметка в Журнал Приключений</h3>
+      <div class="form-group">
+        <label class="form-label">Текст заметки</label>
+        <textarea id="journalNoteText" class="input-control" rows="3" placeholder="Сегодня закрыл сложную цель и победил прокрастинацию..."></textarea>
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
+        <button class="btn btn-block" onclick="saveJournalNote()">Записать</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-journal-note')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-biome-picker">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 10px;">Карта Биомов (8 Земель)</h3>
+      <div id="biomePickList"></div>
+      <button class="btn btn-secondary btn-block" style="margin-top: 10px;" onclick="closeModal('modal-biome-picker')">Закрыть</button>
+    </div>
+  </div>
+
   <script>
     /* ==========================================================================
-       DATA ARCHITECTURE & LOCAL STORAGE MIGRATION
+       DATA MODEL & V3 SCHEMA (MIGRATION COMPATIBLE)
        ========================================================================== */
-    const STORAGE_KEY = "productivity_rpg_v2_data";
+    const STORAGE_KEY = "productivity_rpg_v3_world";
+
+    const BIOMES_DATA = [
+      { id: "b1", name: "Forgotten Outskirts", color: "#64748b", reqLvl: 1, boss: "Lesser Shade", desc: "Заброшенные дороги и древние руины начала пути." },
+      { id: "b2", name: "Crimson Forest", color: "#ef4444", reqLvl: 3, boss: "Bloodthorn Beast", desc: "Кровавый лес с агрессивными сущностями лени." },
+      { id: "b3", name: "Sunken Kingdom", color: "#06b6d4", reqLvl: 5, boss: "Leviathan of Doubt", desc: "Затонувшее подводное царство забытых знаний." },
+      { id: "b4", name: "Frostfall Peaks", color: "#38bdf8", reqLvl: 7, boss: "Yeti of Cold Fatigue", desc: "Ледяные горы, требующие непоколебимой выносливости." },
+      { id: "b5", name: "Clockwork Dominion", color: "#f59e0b", reqLvl: 10, boss: "Mechanic Overseer", desc: "Механический город точности, тайм-менеджмента и работы." },
+      { id: "b6", name: "Plague Cathedral", color: "#84cc16", reqLvl: 13, boss: "Toxic Lord of Excuses", desc: "Зараженные земли ядовитых привычек и прокрастинации." },
+      { id: "b7", name: "Abyssal Frontier", color: "#8b5cf6", reqLvl: 16, boss: "Void Ravager", desc: "Территория темной бездны и глубокой неопределенности." },
+      { id: "b8", name: "The End of Eternity", color: "#e11d48", reqLvl: 20, boss: "Chronos Arch-Fiend", desc: "Финал мира: величайшее испытание для истинного мастера." }
+    ];
+
+    const BUILDS_PRESETS = {
+      berserker: { name: "Berserker", icon: "⚔️", desc: "+30% урона боссам от выполненных квестов" },
+      guardian: { name: "Guardian", icon: "🛡️", desc: "Серия активности не сгорает при пропуске 1 дня" },
+      assassin: { name: "Assassin", icon: "🗡️", desc: "20% шанс удвоить получаемые монеты за квест" },
+      arcanist: { name: "Arcanist", icon: "🔮", desc: "+25% XP за выполнение учебных и кодинг задач" },
+      explorer: { name: "Explorer", icon: "🧭", desc: "Двойной шанс найти кузнечные ресурсы на карте" },
+      strategist: { name: "Strategist", icon: "♟️", desc: "+15% монет и XP за завершение Pomodoro-таймеров" }
+    };
 
     const DEFAULT_DATA = {
-      version: 2,
+      version: 3,
       hero: {
         name: "Герой",
         xp: 0,
-        coins: 100,
+        coins: 120,
         streak: 0,
-        lastActiveDate: null
+        lastActiveDate: null,
+        build: "berserker",
+        materials: 5
       },
       attributes: {
         discipline: 10,
@@ -995,41 +914,63 @@
         social: 10,
         creativity: 10
       },
+      equipment: [
+        { id: "eq1", name: "Клинок Дисциплины", slot: "weapon", level: 1, maxLvl: 10, bonus: "+10% атака босса" },
+        { id: "eq2", name: "Доспех Фокуса", slot: "armor", level: 1, maxLvl: 10, bonus: "+15% защита серии" },
+        { id: "eq3", name: "Амулет Внимания", slot: "amulet", level: 1, maxLvl: 10, bonus: "+10% XP таймера" }
+      ],
+      worldState: {
+        currentBiomeId: "b1",
+        currentNodeId: "n_b1_0",
+        discoveredBiomes: ["b1"],
+        completedNodes: [],
+        discoveredSecrets: 0,
+        camera: { x: 0, y: 0, zoom: 1 }
+      },
       tasks: [
-        { id: "t1", title: "30 мин чтения или учебы", category: "intelligence", type: "daily", diff: "easy", xp: 25, coins: 10, completedDate: null },
-        { id: "t2", title: "Тренировка / 50 отжиманий", category: "strength", type: "daily", diff: "medium", xp: 45, coins: 20, completedDate: null },
-        { id: "t3", title: "Фокус-блок работы/кодинга", category: "wealth", type: "daily", diff: "hard", xp: 80, coins: 35, completedDate: null }
+        { id: "t1", title: "30 мин кодинга / учебы", category: "intelligence", type: "daily", diff: "easy", xp: 25, coins: 10, completedDate: null },
+        { id: "t2", title: "Тренировка / Зарядка", category: "strength", type: "daily", diff: "medium", xp: 45, coins: 20, completedDate: null },
+        { id: "t3", title: "Закрыть рабочий спринт", category: "wealth", type: "daily", diff: "hard", xp: 80, coins: 35, completedDate: null }
       ],
       habits: [
-        { id: "h1", title: "Водный баланс 2л", category: "discipline", history: [] },
-        { id: "h2", title: "Без соцсетей до 11:00", category: "discipline", history: [] }
+        { id: "h1", title: "2 литра чистой воды", category: "discipline", history: [] }
       ],
       boss: {
         title: "Архидемон Прокрастинации",
         maxHp: 20,
         currentHp: 20,
         rewardCoins: 500,
-        defeatedCount: 0
+        phase: 1
       },
       projects: [],
       rewards: [
         { id: "r1", title: "Просмотр фильма / сериала", cost: 80 },
-        { id: "r2", title: "Любимый десерт / читмил", cost: 150 },
-        { id: "r3", title: "Покупка желаемой вещи", cost: 1000 }
+        { id: "r2", title: "Покупка желаемой вещи", cost: 1000 }
       ],
-      timeLogs: [],    // { date, category, hours }
-      financeLogs: [], // { date, type: 'income'|'expense', amount, desc }
-      historyLog: []   // { date, type, title, xp, coins, category }
+      timeLogs: [],
+      financeLogs: [],
+      historyLog: [],
+      adventureJournal: [
+        { id: "j1", date: "2026-10-02", type: "world", title: "Экспедиция начата", text: "Герой ступил на заброшенные дороги Forgotten Outskirts." }
+      ]
     };
 
-    let AppState = loadData();
+    let AppState = loadAndMigrateData();
 
-    function loadData() {
+    function loadAndMigrateData() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("productivity_rpg_v2_data");
         if (!raw) return JSON.parse(JSON.stringify(DEFAULT_DATA));
         const parsed = JSON.parse(raw);
-        return { ...DEFAULT_DATA, ...parsed };
+        // Automatic Deep Merge to guarantee v3 schema
+        return {
+          ...DEFAULT_DATA,
+          ...parsed,
+          hero: { ...DEFAULT_DATA.hero, ...(parsed.hero || {}) },
+          worldState: { ...DEFAULT_DATA.worldState, ...(parsed.worldState || {}) },
+          equipment: parsed.equipment && parsed.equipment.length ? parsed.equipment : DEFAULT_DATA.equipment,
+          adventureJournal: parsed.adventureJournal || DEFAULT_DATA.adventureJournal
+        };
       } catch (e) {
         console.error("Storage error:", e);
         return JSON.parse(JSON.stringify(DEFAULT_DATA));
@@ -1040,11 +981,10 @@
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
       } catch (e) {
-        showToast("Ошибка сохранения данных в LocalStorage!");
+        showToast("Ошибка сохранения в LocalStorage!");
       }
     }
 
-    /* Date utilities */
     function getTodayKey() {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1057,10 +997,9 @@
     }
 
     /* ==========================================================================
-       RPG PROGRESSION ENGINE & STREAKS
+       PROGRESSION & ATTRIBUTES
        ========================================================================== */
     function calcLevel(xp) {
-      // Nonlinear curve: XP = floor(100 * lvl^1.35)
       let lvl = 1;
       while (true) {
         const req = Math.floor(100 * Math.pow(lvl, 1.35));
@@ -1086,19 +1025,42 @@
       if (diffDays === 1) {
         AppState.hero.streak += 1;
       } else if (diffDays > 1) {
-        AppState.hero.streak = 1; // broken streak
+        if (AppState.hero.build === "guardian" && diffDays === 2) {
+          showToast("🛡️ Guardian спас вашу серию дней!");
+        } else {
+          AppState.hero.streak = 1;
+        }
       }
       AppState.hero.lastActiveDate = today;
       saveData();
     }
 
     function addRewards(xp, coins, category, sourceTitle) {
+      let finalXp = xp;
+      let finalCoins = coins;
+
+      // Class Build Modifiers
+      if (AppState.hero.build === "arcanist" && (category === "intelligence" || category === "discipline")) {
+        finalXp = Math.round(finalXp * 1.25);
+      }
+      if (AppState.hero.build === "assassin" && Math.random() < 0.25) {
+        finalCoins *= 2;
+        showToast("🗡️ Критический дроп монет от Assassin!");
+      }
+
       const prevLvl = calcLevel(AppState.hero.xp).level;
-      AppState.hero.xp += xp;
-      AppState.hero.coins = Math.max(0, AppState.hero.coins + coins);
+      AppState.hero.xp += finalXp;
+      AppState.hero.coins = Math.max(0, AppState.hero.coins + finalCoins);
 
       if (category && AppState.attributes[category] !== undefined) {
-        AppState.attributes[category] += Math.max(1, Math.floor(xp / 15));
+        AppState.attributes[category] += Math.max(1, Math.floor(finalXp / 15));
+      }
+
+      // Chance of finding forge materials
+      const matChance = AppState.hero.build === "explorer" ? 0.6 : 0.3;
+      if (Math.random() < matChance) {
+        AppState.hero.materials = (AppState.hero.materials || 0) + 1;
+        showToast("🔩 Найден ресурс для кузницы!");
       }
 
       AppState.historyLog.push({
@@ -1106,19 +1068,21 @@
         timestamp: Date.now(),
         type: "reward",
         title: sourceTitle,
-        xp,
-        coins,
+        xp: finalXp,
+        coins: finalCoins,
         category: category || "general"
       });
 
       evaluateDailyStreak();
+      checkBiomeUnlocks();
       saveData();
 
       const newLvl = calcLevel(AppState.hero.xp).level;
       if (newLvl > prevLvl) {
-        showToast(`🎉 УРОВЕНЬ ПОВЫШЕН! Теперь вы LVL ${newLvl}!`);
+        showToast(`🎉 УРОВЕНЬ ${newLvl} ДОСТИГНУТ!`);
+        addJournalEntry("level", `Повышение уровня до ${newLvl}`, `Герой обретает новую силу на просторах мира.`);
       } else {
-        showToast(`+${xp} XP | +${coins} 🪙`);
+        showToast(`+${finalXp} XP | +${finalCoins} 🪙`);
       }
       updateUI();
     }
@@ -1140,8 +1104,463 @@
       }
     }
 
+    function checkBiomeUnlocks() {
+      const lvl = calcLevel(AppState.hero.xp).level;
+      BIOMES_DATA.forEach(b => {
+        if (lvl >= b.reqLvl && !AppState.worldState.discoveredBiomes.includes(b.id)) {
+          AppState.worldState.discoveredBiomes.push(b.id);
+          showToast(`🗺️ Открыт новый биом: ${b.name}!`);
+          addJournalEntry("world", `Открыт биом ${b.name}`, `Стали доступны новые тропы приключений и босс ${b.boss}.`);
+        }
+      });
+    }
+
     /* ==========================================================================
-       QUESTS & HABITS MANAGEMENT
+       WORLD MAP ENGINE (Procedural 2D Graphs, Nodes, Interaction)
+       ========================================================================== */
+    let mapNodes = [];
+    let mapEdges = [];
+    let mapCanvas, mapCtx;
+    let isDraggingMap = false;
+    let dragStart = { x: 0, y: 0 };
+    let heroMapVisualPos = { x: 0, y: 0 };
+
+    function generateWorldGraph(biomeId) {
+      const nodes = [];
+      const edges = [];
+      const biome = BIOMES_DATA.find(b => b.id === biomeId) || BIOMES_DATA[0];
+
+      // Fixed seed structure for seamless persistence
+      const layout = [
+        { id: `n_${biomeId}_0`, type: "camp", title: "Лагерь Странника", x: 80, y: 240, desc: "Точка отдыха и планирования." },
+        { id: `n_${biomeId}_1`, type: "quest", title: "Аванпост Прогресса", x: 230, y: 160, desc: "Требует фокуса и закрытия задачи.", reqCat: "intelligence" },
+        { id: `n_${biomeId}_2`, type: "chest", title: "Сундук Руин", x: 250, y: 320, desc: "Древние сокровища за выполнение привычек.", rewardCoins: 80 },
+        { id: `n_${biomeId}_3`, type: "elite", title: "Элитный Страж", x: 420, y: 200, desc: "Грозный враг. Требует закрытия сложного квеста.", hp: 3 },
+        { id: `n_${biomeId}_4`, type: "secret", title: "Тайный Грот", x: 440, y: 340, desc: "Секретный тайник с материалами.", rewardMat: 3 },
+        { id: `n_${biomeId}_5`, type: "boss", title: `Логово: ${biome.boss}`, x: 620, y: 240, desc: "Владыка биома. Нанесите урон продуктивностью.", hp: 5 }
+      ];
+
+      edges.push({ from: layout[0].id, to: layout[1].id });
+      edges.push({ from: layout[0].id, to: layout[2].id });
+      edges.push({ from: layout[1].id, to: layout[3].id });
+      edges.push({ from: layout[2].id, to: layout[4].id });
+      edges.push({ from: layout[3].id, to: layout[5].id });
+      edges.push({ from: layout[4].id, to: layout[5].id });
+
+      return { nodes: layout, edges };
+    }
+
+    function initMapCanvas() {
+      mapCanvas = document.getElementById("worldMapCanvas");
+      if (!mapCanvas) return;
+      mapCtx = mapCanvas.getContext("2d");
+
+      function resize() {
+        const wrap = document.getElementById("mapWrapper");
+        if (!wrap) return;
+        const dpr = window.devicePixelRatio || 1;
+        mapCanvas.width = wrap.clientWidth * dpr;
+        mapCanvas.height = wrap.clientHeight * dpr;
+        mapCtx.scale(dpr, dpr);
+        drawWorldMap();
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      // Touch & Mouse Dragging / Panning
+      const wrap = document.getElementById("mapWrapper");
+      wrap.addEventListener("pointerdown", (e) => {
+        isDraggingMap = true;
+        dragStart = { x: e.clientX - AppState.worldState.camera.x, y: e.clientY - AppState.worldState.camera.y };
+      });
+      window.addEventListener("pointermove", (e) => {
+        if (!isDraggingMap) return;
+        AppState.worldState.camera.x = e.clientX - dragStart.x;
+        AppState.worldState.camera.y = e.clientY - dragStart.y;
+        drawWorldMap();
+      });
+      window.addEventListener("pointerup", () => {
+        if (isDraggingMap) {
+          isDraggingMap = false;
+          saveData();
+        }
+      });
+
+      // Click on Nodes
+      mapCanvas.addEventListener("click", (e) => {
+        const rect = mapCanvas.getBoundingClientRect();
+        const clickX = (e.clientX - rect.left - AppState.worldState.camera.x) / AppState.worldState.camera.zoom;
+        const clickY = (e.clientY - rect.top - AppState.worldState.camera.y) / AppState.worldState.camera.zoom;
+
+        const clicked = mapNodes.find(n => Math.hypot(n.x - clickX, n.y - clickY) < 24);
+        if (clicked) {
+          onSelectMapNode(clicked);
+        }
+      });
+    }
+
+    function mapZoom(delta) {
+      AppState.worldState.camera.zoom = Math.min(2.0, Math.max(0.6, AppState.worldState.camera.zoom * delta));
+      saveData();
+      drawWorldMap();
+    }
+
+    function mapCenterHero() {
+      const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
+      if (!cur) return;
+      const wrap = document.getElementById("mapWrapper");
+      AppState.worldState.camera.x = wrap.clientWidth / 2 - cur.x * AppState.worldState.camera.zoom;
+      AppState.worldState.camera.y = wrap.clientHeight / 2 - cur.y * AppState.worldState.camera.zoom;
+      saveData();
+      drawWorldMap();
+    }
+
+    function drawWorldMap() {
+      if (!mapCtx) return;
+      const wrap = document.getElementById("mapWrapper");
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const cam = AppState.worldState.camera;
+      const currentBiome = BIOMES_DATA.find(b => b.id === AppState.worldState.currentBiomeId) || BIOMES_DATA[0];
+
+      mapCtx.clearRect(0, 0, w, h);
+      mapCtx.save();
+      mapCtx.translate(cam.x, cam.y);
+      mapCtx.scale(cam.zoom, cam.zoom);
+
+      // Background Grid & Fantasy Vignette
+      mapCtx.strokeStyle = "#131c2d";
+      mapCtx.lineWidth = 1;
+      for (let x = -400; x <= 1200; x += 60) {
+        mapCtx.beginPath(); mapCtx.moveTo(x, -200); mapCtx.lineTo(x, 800); mapCtx.stroke();
+      }
+      for (let y = -200; y <= 800; y += 60) {
+        mapCtx.beginPath(); mapCtx.moveTo(-400, y); mapCtx.lineTo(1200, y); mapCtx.stroke();
+      }
+
+      // Draw Edges (Roads)
+      mapEdges.forEach(e => {
+        const fromNode = mapNodes.find(n => n.id === e.from);
+        const toNode = mapNodes.find(n => n.id === e.to);
+        if (!fromNode || !toNode) return;
+
+        const isPassed = AppState.worldState.completedNodes.includes(toNode.id);
+        mapCtx.strokeStyle = isPassed ? currentBiome.color : "#2a374f";
+        mapCtx.lineWidth = isPassed ? 3.5 : 2;
+        mapCtx.setLineDash(isPassed ? [] : [6, 4]);
+
+        mapCtx.beginPath();
+        mapCtx.moveTo(fromNode.x, fromNode.y);
+        mapCtx.lineTo(toNode.x, toNode.y);
+        mapCtx.stroke();
+        mapCtx.setLineDash([]);
+      });
+
+      // Draw Nodes
+      mapNodes.forEach(node => {
+        const isCurrent = node.id === AppState.worldState.currentNodeId;
+        const isCompleted = AppState.worldState.completedNodes.includes(node.id);
+
+        // Node Glow
+        if (isCurrent) {
+          mapCtx.fillStyle = "rgba(99, 102, 241, 0.25)";
+          mapCtx.beginPath();
+          mapCtx.arc(node.x, node.y, 24, 0, Math.PI * 2);
+          mapCtx.fill();
+        }
+
+        // Base Circle
+        mapCtx.fillStyle = isCompleted ? "#10b981" : "#1e293b";
+        mapCtx.strokeStyle = isCurrent ? varColor("--accent") : (isCompleted ? "#10b981" : currentBiome.color);
+        mapCtx.lineWidth = isCurrent ? 3 : 2;
+
+        mapCtx.beginPath();
+        mapCtx.arc(node.x, node.y, 16, 0, Math.PI * 2);
+        mapCtx.fill();
+        mapCtx.stroke();
+
+        // Node Icons
+        let icon = "📍";
+        if (node.type === "camp") icon = "🏕️";
+        if (node.type === "chest") icon = "📦";
+        if (node.type === "elite") icon = "⚔️";
+        if (node.type === "secret") icon = "💎";
+        if (node.type === "boss") icon = "👑";
+
+        mapCtx.font = "14px sans-serif";
+        mapCtx.textAlign = "center";
+        mapCtx.textBaseline = "middle";
+        mapCtx.fillText(icon, node.x, node.y + 1);
+
+        // Node Title Tag
+        mapCtx.font = "10px sans-serif";
+        mapCtx.fillStyle = "#cbd5e1";
+        mapCtx.fillText(node.title, node.x, node.y + 26);
+      });
+
+      // Draw Hero Token
+      const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
+      if (cur) {
+        mapCtx.font = "20px sans-serif";
+        mapCtx.fillText("🛡️", cur.x, cur.y - 20);
+      }
+
+      mapCtx.restore();
+    }
+
+    function varColor(cssVar) {
+      return getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim() || "#6366f1";
+    }
+
+    function onSelectMapNode(node) {
+      document.getElementById("locNodeTitle").innerText = node.title;
+      document.getElementById("locNodeDesc").innerText = node.desc;
+
+      const isCompleted = AppState.worldState.completedNodes.includes(node.id);
+      const isCurrent = AppState.worldState.currentNodeId === node.id;
+      const statusEl = document.getElementById("locNodeStatus");
+      const actionArea = document.getElementById("locNodeActionArea");
+
+      statusEl.innerText = isCompleted ? "Исследовано" : (isCurrent ? "Текущее место" : "Доступно");
+      statusEl.className = isCompleted ? "badge badge-green" : "badge badge-gold";
+
+      actionArea.innerHTML = "";
+
+      if (!isCurrent) {
+        const moveBtn = document.createElement("button");
+        moveBtn.className = "btn btn-block";
+        moveBtn.innerText = "Переместиться сюда ➔";
+        moveBtn.onclick = () => {
+          AppState.worldState.currentNodeId = node.id;
+          saveData();
+          showToast(`Герой прибыл в: ${node.title}`);
+          onSelectMapNode(node);
+          drawWorldMap();
+        };
+        actionArea.appendChild(moveBtn);
+        return;
+      }
+
+      if (node.type === "chest" && !isCompleted) {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-block";
+        btn.innerText = `Открыть Сундук (+${node.rewardCoins} 🪙)`;
+        btn.onclick = () => {
+          AppState.worldState.completedNodes.push(node.id);
+          addRewards(40, node.rewardCoins, "wealth", `Сундук: ${node.title}`);
+          addJournalEntry("loot", `Открыт ${node.title}`, `Получено ${node.rewardCoins} золотых монет.`);
+          onSelectMapNode(node);
+          drawWorldMap();
+        };
+        actionArea.appendChild(btn);
+      } else if (node.type === "secret" && !isCompleted) {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-block";
+        btn.innerText = `Исследовать Тайник (+${node.rewardMat} Ресурса)`;
+        btn.onclick = () => {
+          AppState.worldState.completedNodes.push(node.id);
+          AppState.worldState.discoveredSecrets = (AppState.worldState.discoveredSecrets || 0) + 1;
+          AppState.hero.materials = (AppState.hero.materials || 0) + node.rewardMat;
+          addRewards(60, 20, "creativity", `Секрет: ${node.title}`);
+          addJournalEntry("secret", `Найден тайник: ${node.title}`, `Добыты редкие компоненты для кузницы.`);
+          onSelectMapNode(node);
+          drawWorldMap();
+        };
+        actionArea.appendChild(btn);
+      } else if (node.type === "boss" && !isCompleted) {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-danger btn-block";
+        btn.innerText = "Атаковать Босса Области (Мини-Бой)";
+        btn.onclick = () => {
+          AppState.worldState.completedNodes.push(node.id);
+          damageBoss(4);
+          addRewards(150, 80, "discipline", `Победа над ${node.title}`);
+          addJournalEntry("boss", `Повержен владыка ${node.title}`, `Земли биома освобождены. Герой получает славу и трофеи.`);
+          showToast("⚔️ Босс биома повержен!");
+          onSelectMapNode(node);
+          drawWorldMap();
+        };
+        actionArea.appendChild(btn);
+      } else if (!isCompleted && node.type === "quest") {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-block";
+        btn.innerText = "Закрыть Испытание Локации";
+        btn.onclick = () => {
+          AppState.worldState.completedNodes.push(node.id);
+          addRewards(50, 25, node.reqCat || "intelligence", node.title);
+          onSelectMapNode(node);
+          drawWorldMap();
+        };
+        actionArea.appendChild(btn);
+      } else {
+        actionArea.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center;">Зона полностью зачищена и безопасна.</div>`;
+      }
+    }
+
+    function openBiomeSelector() {
+      const list = document.getElementById("biomePickList");
+      list.innerHTML = "";
+      const heroLvl = calcLevel(AppState.hero.xp).level;
+
+      BIOMES_DATA.forEach(b => {
+        const isUnlocked = AppState.worldState.discoveredBiomes.includes(b.id);
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.style.opacity = isUnlocked ? "1" : "0.5";
+        card.innerHTML = `
+          <div>
+            <div style="font-weight:700; font-size:0.85rem; color:${b.color};">${b.name}</div>
+            <div class="muted" style="font-size:0.7rem;">Босс: ${b.boss} | Требуется: LVL ${b.reqLvl}</div>
+          </div>
+          <button class="btn btn-sm ${isUnlocked ? 'btn-secondary' : ''}" ${!isUnlocked ? 'disabled' : ''}>
+            ${isUnlocked ? (AppState.worldState.currentBiomeId === b.id ? 'Здесь' : 'Перейти') : '🔒 Закрыто'}
+          </button>
+        `;
+        if (isUnlocked) {
+          card.onclick = () => {
+            AppState.worldState.currentBiomeId = b.id;
+            const graph = generateWorldGraph(b.id);
+            mapNodes = graph.nodes;
+            mapEdges = graph.edges;
+            AppState.worldState.currentNodeId = mapNodes[0].id;
+            saveData();
+            closeModal("modal-biome-picker");
+            mapCenterHero();
+            drawWorldMap();
+            updateUI();
+          };
+        }
+        list.appendChild(card);
+      });
+      openModal("modal-biome-picker");
+    }
+
+    /* ==========================================================================
+       BUILDS & FORGE
+       ========================================================================== */
+    function renderBuildsView() {
+      const grid = document.getElementById("buildSelectionGrid");
+      grid.innerHTML = "";
+      Object.entries(BUILDS_PRESETS).forEach(([key, val]) => {
+        const isCurrent = AppState.hero.build === key;
+        const box = document.createElement("div");
+        box.className = `build-card ${isCurrent ? 'active' : ''}`;
+        box.innerHTML = `
+          <div style="font-size:1.1rem;">${val.icon} <strong>${val.name}</strong></div>
+          <div class="muted" style="font-size:0.68rem;">${val.desc}</div>
+        `;
+        box.onclick = () => {
+          AppState.hero.build = key;
+          saveData();
+          showToast(`Специализация изменена на: ${val.name}`);
+          renderBuildsView();
+          updateUI();
+        };
+        grid.appendChild(box);
+      });
+
+      document.getElementById("heroBuildBadge").innerText = BUILDS_PRESETS[AppState.hero.build]?.name || "Hero";
+    }
+
+    function renderForgeView() {
+      const cont = document.getElementById("forgeEquipmentContainer");
+      cont.innerHTML = "";
+      document.getElementById("forgeMaterialText").innerText = `🔩 ${AppState.hero.materials || 0} Ресурсов`;
+
+      AppState.equipment.forEach(eq => {
+        const costMat = eq.level * 2;
+        const costCoins = eq.level * 50;
+        const canUpgrade = (AppState.hero.materials >= costMat) && (AppState.hero.coins >= costCoins) && (eq.level < eq.maxLvl);
+
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.innerHTML = `
+          <div style="flex:1;">
+            <div style="font-weight:700; font-size:0.88rem;">${eq.name} <span class="badge badge-purple">+${eq.level}</span></div>
+            <div class="muted" style="font-size:0.72rem;">Эффект: ${eq.bonus}</div>
+            <div style="font-size:0.68rem; color:var(--accent-gold); margin-top:3px;">
+              ${eq.level < eq.maxLvl ? `Цена улучшения: ${costMat} 🔩 + ${costCoins} 🪙` : 'МАКСИМАЛЬНЫЙ УРОВЕНЬ'}
+            </div>
+          </div>
+          ${eq.level < eq.maxLvl ? `
+            <button class="btn btn-sm" onclick="upgradeEquipment('${eq.id}')" ${!canUpgrade ? 'disabled' : ''}>Заточить</button>
+          ` : ''}
+        `;
+        cont.appendChild(card);
+      });
+    }
+
+    function upgradeEquipment(id) {
+      const eq = AppState.equipment.find(x => x.id === id);
+      if (!eq) return;
+      const costMat = eq.level * 2;
+      const costCoins = eq.level * 50;
+
+      if (AppState.hero.materials < costMat || AppState.hero.coins < costCoins) {
+        return showToast("Не хватает ресурсов или монет!");
+      }
+
+      AppState.hero.materials -= costMat;
+      AppState.hero.coins -= costCoins;
+      eq.level++;
+      saveData();
+      showToast(`Успешно улучшено: ${eq.name} +${eq.level}!`);
+      addJournalEntry("craft", `Кузница: ${eq.name} +${eq.level}`, `Экипировка усилена для битв на дальних рубежах.`);
+      renderForgeView();
+      updateUI();
+    }
+
+    /* ==========================================================================
+       ADVENTURE JOURNAL
+       ========================================================================== */
+    function addJournalEntry(type, title, text) {
+      AppState.adventureJournal.unshift({
+        id: "j_" + Date.now(),
+        date: getTodayKey(),
+        type,
+        title,
+        text
+      });
+      if (AppState.adventureJournal.length > 50) AppState.adventureJournal.pop();
+      saveData();
+    }
+
+    function renderJournalView() {
+      const list = document.getElementById("adventureJournalList");
+      list.innerHTML = "";
+      if (AppState.adventureJournal.length === 0) {
+        list.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center;">Журнал пуст. Время совершать подвиги!</div>`;
+        return;
+      }
+      AppState.adventureJournal.forEach(j => {
+        const item = document.createElement("div");
+        item.className = "item-card";
+        item.style.flexDirection = "column";
+        item.style.alignItems = "flex-start";
+        item.innerHTML = `
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.7rem;" class="muted">
+            <span>${j.date}</span>
+            <span class="badge badge-cyan">${j.type.toUpperCase()}</span>
+          </div>
+          <div style="font-weight:700; font-size:0.85rem; margin: 3px 0;">${sanitize(j.title)}</div>
+          <div style="font-size:0.75rem; color:#cbd5e1;">${sanitize(j.text)}</div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function saveJournalNote() {
+      const txt = document.getElementById("journalNoteText").value.trim();
+      if (!txt) return showToast("Заполните текст заметки!");
+      addJournalEntry("note", "Заметка Путника", txt);
+      closeModal("modal-add-journal-note");
+      document.getElementById("journalNoteText").value = "";
+      renderJournalView();
+      showToast("Заметка записана в свиток!");
+    }
+
+    /* ==========================================================================
+       QUESTS, POMODORO, BOSS, STATS
        ========================================================================== */
     function toggleTask(id) {
       const task = AppState.tasks.find(t => t.id === id);
@@ -1149,13 +1568,13 @@
       const today = getTodayKey();
 
       if (task.completedDate === today) {
-        // Uncheck
         task.completedDate = null;
         revertReward(task.title);
       } else {
-        // Complete
         task.completedDate = today;
-        damageBoss(1);
+        let dmg = 1;
+        if (AppState.hero.build === "berserker") dmg = 2;
+        damageBoss(dmg);
         addRewards(task.xp, task.coins, task.category, task.title);
       }
       saveData();
@@ -1183,7 +1602,6 @@
     function saveNewTask() {
       const title = document.getElementById("newTaskTitle").value.trim();
       if (!title) return showToast("Введите название!");
-
       const cat = document.getElementById("newTaskCategory").value;
       const type = document.getElementById("newTaskType").value;
       const diff = document.getElementById("newTaskDiff").value;
@@ -1206,22 +1624,16 @@
       saveData();
       closeModal("modal-add-task");
       document.getElementById("newTaskTitle").value = "";
-      showToast("Квест добавлен в журнал!");
+      showToast("Квест добавлен!");
       updateUI();
     }
 
     function saveNewHabit() {
       const title = document.getElementById("newHabitTitle").value.trim();
-      if (!title) return showToast("Введите название привычки!");
+      if (!title) return showToast("Введите название!");
       const cat = document.getElementById("newHabitCategory").value;
 
-      AppState.habits.push({
-        id: "h_" + Date.now(),
-        title,
-        category: cat,
-        history: []
-      });
-
+      AppState.habits.push({ id: "h_" + Date.now(), title, category: cat, history: [] });
       saveData();
       closeModal("modal-add-habit");
       document.getElementById("newHabitTitle").value = "";
@@ -1229,25 +1641,13 @@
       updateUI();
     }
 
-    function deleteTask(id) {
-      if (confirm("Удалить этот квест?")) {
-        AppState.tasks = AppState.tasks.filter(t => t.id !== id);
-        saveData();
-        updateUI();
-      }
-    }
-
-    /* ==========================================================================
-       BOSSES & PROJECTS
-       ========================================================================== */
     function damageBoss(amount) {
       if (AppState.boss.currentHp <= 0) return;
       AppState.boss.currentHp = Math.max(0, AppState.boss.currentHp - amount);
       if (AppState.boss.currentHp === 0) {
-        showToast(`⚔️ БОСС ПОВЕРЖЕН! Получено ${AppState.boss.rewardCoins} 🪙!`);
+        showToast(`⚔️ МИРОВОЙ БОСС ПОВЕРЖЕН! Получено ${AppState.boss.rewardCoins} 🪙!`);
         AppState.hero.coins += AppState.boss.rewardCoins;
-        AppState.boss.defeatedCount = (AppState.boss.defeatedCount || 0) + 1;
-        // respawn stronger
+        addJournalEntry("boss", `Победа над мировым боссом: ${AppState.boss.title}`, "Великое зло отступило.");
         AppState.boss.maxHp = Math.round(AppState.boss.maxHp * 1.3);
         AppState.boss.currentHp = AppState.boss.maxHp;
         AppState.boss.rewardCoins = Math.round(AppState.boss.rewardCoins * 1.25);
@@ -1255,32 +1655,12 @@
       saveData();
     }
 
-    function saveBossConfig() {
-      const name = document.getElementById("bossNameInput").value.trim();
-      const hp = parseInt(document.getElementById("bossHpInput").value, 10);
-      const r = parseInt(document.getElementById("bossRewardInput").value, 10);
-
-      if (name) AppState.boss.title = name;
-      if (hp && hp > 0) { AppState.boss.maxHp = hp; AppState.boss.currentHp = hp; }
-      if (r && r > 0) AppState.boss.rewardCoins = r;
-
-      saveData();
-      closeModal("modal-edit-boss");
-      updateUI();
-    }
-
     function saveNewProject() {
       const title = document.getElementById("projTitle").value.trim();
       const steps = parseInt(document.getElementById("projTotalSteps").value, 10) || 5;
       if (!title) return showToast("Введите название!");
 
-      AppState.projects.push({
-        id: "p_" + Date.now(),
-        title,
-        totalSteps: steps,
-        currentStep: 0
-      });
-
+      AppState.projects.push({ id: "p_" + Date.now(), title, totalSteps: steps, currentStep: 0 });
       saveData();
       closeModal("modal-add-project");
       document.getElementById("projTitle").value = "";
@@ -1295,119 +1675,39 @@
       addRewards(50, 25, "creativity", `Этап проекта: ${p.title}`);
       if (p.currentStep === p.totalSteps) {
         showToast(`🏆 ПРОЕКТ ЗАВЕРШЕН: ${p.title}!`);
+        addJournalEntry("goal", `Завершен проект: ${p.title}`, "Все намеченные этапы закрыты с триумфом.");
       }
       saveData();
       updateUI();
     }
 
-    /* ==========================================================================
-       REWARD SHOP
-       ========================================================================== */
-    function buyReward(id) {
-      const r = AppState.rewards.find(x => x.id === id);
-      if (!r) return;
-      if (AppState.hero.coins < r.cost) {
-        return showToast("Недостаточно монет! Выполняйте квесты.");
-      }
-      AppState.hero.coins -= r.cost;
-      saveData();
-      showToast(`Куплено: ${r.title}! Наслаждайтесь заслуженным отдыхом.`);
-      updateUI();
-    }
-
-    function saveNewReward() {
-      const title = document.getElementById("newRewardTitle").value.trim();
-      const cost = parseInt(document.getElementById("newRewardCost").value, 10);
-      if (!title || !cost) return showToast("Заполните поля!");
-
-      AppState.rewards.push({
-        id: "r_" + Date.now(),
-        title,
-        cost
-      });
-      saveData();
-      closeModal("modal-add-reward");
-      document.getElementById("newRewardTitle").value = "";
-      document.getElementById("newRewardCost").value = "";
-      updateUI();
-    }
-
-    /* ==========================================================================
-       TIME TRACKING & FINANCES
-       ========================================================================== */
-    function saveTimeLog() {
-      const cat = document.getElementById("timeLogCategory").value;
-      const hours = parseFloat(document.getElementById("timeLogHours").value);
-      if (!hours || hours <= 0) return showToast("Укажите корректные часы!");
-
-      AppState.timeLogs.push({
-        date: getTodayKey(),
-        category: cat,
-        hours
-      });
-      saveData();
-      closeModal("modal-add-timelog");
-      document.getElementById("timeLogHours").value = "";
-      showToast("Время зафиксировано в статистике!");
-      updateUI();
-    }
-
-    function saveFinanceLog() {
-      const type = document.getElementById("finType").value;
-      const amount = parseFloat(document.getElementById("finAmount").value);
-      const desc = document.getElementById("finDesc").value.trim();
-      if (!amount || amount <= 0) return showToast("Укажите сумму!");
-
-      AppState.financeLogs.push({
-        date: getTodayKey(),
-        type,
-        amount,
-        desc: desc || "Без описания"
-      });
-      saveData();
-      closeModal("modal-add-finance");
-      document.getElementById("finAmount").value = "";
-      document.getElementById("finDesc").value = "";
-      showToast("Финансовая запись сохранена!");
-      updateUI();
-    }
-
-    /* ==========================================================================
-       POMODORO TIMER (Safari background proof via timestamps)
-       ========================================================================== */
+    /* Pomodoro Safari-Safe */
     let timerTargetEnd = null;
     let timerDurationSeconds = 25 * 60;
     let timerTicker = null;
     let isTimerRunning = false;
 
     function setTimerDuration(mins) {
-      if (isTimerRunning) return showToast("Сначала остановите текущий таймер!");
+      if (isTimerRunning) return showToast("Остановите таймер!");
       timerDurationSeconds = mins * 60;
       updateTimerDisplay(timerDurationSeconds);
     }
 
     function toggleTimer() {
       if (!isTimerRunning) {
-        // Start
         timerTargetEnd = Date.now() + timerDurationSeconds * 1000;
         isTimerRunning = true;
         document.getElementById("timerActionBtn").innerText = "Пауза";
         document.getElementById("timerStatusLabel").innerText = "Фокус";
         timerTicker = setInterval(tickTimer, 250);
       } else {
-        // Pause
-        pauseTimer();
+        const rem = Math.max(0, Math.round((timerTargetEnd - Date.now()) / 1000));
+        timerDurationSeconds = rem;
+        clearInterval(timerTicker);
+        isTimerRunning = false;
+        document.getElementById("timerActionBtn").innerText = "Старт";
+        document.getElementById("timerStatusLabel").innerText = "Пауза";
       }
-    }
-
-    function pauseTimer() {
-      if (!isTimerRunning) return;
-      const rem = Math.max(0, Math.round((timerTargetEnd - Date.now()) / 1000));
-      timerDurationSeconds = rem;
-      clearInterval(timerTicker);
-      isTimerRunning = false;
-      document.getElementById("timerActionBtn").innerText = "Старт";
-      document.getElementById("timerStatusLabel").innerText = "Пауза";
     }
 
     function resetTimer() {
@@ -1420,23 +1720,15 @@
     }
 
     function tickTimer() {
-      const now = Date.now();
-      const remaining = Math.round((timerTargetEnd - now) / 1000);
-
+      const remaining = Math.round((timerTargetEnd - Date.now()) / 1000);
       if (remaining <= 0) {
         clearInterval(timerTicker);
         isTimerRunning = false;
         updateTimerDisplay(0);
         document.getElementById("timerActionBtn").innerText = "Старт";
         document.getElementById("timerStatusLabel").innerText = "Завершено";
-        showToast("🔔 Сессия фокуса завершена! +30 XP");
-        addRewards(30, 15, "discipline", "Pomodoro фокус-сессия");
-        AppState.timeLogs.push({
-          date: getTodayKey(),
-          category: "intelligence",
-          hours: 0.5
-        });
-        saveData();
+        showToast("🔔 Фокус-сессия окончена! +35 XP");
+        addRewards(35, 15, "discipline", "Pomodoro фокус-сессия");
       } else {
         updateTimerDisplay(remaining);
       }
@@ -1445,15 +1737,11 @@
     function updateTimerDisplay(totalSecs) {
       const m = Math.floor(totalSecs / 60);
       const s = totalSecs % 60;
-      document.getElementById("timerDisplay").innerText = 
-        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      document.getElementById("timerDisplay").innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
-    /* ==========================================================================
-       CANVAS CHARTS RENDERING (Pure JS Zero-Dependency)
-       ========================================================================== */
+    /* Charts (Canvas) */
     let analyticsPeriodDays = 7;
-
     function setAnalyticsPeriod(days, el) {
       analyticsPeriodDays = days;
       document.querySelectorAll("#view-stats .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
@@ -1473,44 +1761,21 @@
 
     function renderAnalyticsCharts() {
       const dates = getDatesRange(analyticsPeriodDays);
+      const taskCounts = dates.map(dt => AppState.historyLog.filter(l => l.date === dt && l.type === "reward").length);
 
-      // Aggregate tasks completed per day
-      const taskCounts = dates.map(dt => {
-        return AppState.historyLog.filter(l => l.date === dt && l.type === "reward").length;
-      });
-
-      // Chart 1: Tasks Velocity Line Chart
       drawLineChart("chartTasks", dates.map(d => d.slice(5)), taskCounts, "#10b981");
-      const sumTasks = taskCounts.reduce((a,b)=>a+b, 0);
-      document.getElementById("statTasksTotal").innerText = `${sumTasks} квестов`;
+      document.getElementById("statTasksTotal").innerText = `${taskCounts.reduce((a,b)=>a+b, 0)} квестов`;
 
-      // Chart 2: Cumulative XP Growth
       let runningXp = 0;
       const xpValues = dates.map(dt => {
-        const dayXp = AppState.historyLog.filter(l => l.date === dt).reduce((acc, c) => acc + (c.xp || 0), 0);
-        runningXp += dayXp;
+        runningXp += AppState.historyLog.filter(l => l.date === dt).reduce((acc, c) => acc + (c.xp || 0), 0);
         return runningXp;
       });
       drawLineChart("chartXp", dates.map(d => d.slice(5)), xpValues, "#6366f1");
       document.getElementById("statXpTotal").innerText = `+${runningXp} XP`;
 
-      // Chart 3: Attributes Radar / Polar Chart
       drawRadarChart("chartAttributes", AppState.attributes);
-
-      // Chart 4: Time Allocation Bars
-      const timeByCat = { intelligence: 0, wealth: 0, strength: 0, creativity: 0, social: 0 };
-      AppState.timeLogs.forEach(log => {
-        if (dates.includes(log.date) && timeByCat[log.category] !== undefined) {
-          timeByCat[log.category] += log.hours;
-        }
-      });
-      drawBarChart("chartTime", Object.keys(timeByCat), Object.values(timeByCat), "#f59e0b");
-
-      // GitHub Matrix
       renderCalendarMatrix();
-
-      // Finance Balance
-      renderFinances();
     }
 
     function drawLineChart(canvasId, labels, data, color) {
@@ -1520,80 +1785,23 @@
       const dpr = window.devicePixelRatio || 1;
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.scale(dpr, dpr);
-
       ctx.clearRect(0, 0, w, h);
-      const pad = 24;
-      const max = Math.max(...data, 5);
 
-      // Grid lines
-      ctx.strokeStyle = "#1a2538";
-      ctx.lineWidth = 1;
-      for (let i = 0; i <= 3; i++) {
-        const y = pad + (h - pad * 2) * (i / 3);
-        ctx.beginPath();
-        ctx.moveTo(pad, y);
-        ctx.lineTo(w - pad, y);
-        ctx.stroke();
-      }
-
-      // Line & Area
+      const pad = 20;
+      const max = Math.max(...data, 4);
       const stepX = (w - pad * 2) / (data.length - 1 || 1);
+
       ctx.beginPath();
       data.forEach((val, i) => {
         const x = pad + i * stepX;
         const y = h - pad - (val / max) * (h - pad * 2);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       });
       ctx.strokeStyle = color;
       ctx.lineWidth = 2.5;
       ctx.stroke();
-
-      // Points
-      data.forEach((val, i) => {
-        const x = pad + i * stepX;
-        const y = h - pad - (val / max) * (h - pad * 2);
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    }
-
-    function drawBarChart(canvasId, labels, data, color) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-
-      ctx.clearRect(0, 0, w, h);
-      const pad = 24;
-      const max = Math.max(...data, 4);
-      const barW = (w - pad * 2) / data.length - 12;
-
-      data.forEach((val, i) => {
-        const x = pad + i * ((w - pad * 2) / data.length) + 6;
-        const barH = (val / max) * (h - pad * 2);
-        const y = h - pad - barH;
-
-        ctx.fillStyle = "#1e293b";
-        ctx.fillRect(x, pad, barW, h - pad * 2);
-
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, barW, barH);
-
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "9px sans-serif";
-        ctx.fillText(labels[i].slice(0, 4), x, h - 8);
-      });
     }
 
     function drawRadarChart(canvasId, attributes) {
@@ -1603,43 +1811,23 @@
       const dpr = window.devicePixelRatio || 1;
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.scale(dpr, dpr);
-
       ctx.clearRect(0, 0, w, h);
+
       const center = { x: w / 2, y: h / 2 };
       const radius = Math.min(w, h) / 2.6;
       const keys = Object.keys(attributes);
       const total = keys.length;
-
-      // Concentric circles
-      ctx.strokeStyle = "#1a2538";
-      ctx.lineWidth = 1;
-      for (let r = 1; r <= 3; r++) {
-        ctx.beginPath();
-        for (let i = 0; i < total; i++) {
-          const angle = (i * 2 * Math.PI) / total - Math.PI / 2;
-          const x = center.x + (radius * (r / 3)) * Math.cos(angle);
-          const y = center.y + (radius * (r / 3)) * Math.sin(angle);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.stroke();
-      }
-
-      // Attribute polygon
       const maxAttr = Math.max(...Object.values(attributes), 50);
+
       ctx.beginPath();
       keys.forEach((k, i) => {
-        const val = attributes[k];
         const angle = (i * 2 * Math.PI) / total - Math.PI / 2;
-        const dist = (val / maxAttr) * radius;
+        const dist = (attributes[k] / maxAttr) * radius;
         const x = center.x + dist * Math.cos(angle);
         const y = center.y + dist * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       });
       ctx.closePath();
       ctx.fillStyle = "rgba(139, 92, 246, 0.25)";
@@ -1652,7 +1840,7 @@
     function renderCalendarMatrix() {
       const container = document.getElementById("calendarMatrix");
       container.innerHTML = "";
-      const dates = getDatesRange(28); // 4 weeks
+      const dates = getDatesRange(28);
       const today = getTodayKey();
 
       dates.forEach(d => {
@@ -1662,37 +1850,22 @@
         if (logs.length >= 1) lvlClass = "lvl-1";
         if (logs.length >= 3) lvlClass = "lvl-2";
         if (logs.length >= 5) lvlClass = "lvl-3";
-        if (logs.length >= 7) lvlClass = "lvl-4";
 
         cell.className = `cal-cell ${lvlClass} ${d === today ? 'today' : ''}`;
         cell.innerText = d.slice(8);
         cell.onclick = () => {
           document.getElementById("matrixLogDetail").innerHTML = `
-            <strong>${d}:</strong> Выполнено действий: ${logs.length} | XP: ${logs.reduce((a,b)=>a+b.xp,0)}
+            <strong>${d}:</strong> Активностей: ${logs.length} | XP: ${logs.reduce((a,b)=>a+b.xp,0)}
           `;
         };
         container.appendChild(cell);
       });
     }
 
-    function renderFinances() {
-      let income = 0, expense = 0;
-      AppState.financeLogs.forEach(l => {
-        if (l.type === "income") income += l.amount;
-        if (l.type === "expense") expense += l.amount;
-      });
-      document.getElementById("finIncomeText").innerText = `$${income}`;
-      document.getElementById("finExpenseText").innerText = `$${expense}`;
-      document.getElementById("finBalanceText").innerText = `$${income - expense}`;
-    }
-
-    /* ==========================================================================
-       VIEW RENDERING: HOME, QUESTS, HERO
-       ========================================================================== */
+    /* General UI Update */
     function updateUI() {
       evaluateDailyStreak();
 
-      // Top HUD
       const lvlData = calcLevel(AppState.hero.xp);
       document.getElementById("heroName").innerText = AppState.hero.name;
       document.getElementById("heroLevelBadge").innerText = `LVL ${lvlData.level}`;
@@ -1705,18 +1878,9 @@
       document.getElementById("heroXpFill").style.width = `${pct}%`;
       document.getElementById("heroXpText").innerText = `${currentProgressXp} / ${rangeXp} XP`;
 
-      // Render Active View
-      renderHomeView();
-      renderQuestsView();
-      renderGoalsView();
-      renderHeroView();
-      renderAnalyticsCharts();
-    }
-
-    function renderHomeView() {
+      // Home View Data
       const today = getTodayKey();
       document.getElementById("currentDateStr").innerText = today;
-
       const dailyTasks = AppState.tasks.filter(t => t.type === "daily");
       const doneToday = dailyTasks.filter(t => t.completedDate === today);
       document.getElementById("homeDailyDoneCount").innerText = `${doneToday.length} / ${dailyTasks.length}`;
@@ -1724,37 +1888,64 @@
       const todayXp = AppState.historyLog.filter(l => l.date === today).reduce((acc, c) => acc + (c.xp || 0), 0);
       document.getElementById("homeTodayXp").innerText = `+${todayXp}`;
 
-      const todayHours = AppState.timeLogs.filter(l => l.date === today).reduce((acc, c) => acc + c.hours, 0);
-      document.getElementById("homeFocusHours").innerText = `${todayHours.toFixed(1)} ч`;
+      const totalBiomes = BIOMES_DATA.length;
+      const discBiomes = (AppState.worldState.discoveredBiomes || []).length;
+      document.getElementById("homeExplorationPct").innerText = `${Math.round((discBiomes / totalBiomes) * 100)}%`;
 
-      // Urgent Task list (up to 3)
+      // Map tags
+      const curBiome = BIOMES_DATA.find(b => b.id === AppState.worldState.currentBiomeId) || BIOMES_DATA[0];
+      document.getElementById("mapBiomeNameTag").innerText = `Земля: ${curBiome.name}`;
+      document.getElementById("mapDiscoveredTag").innerText = `Исследовано: ${discBiomes}/${totalBiomes}`;
+
+      // Urgent Tasks Home
       const listEl = document.getElementById("homeUrgentList");
       listEl.innerHTML = "";
       const pending = AppState.tasks.filter(t => t.completedDate !== today).slice(0, 3);
       if (pending.length === 0) {
-        listEl.innerHTML = `<div class="muted" style="font-size:0.8rem; padding: 10px; text-align: center;">Все важные задачи выполнены! 🔥</div>`;
-        return;
+        listEl.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center; padding:10px;">Все срочные дела выполнены! 🔥</div>`;
+      } else {
+        pending.forEach(t => listEl.appendChild(createTaskCardEl(t, today)));
       }
-      pending.forEach(t => {
-        listEl.appendChild(createTaskCardEl(t, today));
+
+      // Boss Card
+      document.getElementById("bossTitle").innerText = AppState.boss.title;
+      document.getElementById("bossHpText").innerText = `HP: ${AppState.boss.currentHp} / ${AppState.boss.maxHp}`;
+      document.getElementById("bossRewardTag").innerText = `+${AppState.boss.rewardCoins} 🪙`;
+      document.getElementById("bossHpFill").style.width = `${(AppState.boss.currentHp / AppState.boss.maxHp) * 100}%`;
+
+      // Attributes Grid
+      const attrGrid = document.getElementById("heroAttributesGrid");
+      attrGrid.innerHTML = "";
+      Object.entries(AppState.attributes).forEach(([attr, val]) => {
+        const box = document.createElement("div");
+        box.style.background = "var(--panel)";
+        box.style.padding = "8px";
+        box.style.borderRadius = "8px";
+        box.style.fontSize = "0.75rem";
+        box.innerHTML = `<strong>${attr.toUpperCase()}</strong>: <span style="color:var(--accent);">${val}</span>`;
+        attrGrid.appendChild(box);
       });
+
+      renderQuestsView();
+      renderBuildsView();
+      renderForgeView();
+      renderJournalView();
+      renderAnalyticsCharts();
     }
 
     function renderQuestsView() {
       const today = getTodayKey();
-      const search = (document.getElementById("taskSearchInput").value || "").toLowerCase();
+      const search = (document.getElementById("taskSearchInput")?.value || "").toLowerCase();
 
-      // Tasks
       const tasksContainer = document.getElementById("tasksListContainer");
       tasksContainer.innerHTML = "";
       const activeTasks = AppState.tasks.filter(t => t.completedDate !== today && t.title.toLowerCase().includes(search));
       if (activeTasks.length === 0) {
-        tasksContainer.innerHTML = `<div class="muted" style="font-size:0.8rem; text-align:center; padding: 20px;">Нет активных задач</div>`;
+        tasksContainer.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center; padding:16px;">Список квестов пуст</div>`;
       } else {
         activeTasks.forEach(t => tasksContainer.appendChild(createTaskCardEl(t, today)));
       }
 
-      // Habits
       const habitsContainer = document.getElementById("habitsListContainer");
       habitsContainer.innerHTML = "";
       AppState.habits.forEach(h => {
@@ -1763,24 +1954,16 @@
         card.className = `item-card ${isDone ? 'completed' : ''}`;
         card.innerHTML = `
           <div class="item-left">
-            <div class="check-circle" onclick="toggleHabit('${h.id}')">
-              ${isDone ? '✓' : ''}
-            </div>
-            <div class="item-info">
-              <span class="item-title">${sanitize(h.title)}</span>
-              <span class="item-meta muted">Дней подряд: ${h.history.length}</span>
+            <div class="check-circle" onclick="toggleHabit('${h.id}')">${isDone ? '✓' : ''}</div>
+            <div>
+              <div style="font-size:0.85rem; font-weight:600;">${sanitize(h.title)}</div>
+              <div class="muted" style="font-size:0.7rem;">Серия: ${h.history.length} дн.</div>
             </div>
           </div>
           <span class="badge badge-purple">+20 XP</span>
         `;
         habitsContainer.appendChild(card);
       });
-
-      // Archive
-      const archiveContainer = document.getElementById("archiveListContainer");
-      archiveContainer.innerHTML = "";
-      const archived = AppState.tasks.filter(t => t.completedDate === today);
-      archived.forEach(t => archiveContainer.appendChild(createTaskCardEl(t, today)));
     }
 
     function createTaskCardEl(t, today) {
@@ -1789,166 +1972,74 @@
       el.className = `item-card ${isDone ? 'completed' : ''}`;
       el.innerHTML = `
         <div class="item-left">
-          <div class="check-circle" onclick="toggleTask('${t.id}')">
-            ${isDone ? '✓' : ''}
-          </div>
-          <div class="item-info">
-            <span class="item-title">${sanitize(t.title)}</span>
-            <div class="item-meta">
+          <div class="check-circle" onclick="toggleTask('${t.id}')">${isDone ? '✓' : ''}</div>
+          <div>
+            <div style="font-size:0.85rem; font-weight:600;">${sanitize(t.title)}</div>
+            <div style="display:flex; gap:6px; font-size:0.68rem; margin-top:2px;">
               <span class="badge badge-gold">+${t.xp} XP</span>
               <span class="muted">${t.category}</span>
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-secondary" onclick="deleteTask('${t.id}')">✕</button>
       `;
       return el;
     }
 
-    function renderGoalsView() {
-      // Boss
-      document.getElementById("bossTitle").innerText = AppState.boss.title;
-      document.getElementById("bossHpText").innerText = `HP: ${AppState.boss.currentHp} / ${AppState.boss.maxHp}`;
-      document.getElementById("bossRewardTag").innerText = `+${AppState.boss.rewardCoins} 🪙`;
-      const hpPct = (AppState.boss.currentHp / AppState.boss.maxHp) * 100;
-      document.getElementById("bossHpFill").style.width = `${hpPct}%`;
-
-      // Projects
-      const projContainer = document.getElementById("projectsListContainer");
-      projContainer.innerHTML = "";
-      if (AppState.projects.length === 0) {
-        projContainer.innerHTML = `<div class="muted" style="font-size:0.8rem; text-align:center; padding:12px;">Проектов пока нет</div>`;
-        return;
-      }
-      AppState.projects.forEach(p => {
-        const pct = Math.round((p.currentStep / p.totalSteps) * 100);
-        const card = document.createElement("div");
-        card.className = "item-card";
-        card.innerHTML = `
-          <div style="flex:1;">
-            <div style="font-weight:700; font-size:0.9rem;">${sanitize(p.title)}</div>
-            <div class="muted" style="font-size:0.75rem; margin: 4px 0;">Шаг ${p.currentStep} из ${p.totalSteps} (${pct}%)</div>
-            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-          </div>
-          <button class="btn btn-sm" onclick="advanceProject('${p.id}')" ${p.currentStep >= p.totalSteps ? 'disabled' : ''}>＋ Шаг</button>
-        `;
-        projContainer.appendChild(card);
-      });
-    }
-
-    function renderHeroView() {
-      // Attributes Grid
-      const grid = document.getElementById("heroAttributesGrid");
-      grid.innerHTML = "";
-      Object.entries(AppState.attributes).forEach(([attr, val]) => {
-        const box = document.createElement("div");
-        box.className = "attribute-box";
-        box.innerHTML = `
-          <div class="attr-header">
-            <span>${attr.toUpperCase()}</span>
-            <span style="color:var(--accent);">${val}</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${Math.min(100, val)}%;"></div>
-          </div>
-        `;
-        grid.appendChild(box);
-      });
-
-      // Shop
-      const shop = document.getElementById("rewardShopContainer");
-      shop.innerHTML = "";
-      AppState.rewards.forEach(r => {
-        const item = document.createElement("div");
-        item.className = "item-card";
-        item.innerHTML = `
-          <div>
-            <div style="font-weight:600; font-size:0.88rem;">${sanitize(r.title)}</div>
-            <span class="badge badge-gold">${r.cost} 🪙</span>
-          </div>
-          <button class="btn btn-sm btn-secondary" onclick="buyReward('${r.id}')">Купить</button>
-        `;
-        shop.appendChild(item);
-      });
-
-      // Achievements
-      const achContainer = document.getElementById("achievementsContainer");
-      achContainer.innerHTML = "";
-      const totalQuests = AppState.historyLog.filter(l => l.type === "reward").length;
-      const achievements = [
-        { title: "Первый Шаг", desc: "Выполнить 1 квест", unlocked: totalQuests >= 1 },
-        { title: "Настоящий Воин", desc: "Выполнить 10 квестов", unlocked: totalQuests >= 10 },
-        { title: "Железная Воля", desc: "Серия активности 7 дней", unlocked: AppState.hero.streak >= 7 },
-        { title: "Мастер Дел", desc: "Выполнить 50 квестов", unlocked: totalQuests >= 50 }
-      ];
-      const unlockedCount = achievements.filter(a => a.unlocked).length;
-      document.getElementById("achievementsCounter").innerText = `${unlockedCount} / ${achievements.length}`;
-
-      achievements.forEach(a => {
-        const el = document.createElement("div");
-        el.className = "item-card";
-        el.style.opacity = a.unlocked ? "1" : "0.4";
-        el.innerHTML = `
-          <div>
-            <div style="font-weight:700; font-size:0.85rem;">${a.unlocked ? '🏆' : '🔒'} ${a.title}</div>
-            <div class="muted" style="font-size:0.7rem;">${a.desc}</div>
-          </div>
-          <span class="badge ${a.unlocked ? 'badge-green' : 'badge-gold'}">${a.unlocked ? 'Открыто' : 'Закрыто'}</span>
-        `;
-        achContainer.appendChild(el);
-      });
-
-      document.getElementById("settingHeroName").value = AppState.hero.name;
-    }
-
-    function updateHeroProfile() {
-      const name = document.getElementById("settingHeroName").value.trim();
-      if (name) {
-        AppState.hero.name = name;
-        saveData();
-        showToast("Имя персонажа обновлено!");
-        updateUI();
-      }
-    }
-
-    /* ==========================================================================
-       NAVIGATION & TABS
-       ========================================================================== */
+    /* Navigation & Tabs */
     function switchTab(tabId) {
       document.querySelectorAll(".view-pane").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".bottom-nav .nav-btn").forEach(b => b.classList.remove("active"));
 
       const target = document.getElementById(`view-${tabId}`);
       if (target) target.classList.add("active");
 
-      // Match navigation button state
+      const map = { home: 0, world: 1, quests: 2, goals: 3, stats: 4, hero: 5 };
       const btns = document.querySelectorAll(".bottom-nav .nav-btn");
-      const map = { home: 0, quests: 1, goals: 2, stats: 3, hero: 4 };
       if (btns[map[tabId]]) btns[map[tabId]].classList.add("active");
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (tabId === "world") {
+        setTimeout(() => {
+          if (!mapNodes.length) {
+            const graph = generateWorldGraph(AppState.worldState.currentBiomeId);
+            mapNodes = graph.nodes;
+            mapEdges = graph.edges;
+          }
+          initMapCanvas();
+          mapCenterHero();
+          drawWorldMap();
+          const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
+          if (cur) onSelectMapNode(cur);
+        }, 50);
+      }
       updateUI();
     }
 
+    function switchHeroSubTab(sub, el) {
+      document.querySelectorAll("#view-hero .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+      document.getElementById("subtab-hero-builds").style.display = sub === "builds" ? "block" : "none";
+      document.getElementById("subtab-hero-forge").style.display = sub === "forge" ? "block" : "none";
+      document.getElementById("subtab-hero-journal").style.display = sub === "journal" ? "block" : "none";
+      document.getElementById("subtab-hero-settings").style.display = sub === "settings" ? "block" : "none";
+    }
+
     function switchQuestSubTab(sub, el) {
-      document.querySelectorAll("#view-quests .segment-item").forEach(i => i.classList.remove("active"));
+      document.querySelectorAll("#view-quests .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
       el.classList.add("active");
       document.getElementById("subtab-tasks").style.display = sub === "tasks" ? "block" : "none";
       document.getElementById("subtab-habits").style.display = sub === "habits" ? "block" : "none";
       document.getElementById("subtab-archive").style.display = sub === "archive" ? "block" : "none";
-      renderQuestsView();
     }
 
-    /* ==========================================================================
-       DATA EXPORT, IMPORT & RESET
-       ========================================================================== */
+    /* Backup / Import */
     function exportDataJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `Productivity_RPG_Backup_${getTodayKey()}.json`;
+      a.download = `Productivity_RPG_World_${getTodayKey()}.json`;
       a.click();
-      showToast("Резервная копия скачана!");
     }
 
     function importDataJSON(event) {
@@ -1958,49 +2049,50 @@
       reader.onload = function(e) {
         try {
           const parsed = JSON.parse(e.target.result);
-          if (!parsed.hero || !parsed.attributes) throw new Error("Неверная структура данных");
-          AppState = parsed;
+          AppState = { ...DEFAULT_DATA, ...parsed };
           saveData();
-          showToast("Данные успешно восстановлены!");
+          showToast("Мир и данные восстановлены!");
           updateUI();
         } catch (err) {
-          showToast("Ошибка: поврежденный JSON файл!");
+          showToast("Ошибка чтения файла JSON!");
         }
       };
       reader.readAsText(file);
     }
 
     function exportStatsCSV() {
-      let csv = "Date,Type,Title,XP,Coins,Category\n";
+      let csv = "Date,Type,Title,XP,Coins\n";
       AppState.historyLog.forEach(l => {
-        csv += `"${l.date}","${l.type}","${l.title.replace(/"/g, '""')}",${l.xp},${l.coins},"${l.category}"\n`;
+        csv += `"${l.date}","${l.type}","${l.title.replace(/"/g, '""')}",${l.xp},${l.coins}\n`;
       });
       const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `Productivity_Stats_${getTodayKey()}.csv`;
+      a.download = `Productivity_Logs_${getTodayKey()}.csv`;
       a.click();
     }
 
     function resetAllProgress() {
-      if (confirm("Вы уверены? Весь накопленный опыт, привычки и история будут удалены безвозвратно!")) {
+      if (confirm("Сбросить весь прогресс и карту мира?")) {
         localStorage.removeItem(STORAGE_KEY);
         AppState = JSON.parse(JSON.stringify(DEFAULT_DATA));
         saveData();
-        showToast("Прогресс сброшен.");
         updateUI();
       }
     }
 
-    /* ==========================================================================
-       UI UTILS & MODALS
-       ========================================================================== */
-    function openModal(id) {
-      document.getElementById(id).classList.add("active");
+    function updateHeroProfile() {
+      const name = document.getElementById("settingHeroName").value.trim();
+      if (name) {
+        AppState.hero.name = name;
+        saveData();
+        showToast("Имя обновлено!");
+        updateUI();
+      }
     }
-    function closeModal(id) {
-      document.getElementById(id).classList.remove("active");
-    }
+
+    function openModal(id) { document.getElementById(id).classList.add("active"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
     function showToast(msg) {
       const container = document.getElementById("toast-container");
@@ -2010,22 +2102,23 @@
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = "0";
-        setTimeout(() => toast.remove(), 300);
-      }, 2500);
+        setTimeout(() => toast.remove(), 250);
+      }, 2400);
     }
 
-    // Modal background click close
     document.querySelectorAll(".modal-overlay").forEach(overlay => {
       overlay.addEventListener("click", (e) => {
         if (e.target === overlay) overlay.classList.remove("active");
       });
     });
 
-    // Initial Launch
     window.addEventListener("DOMContentLoaded", () => {
+      const graph = generateWorldGraph(AppState.worldState.currentBiomeId);
+      mapNodes = graph.nodes;
+      mapEdges = graph.edges;
       updateUI();
-      renderAnalyticsCharts();
     });
   </script>
 </body>
 </html>
+
