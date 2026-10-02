@@ -2,216 +2,2030 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="LevelUp">
+  <meta name="apple-mobile-web-app-title" content="LevelUp RPG">
+  <meta name="theme-color" content="#0d1117">
   <title>Productivity RPG</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
+      --bg: #090d16;
+      --panel: #131b2a;
+      --card: #1c2638;
+      --card-border: #2a374f;
       --accent: #6366f1;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --success: #10b981;
+      --accent-gold: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Roboto, sans-serif;
-      min-height: 100vh;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
-    header {
-      padding: 16px 0;
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      padding-top: calc(var(--safe-top) + 12px);
+      padding-bottom: calc(var(--safe-bottom) + 75px);
+      padding-left: 14px;
+      padding-right: 14px;
+      overflow-x: hidden;
+    }
+
+    /* Typography & Utilities */
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
+    .muted { color: var(--text-muted); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-gold { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* HUD Header */
+    .hud-header {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .hud-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .level-badge {
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.9rem;
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    .hero-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .hero-info h2 { font-size: 1.05rem; }
+    .hero-resources {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .hud-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .hud-bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+    }
+    .progress-bar-bg {
+      height: 9px;
+      background: #0f1623;
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid #1a2536;
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #a855f7);
+      border-radius: 99px;
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Cards */
     .card {
       background: var(--card);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin-bottom: 14px;
     }
-    .xp-bar {
-      height: 10px;
-      background: #334155;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 8px;
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .xp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #10b981, #6366f1);
-      width: 0%;
-      transition: width 0.3s ease;
+
+    /* Navigation */
+    .views-container > .view-pane {
+      display: none;
     }
-    .task {
+    .views-container > .view-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 38, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding-top: 8px;
+      padding-bottom: calc(var(--safe-bottom) + 8px);
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 20%;
+    }
+    .nav-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+    }
+    .nav-btn.active {
+      color: var(--accent);
+    }
+    .nav-btn.active svg {
+      stroke: var(--accent);
+    }
+
+    /* Attributes Grid */
+    .attributes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .attribute-box {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .attr-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Lists: Quests & Habits */
+    .segment-bar {
+      display: flex;
+      background: var(--panel);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      gap: 4px;
+      border: 1px solid var(--card-border);
+    }
+    .segment-item {
+      flex: 1;
+      padding: 7px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .segment-item.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .item-card {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px;
-      background: #0f172a;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
-    .task.done {
+    .item-card.completed {
       opacity: 0.55;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .item-card.completed .item-title {
       text-decoration: line-through;
     }
-    .calendar-grid {
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .check-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .item-card.completed .check-circle {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .item-meta {
+      font-size: 0.72rem;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Buttons & Inputs */
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary { background: var(--panel); border: 1px solid var(--card-border); color: var(--text); }
+    .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); }
+    .btn-sm { padding: 5px 10px; font-size: 0.72rem; border-radius: 6px; }
+    .btn-block { width: 100%; }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-sheet {
+      background: var(--panel);
+      width: 100%;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-top: 1px solid var(--card-border);
+      padding: 20px 16px calc(var(--safe-bottom) + 20px) 16px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .input-control, select.input-control, textarea.input-control {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+    .input-control:focus {
+      border-color: var(--accent);
+    }
+
+    /* Charts */
+    .chart-box {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin-top: 8px;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Contribution Grid */
+    .calendar-matrix {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 10px;
+      gap: 5px;
     }
-    .day-cell {
+    .cal-cell {
       aspect-ratio: 1;
-      border-radius: 8px;
-      background: #334155;
+      border-radius: 6px;
+      background: #141b27;
+      border: 1px solid #1a2538;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
+      cursor: pointer;
     }
-    .day-cell.completed { background: var(--success); color: #fff; font-weight: bold; }
-    .day-cell.today { border: 2px solid var(--accent); }
-    .btn {
+    .cal-cell.today { border: 2px solid var(--accent); font-weight: 700; }
+    .cal-cell.lvl-1 { background: #1e3a5f; }
+    .cal-cell.lvl-2 { background: #2563eb; }
+    .cal-cell.lvl-3 { background: #3b82f6; }
+    .cal-cell.lvl-4 { background: #60a5fa; color: #000; }
+
+    /* Timer Widget */
+    .timer-display {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      text-align: center;
+      margin: 16px 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Boss Bar */
+    .boss-card {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--card));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .boss-hp-bar {
+      height: 12px;
+      background: #1e1115;
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      margin: 10px 0;
+    }
+    .boss-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f87171, #ef4444);
       width: 100%;
-      padding: 12px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
+      transition: width 0.3s;
+    }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      top: calc(var(--safe-top) + 16px);
+      left: 14px;
+      right: 14px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      background: rgba(19, 27, 42, 0.95);
+      border: 1px solid var(--accent);
+      backdrop-filter: blur(8px);
+      padding: 10px 14px;
       border-radius: 12px;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin-top: 8px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      animation: toastIn 0.25s ease-out forwards;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div>
-      <h2 style="margin: 0; font-size: 1.3rem;">Прокачка Героя</h2>
-      <small style="color: var(--muted);" id="dateStr"></small>
-    </div>
-    <div class="level-badge" id="lvlBadge">LVL 1</div>
-  </header>
+  <!-- Toast Feed -->
+  <div id="toast-container"></div>
 
-  <!-- Прогресс игрока -->
-  <div class="card">
-    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
-      <span id="xpText">XP: 0 / 100</span>
-      <span id="streakText">🔥 Серия: 0 дн.</span>
+  <!-- HUD Status Bar -->
+  <div class="hud-header">
+    <div class="hud-top">
+      <div class="hero-meta">
+        <div class="hero-avatar" id="heroAvatar">⚔️</div>
+        <div class="hero-info">
+          <h2 id="heroName">Герой</h2>
+          <span class="badge badge-purple" id="heroLevelBadge">LVL 1</span>
+        </div>
+      </div>
+      <div class="hero-resources">
+        <div style="display:flex; align-items:center; gap:4px; color: var(--accent-gold);">
+          <span>🪙</span><span id="heroCoins">0</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:4px; color: #f97316;">
+          <span>🔥</span><span id="heroStreak">0 дн.</span>
+        </div>
+      </div>
     </div>
-    <div class="xp-bar">
-      <div class="xp-fill" id="xpFill"></div>
+    <div class="hud-progress-wrap">
+      <div class="hud-bar-meta">
+        <span class="muted">XP Прогресс</span>
+        <span id="heroXpText">0 / 100</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="heroXpFill" style="width: 0%;"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Привычки на сегодня -->
-  <div class="card">
-    <h3 style="margin-top: 0; font-size: 1.05rem;">Задания на сегодня</h3>
-    <div id="taskList"></div>
+  <!-- VIEWS CONTAINER -->
+  <div class="views-container">
+
+    <!-- VIEW 1: HOME (Dashboard) -->
+    <div class="view-pane active" id="view-home">
+      <!-- Quick Focus & Daily Summary Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Фокус & Сводка Дня</span>
+          <span class="badge badge-gold" id="currentDateStr">Сегодня</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
+            <div class="muted" style="font-size: 0.68rem;">Квесты дня</div>
+            <div style="font-size: 1.1rem; font-weight: 700;" id="homeDailyDoneCount">0 / 0</div>
+          </div>
+          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
+            <div class="muted" style="font-size: 0.68rem;">XP за сегодня</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent);" id="homeTodayXp">+0</div>
+          </div>
+          <div style="flex:1; background: var(--panel); padding: 10px; border-radius: 10px; text-align: center;">
+            <div class="muted" style="font-size: 0.68rem;">Часы фокуса</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-green);" id="homeFocusHours">0.0 ч</div>
+          </div>
+        </div>
+        <button class="btn btn-block" onclick="openModal('modal-add-task')">＋ Добавить задание</button>
+      </div>
+
+      <!-- Quick Active Quests -->
+      <div class="card">
+        <div class="card-title">
+          <span>Срочные задачи на сегодня</span>
+          <button class="btn btn-sm btn-secondary" onclick="switchTab('quests')">Все →</button>
+        </div>
+        <div id="homeUrgentList"></div>
+      </div>
+
+      <!-- Focus Pomodoro Widget -->
+      <div class="card">
+        <div class="card-title">
+          <span>Таймер Продуктивности</span>
+          <span class="badge badge-purple" id="timerStatusLabel">Готов</span>
+        </div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-controls">
+          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(15)">15м</button>
+          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(25)">25м</button>
+          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(50)">50м</button>
+          <button class="btn btn-sm" id="timerActionBtn" onclick="toggleTimer()">Старт</button>
+          <button class="btn btn-danger btn-sm" onclick="resetTimer()">Сброс</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: QUESTS & HABITS -->
+    <div class="view-pane" id="view-quests">
+      <div class="segment-bar">
+        <div class="segment-item active" onclick="switchQuestSubTab('tasks', this)">Задачи</div>
+        <div class="segment-item" onclick="switchQuestSubTab('habits', this)">Привычки</div>
+        <div class="segment-item" onclick="switchQuestSubTab('archive', this)">Архив</div>
+      </div>
+
+      <!-- Tasks Tab -->
+      <div id="subtab-tasks">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="text" id="taskSearchInput" class="input-control" placeholder="Поиск задания..." oninput="renderQuestsView()">
+          <button class="btn" onclick="openModal('modal-add-task')">＋</button>
+        </div>
+        <div id="tasksListContainer"></div>
+      </div>
+
+      <!-- Habits Tab -->
+      <div id="subtab-habits" style="display: none;">
+        <button class="btn btn-block" style="margin-bottom: 12px;" onclick="openModal('modal-add-habit')">＋ Новая привычка</button>
+        <div id="habitsListContainer"></div>
+      </div>
+
+      <!-- Archive Tab -->
+      <div id="subtab-archive" style="display: none;">
+        <div id="archiveListContainer"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: GOALS & BOSSES -->
+    <div class="view-pane" id="view-goals">
+      <div class="card boss-card">
+        <div class="card-title">
+          <span>Текущий Рейд-Босс</span>
+          <span class="badge badge-gold" id="bossRewardTag">+500 XP</span>
+        </div>
+        <h3 id="bossTitle" style="margin-bottom: 4px;">Великий Прокрастинатор</h3>
+        <p class="muted" style="font-size: 0.75rem;" id="bossDesc">Закрывайте связанные этапы проектов для нанесения урона.</p>
+        <div class="boss-hp-bar">
+          <div class="boss-hp-fill" id="bossHpFill"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700;">
+          <span id="bossHpText">HP: 100 / 100</span>
+          <span id="bossStageText">0/4 Этапов</span>
+        </div>
+        <button class="btn btn-secondary btn-sm btn-block" style="margin-top: 10px;" onclick="openModal('modal-edit-boss')">Настроить цель-босса</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Крупные Цели & Проекты</span>
+          <button class="btn btn-sm" onclick="openModal('modal-add-project')">＋ Проект</button>
+        </div>
+        <div id="projectsListContainer"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: STATS & ANALYTICS -->
+    <div class="view-pane" id="view-stats">
+      <!-- Period Selector -->
+      <div class="segment-bar">
+        <div class="segment-item active" onclick="setAnalyticsPeriod(7, this)">7 Дней</div>
+        <div class="segment-item" onclick="setAnalyticsPeriod(30, this)">30 Дней</div>
+        <div class="segment-item" onclick="setAnalyticsPeriod(90, this)">90 Дней</div>
+      </div>
+
+      <!-- Chart 1: Tasks Velocity -->
+      <div class="card">
+        <div class="card-title">
+          <span>Динамика выполнения задач</span>
+          <span class="badge badge-green" id="statTasksTotal">0 шт</span>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartTasks"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Cumulative XP Growth -->
+      <div class="card">
+        <div class="card-title">
+          <span>Рост Опыта (XP)</span>
+          <span class="badge badge-purple" id="statXpTotal">+0 XP</span>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartXp"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Radar Attributes -->
+      <div class="card">
+        <div class="card-title">
+          <span>Баланс Сфер Жизни</span>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartAttributes"></canvas>
+        </div>
+      </div>
+
+      <!-- Activity Calendar Matrix -->
+      <div class="card">
+        <div class="card-title">
+          <span>Матрица Активности (4 недели)</span>
+        </div>
+        <div class="calendar-matrix" id="calendarMatrix"></div>
+        <div id="matrixLogDetail" style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);">
+          Нажмите на ячейку для просмотра лога.
+        </div>
+      </div>
+
+      <!-- Time Tracking Manual Input & Chart -->
+      <div class="card">
+        <div class="card-title">
+          <span>Учет времени по сферам</span>
+          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-timelog')">＋ Записать часы</button>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartTime"></canvas>
+        </div>
+      </div>
+
+      <!-- Real Finances Tracker -->
+      <div class="card">
+        <div class="card-title">
+          <span>Реальные Финансы</span>
+          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-finance')">＋ Операция</button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Доход</div>
+            <div style="color: var(--accent-green); font-weight:700;" id="finIncomeText">$0</div>
+          </div>
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Расход</div>
+            <div style="color: var(--accent-red); font-weight:700;" id="finExpenseText">$0</div>
+          </div>
+          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
+            <div class="muted" style="font-size: 0.65rem;">Баланс</div>
+            <div style="font-weight:700;" id="finBalanceText">$0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export CSV -->
+      <button class="btn btn-secondary btn-block" style="margin-bottom: 20px;" onclick="exportStatsCSV()">Экспорт статистики в CSV</button>
+    </div>
+
+    <!-- VIEW 5: HERO PROFILE & SETTINGS -->
+    <div class="view-pane" id="view-hero">
+      <!-- Attributes breakdown -->
+      <div class="card">
+        <div class="card-title">
+          <span>Характеристики Персонажа</span>
+        </div>
+        <div class="attributes-grid" id="heroAttributesGrid"></div>
+      </div>
+
+      <!-- Rewards Shop -->
+      <div class="card">
+        <div class="card-title">
+          <span>Лавка Наград (За монеты)</span>
+          <button class="btn btn-sm" onclick="openModal('modal-add-reward')">＋ Награда</button>
+        </div>
+        <div id="rewardShopContainer"></div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="card">
+        <div class="card-title">
+          <span>Достижения</span>
+          <span class="badge badge-purple" id="achievementsCounter">0 / 0</span>
+        </div>
+        <div id="achievementsContainer"></div>
+      </div>
+
+      <!-- Settings & Data Management -->
+      <div class="card">
+        <div class="card-title">
+          <span>Настройки & Резервная Копия</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Имя героя</label>
+          <div style="display:flex; gap: 8px;">
+            <input type="text" id="settingHeroName" class="input-control">
+            <button class="btn btn-sm" onclick="updateHeroProfile()">OK</button>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+          <button class="btn btn-secondary btn-block" onclick="exportDataJSON()">Резервная копия (Экспорт JSON)</button>
+          <button class="btn btn-secondary btn-block" onclick="document.getElementById('importFileInput').click()">Восстановить из JSON</button>
+          <input type="file" id="importFileInput" style="display: none;" accept=".json" onchange="importDataJSON(event)">
+          <button class="btn btn-danger btn-block" onclick="resetAllProgress()">Сбросить весь прогресс</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Календарь активности -->
-  <div class="card">
-    <h3 style="margin-top: 0; font-size: 1.05rem;">Календарь (последние 14 дней)</h3>
-    <div class="calendar-grid" id="calendarGrid"></div>
+  <!-- BOTTOM NAVIGATION DOCK -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Главная</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('quests')">
+      <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+      <span>Квесты</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('goals')">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>Цели</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('stats')">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      <span>Статы</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('hero')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Герой</span>
+    </button>
+  </div>
+
+  <!-- MODAL: ADD TASK -->
+  <div class="modal-overlay" id="modal-add-task">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Новый Квест</h3>
+      <div class="form-group">
+        <label class="form-label">Название задания</label>
+        <input type="text" id="newTaskTitle" class="input-control" placeholder="Например: Решить 3 задачи LeetCode">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория / Атрибут</label>
+        <select id="newTaskCategory" class="input-control">
+          <option value="discipline">Discipline (Дисциплина)</option>
+          <option value="intelligence">Intelligence (Учеба / Кодинг)</option>
+          <option value="strength">Strength (Спорт / Тело)</option>
+          <option value="wealth">Wealth (Финансы / Карьера)</option>
+          <option value="social">Social (Общение)</option>
+          <option value="creativity">Creativity (Творчество)</option>
+        </select>
+      </div>
+      <div style="display:flex; gap: 8px;">
+        <div class="form-group" style="flex:1;">
+          <label class="form-label">Тип</label>
+          <select id="newTaskType" class="input-control">
+            <option value="daily">Ежедневный</option>
+            <option value="weekly">Еженедельный</option>
+            <option value="once">Разовый</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label class="form-label">Сложность (XP / 🪙)</label>
+          <select id="newTaskDiff" class="input-control">
+            <option value="easy">Легко (+20 XP / 5 🪙)</option>
+            <option value="medium" selected>Средне (+40 XP / 15 🪙)</option>
+            <option value="hard">Сложно (+80 XP / 30 🪙)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveNewTask()">Создать Квест</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-task')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD HABIT -->
+  <div class="modal-overlay" id="modal-add-habit">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Новая Привычка</h3>
+      <div class="form-group">
+        <label class="form-label">Название привычки</label>
+        <input type="text" id="newHabitTitle" class="input-control" placeholder="Например: Чтение 20 страниц">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select id="newHabitCategory" class="input-control">
+          <option value="discipline">Discipline</option>
+          <option value="intelligence">Intelligence</option>
+          <option value="strength">Strength</option>
+          <option value="wealth">Wealth</option>
+          <option value="social">Social</option>
+          <option value="creativity">Creativity</option>
+        </select>
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveNewHabit()">Добавить Привычку</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-habit')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT BOSS -->
+  <div class="modal-overlay" id="modal-edit-boss">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Настройка Рейд-Босса</h3>
+      <div class="form-group">
+        <label class="form-label">Имя Босса (Главная Цель)</label>
+        <input type="text" id="bossNameInput" class="input-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Количество этапов (Всего HP)</label>
+        <input type="number" id="bossHpInput" class="input-control" min="1" max="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Награда за победу (Монеты)</label>
+        <input type="number" id="bossRewardInput" class="input-control" min="50" max="5000">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveBossConfig()">Сохранить Босса</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-edit-boss')">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD REWARD -->
+  <div class="modal-overlay" id="modal-add-reward">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Новая Награда в Лавку</h3>
+      <div class="form-group">
+        <label class="form-label">Название награды</label>
+        <input type="text" id="newRewardTitle" class="input-control" placeholder="Например: 1 час видеоигр">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Цена в монетах 🪙</label>
+        <input type="number" id="newRewardCost" class="input-control" placeholder="100">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveNewReward()">Добавить в Магазин</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-reward')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD TIME LOG -->
+  <div class="modal-overlay" id="modal-add-timelog">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Записать потраченное время</h3>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select id="timeLogCategory" class="input-control">
+          <option value="intelligence">Учеба / Кодинг</option>
+          <option value="wealth">Работа / Проекты</option>
+          <option value="strength">Спорт / Тренировка</option>
+          <option value="creativity">Творчество</option>
+          <option value="social">Общение</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Затрачено часов</label>
+        <input type="number" id="timeLogHours" step="0.5" min="0.5" max="24" class="input-control" placeholder="1.5">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveTimeLog()">Сохранить Часы</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-timelog')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD FINANCE -->
+  <div class="modal-overlay" id="modal-add-finance">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Финансовая операция</h3>
+      <div class="form-group">
+        <label class="form-label">Тип</label>
+        <select id="finType" class="input-control">
+          <option value="expense">Расход</option>
+          <option value="income">Доход</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Сумма</label>
+        <input type="number" id="finAmount" class="input-control" placeholder="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Описание</label>
+        <input type="text" id="finDesc" class="input-control" placeholder="Курсы / Зарплата">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveFinanceLog()">Записать</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-finance')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD PROJECT -->
+  <div class="modal-overlay" id="modal-add-project">
+    <div class="modal-sheet">
+      <h3 style="margin-bottom: 12px;">Новый Проект / Цель</h3>
+      <div class="form-group">
+        <label class="form-label">Название Проекта</label>
+        <input type="text" id="projTitle" class="input-control" placeholder="Запуск Pet-проекта">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Всего шагов / этапов</label>
+        <input type="number" id="projTotalSteps" class="input-control" value="5" min="1" max="100">
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn btn-block" onclick="saveNewProject()">Создать Проект</button>
+        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-project')">Отмена</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Шаблон привычек (название и опыт)
-    const HABIT_TEMPLATES = [
-      { id: 'english', title: '🇬🇧 Английский язык (30 мин)', xp: 30 },
-      { id: 'coding', title: '💻 Кодинг / Проект (1 час)', xp: 40 },
-      { id: 'sport', title: '🏃 Спорт / Зарядка / Прогулка', xp: 25 },
-      { id: 'reading', title: '📚 Чтение (15 страниц)', xp: 20 },
-      { id: 'water', title: '💧 Водный баланс (2л)', xp: 15 }
-    ];
+    /* ==========================================================================
+       DATA ARCHITECTURE & LOCAL STORAGE MIGRATION
+       ========================================================================== */
+    const STORAGE_KEY = "productivity_rpg_v2_data";
 
-    const todayKey = new Date().toISOString().split('T')[0];
-
-    let state = JSON.parse(localStorage.getItem('rpg_habits_state')) || {
-      xp: 0,
-      history: {} // 'YYYY-MM-DD': ['id1', 'id2']
+    const DEFAULT_DATA = {
+      version: 2,
+      hero: {
+        name: "Герой",
+        xp: 0,
+        coins: 100,
+        streak: 0,
+        lastActiveDate: null
+      },
+      attributes: {
+        discipline: 10,
+        intelligence: 10,
+        strength: 10,
+        wealth: 10,
+        social: 10,
+        creativity: 10
+      },
+      tasks: [
+        { id: "t1", title: "30 мин чтения или учебы", category: "intelligence", type: "daily", diff: "easy", xp: 25, coins: 10, completedDate: null },
+        { id: "t2", title: "Тренировка / 50 отжиманий", category: "strength", type: "daily", diff: "medium", xp: 45, coins: 20, completedDate: null },
+        { id: "t3", title: "Фокус-блок работы/кодинга", category: "wealth", type: "daily", diff: "hard", xp: 80, coins: 35, completedDate: null }
+      ],
+      habits: [
+        { id: "h1", title: "Водный баланс 2л", category: "discipline", history: [] },
+        { id: "h2", title: "Без соцсетей до 11:00", category: "discipline", history: [] }
+      ],
+      boss: {
+        title: "Архидемон Прокрастинации",
+        maxHp: 20,
+        currentHp: 20,
+        rewardCoins: 500,
+        defeatedCount: 0
+      },
+      projects: [],
+      rewards: [
+        { id: "r1", title: "Просмотр фильма / сериала", cost: 80 },
+        { id: "r2", title: "Любимый десерт / читмил", cost: 150 },
+        { id: "r3", title: "Покупка желаемой вещи", cost: 1000 }
+      ],
+      timeLogs: [],    // { date, category, hours }
+      financeLogs: [], // { date, type: 'income'|'expense', amount, desc }
+      historyLog: []   // { date, type, title, xp, coins, category }
     };
 
-    function save() {
-      localStorage.setItem('rpg_habits_state', JSON.stringify(state));
-      render();
-    }
+    let AppState = loadData();
 
-    function toggleHabit(id, habitXp) {
-      if (!state.history[todayKey]) state.history[todayKey] = [];
-      const index = state.history[todayKey].indexOf(id);
-
-      if (index === -1) {
-        state.history[todayKey].push(id);
-        state.xp += habitXp;
-      } else {
-        state.history[todayKey].splice(index, 1);
-        state.xp = Math.max(0, state.xp - habitXp);
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return JSON.parse(JSON.stringify(DEFAULT_DATA));
+        const parsed = JSON.parse(raw);
+        return { ...DEFAULT_DATA, ...parsed };
+      } catch (e) {
+        console.error("Storage error:", e);
+        return JSON.parse(JSON.stringify(DEFAULT_DATA));
       }
-      save();
     }
 
-    function render() {
-      // Уровень и XP (100 XP на каждый уровень)
-      const level = Math.floor(state.xp / 100) + 1;
-      const currentLevelXp = state.xp % 100;
-      document.getElementById('lvlBadge').innerText = `LVL ${level}`;
-      document.getElementById('xpText').innerText = `XP: ${currentLevelXp} / 100`;
-      document.getElementById('xpFill').style.width = `${currentLevelXp}%`;
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
+      } catch (e) {
+        showToast("Ошибка сохранения данных в LocalStorage!");
+      }
+    }
 
-      // Дата
+    /* Date utilities */
+    function getTodayKey() {
       const d = new Date();
-      document.getElementById('dateStr').innerText = d.toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'short' });
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
 
-      // Задачи
-      const todayDone = state.history[todayKey] || [];
-      const listEl = document.getElementById('taskList');
-      listEl.innerHTML = '';
-      HABIT_TEMPLATES.forEach(h => {
-        const isDone = todayDone.includes(h.id);
-        const item = document.createElement('div');
-        item.className = `task ${isDone ? 'done' : ''}`;
-        item.innerHTML = `<span>${h.title}</span><span style="color: #a855f7; font-weight: bold;">+${h.xp} XP</span>`;
-        item.onclick = () => toggleHabit(h.id, h.xp);
-        listEl.appendChild(item);
+    function sanitize(str) {
+      const temp = document.createElement("div");
+      temp.textContent = str;
+      return temp.innerHTML;
+    }
+
+    /* ==========================================================================
+       RPG PROGRESSION ENGINE & STREAKS
+       ========================================================================== */
+    function calcLevel(xp) {
+      // Nonlinear curve: XP = floor(100 * lvl^1.35)
+      let lvl = 1;
+      while (true) {
+        const req = Math.floor(100 * Math.pow(lvl, 1.35));
+        if (xp < req) return { level: lvl, curReq: req, prevReq: lvl === 1 ? 0 : Math.floor(100 * Math.pow(lvl - 1, 1.35)) };
+        lvl++;
+      }
+    }
+
+    function evaluateDailyStreak() {
+      const today = getTodayKey();
+      if (!AppState.hero.lastActiveDate) {
+        AppState.hero.lastActiveDate = today;
+        AppState.hero.streak = 1;
+        saveData();
+        return;
+      }
+      if (AppState.hero.lastActiveDate === today) return;
+
+      const last = new Date(AppState.hero.lastActiveDate);
+      const cur = new Date(today);
+      const diffDays = Math.round((cur - last) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        AppState.hero.streak += 1;
+      } else if (diffDays > 1) {
+        AppState.hero.streak = 1; // broken streak
+      }
+      AppState.hero.lastActiveDate = today;
+      saveData();
+    }
+
+    function addRewards(xp, coins, category, sourceTitle) {
+      const prevLvl = calcLevel(AppState.hero.xp).level;
+      AppState.hero.xp += xp;
+      AppState.hero.coins = Math.max(0, AppState.hero.coins + coins);
+
+      if (category && AppState.attributes[category] !== undefined) {
+        AppState.attributes[category] += Math.max(1, Math.floor(xp / 15));
+      }
+
+      AppState.historyLog.push({
+        date: getTodayKey(),
+        timestamp: Date.now(),
+        type: "reward",
+        title: sourceTitle,
+        xp,
+        coins,
+        category: category || "general"
       });
 
-      // Календарь на 14 дней
-      const calEl = document.getElementById('calendarGrid');
-      calEl.innerHTML = '';
-      for (let i = 13; i >= 0; i--) {
-        const day = new Date();
-        day.setDate(d.getDate() - i);
-        const key = day.toISOString().split('T')[0];
-        const doneCount = (state.history[key] || []).length;
-        const cell = document.createElement('div');
-        cell.className = `day-cell ${doneCount >= 3 ? 'completed' : ''} ${key === todayKey ? 'today' : ''}`;
-        cell.innerHTML = `<span>${day.getDate()}</span><span style="font-size: 0.6rem;">${doneCount}/${HABIT_TEMPLATES.length}</span>`;
-        calEl.appendChild(cell);
+      evaluateDailyStreak();
+      saveData();
+
+      const newLvl = calcLevel(AppState.hero.xp).level;
+      if (newLvl > prevLvl) {
+        showToast(`🎉 УРОВЕНЬ ПОВЫШЕН! Теперь вы LVL ${newLvl}!`);
+      } else {
+        showToast(`+${xp} XP | +${coins} 🪙`);
+      }
+      updateUI();
+    }
+
+    function revertReward(sourceTitle) {
+      const idx = AppState.historyLog.slice().reverse().findIndex(l => l.title === sourceTitle);
+      if (idx !== -1) {
+        const realIdx = AppState.historyLog.length - 1 - idx;
+        const entry = AppState.historyLog[realIdx];
+        AppState.hero.xp = Math.max(0, AppState.hero.xp - entry.xp);
+        AppState.hero.coins = Math.max(0, AppState.hero.coins - entry.coins);
+        if (entry.category && AppState.attributes[entry.category]) {
+          AppState.attributes[entry.category] = Math.max(10, AppState.attributes[entry.category] - Math.floor(entry.xp / 15));
+        }
+        AppState.historyLog.splice(realIdx, 1);
+        saveData();
+        showToast(`Отменено: -${entry.xp} XP / -${entry.coins} 🪙`);
+        updateUI();
       }
     }
 
-    render();
+    /* ==========================================================================
+       QUESTS & HABITS MANAGEMENT
+       ========================================================================== */
+    function toggleTask(id) {
+      const task = AppState.tasks.find(t => t.id === id);
+      if (!task) return;
+      const today = getTodayKey();
+
+      if (task.completedDate === today) {
+        // Uncheck
+        task.completedDate = null;
+        revertReward(task.title);
+      } else {
+        // Complete
+        task.completedDate = today;
+        damageBoss(1);
+        addRewards(task.xp, task.coins, task.category, task.title);
+      }
+      saveData();
+      renderQuestsView();
+      renderHomeView();
+    }
+
+    function toggleHabit(id) {
+      const habit = AppState.habits.find(h => h.id === id);
+      if (!habit) return;
+      const today = getTodayKey();
+      const idx = habit.history.indexOf(today);
+
+      if (idx >= 0) {
+        habit.history.splice(idx, 1);
+        revertReward(`Привычка: ${habit.title}`);
+      } else {
+        habit.history.push(today);
+        addRewards(20, 10, habit.category, `Привычка: ${habit.title}`);
+      }
+      saveData();
+      renderQuestsView();
+    }
+
+    function saveNewTask() {
+      const title = document.getElementById("newTaskTitle").value.trim();
+      if (!title) return showToast("Введите название!");
+
+      const cat = document.getElementById("newTaskCategory").value;
+      const type = document.getElementById("newTaskType").value;
+      const diff = document.getElementById("newTaskDiff").value;
+
+      let xp = 20, coins = 5;
+      if (diff === "medium") { xp = 40; coins = 15; }
+      if (diff === "hard") { xp = 80; coins = 30; }
+
+      AppState.tasks.push({
+        id: "t_" + Date.now(),
+        title,
+        category: cat,
+        type,
+        diff,
+        xp,
+        coins,
+        completedDate: null
+      });
+
+      saveData();
+      closeModal("modal-add-task");
+      document.getElementById("newTaskTitle").value = "";
+      showToast("Квест добавлен в журнал!");
+      updateUI();
+    }
+
+    function saveNewHabit() {
+      const title = document.getElementById("newHabitTitle").value.trim();
+      if (!title) return showToast("Введите название привычки!");
+      const cat = document.getElementById("newHabitCategory").value;
+
+      AppState.habits.push({
+        id: "h_" + Date.now(),
+        title,
+        category: cat,
+        history: []
+      });
+
+      saveData();
+      closeModal("modal-add-habit");
+      document.getElementById("newHabitTitle").value = "";
+      showToast("Привычка создана!");
+      updateUI();
+    }
+
+    function deleteTask(id) {
+      if (confirm("Удалить этот квест?")) {
+        AppState.tasks = AppState.tasks.filter(t => t.id !== id);
+        saveData();
+        updateUI();
+      }
+    }
+
+    /* ==========================================================================
+       BOSSES & PROJECTS
+       ========================================================================== */
+    function damageBoss(amount) {
+      if (AppState.boss.currentHp <= 0) return;
+      AppState.boss.currentHp = Math.max(0, AppState.boss.currentHp - amount);
+      if (AppState.boss.currentHp === 0) {
+        showToast(`⚔️ БОСС ПОВЕРЖЕН! Получено ${AppState.boss.rewardCoins} 🪙!`);
+        AppState.hero.coins += AppState.boss.rewardCoins;
+        AppState.boss.defeatedCount = (AppState.boss.defeatedCount || 0) + 1;
+        // respawn stronger
+        AppState.boss.maxHp = Math.round(AppState.boss.maxHp * 1.3);
+        AppState.boss.currentHp = AppState.boss.maxHp;
+        AppState.boss.rewardCoins = Math.round(AppState.boss.rewardCoins * 1.25);
+      }
+      saveData();
+    }
+
+    function saveBossConfig() {
+      const name = document.getElementById("bossNameInput").value.trim();
+      const hp = parseInt(document.getElementById("bossHpInput").value, 10);
+      const r = parseInt(document.getElementById("bossRewardInput").value, 10);
+
+      if (name) AppState.boss.title = name;
+      if (hp && hp > 0) { AppState.boss.maxHp = hp; AppState.boss.currentHp = hp; }
+      if (r && r > 0) AppState.boss.rewardCoins = r;
+
+      saveData();
+      closeModal("modal-edit-boss");
+      updateUI();
+    }
+
+    function saveNewProject() {
+      const title = document.getElementById("projTitle").value.trim();
+      const steps = parseInt(document.getElementById("projTotalSteps").value, 10) || 5;
+      if (!title) return showToast("Введите название!");
+
+      AppState.projects.push({
+        id: "p_" + Date.now(),
+        title,
+        totalSteps: steps,
+        currentStep: 0
+      });
+
+      saveData();
+      closeModal("modal-add-project");
+      document.getElementById("projTitle").value = "";
+      updateUI();
+    }
+
+    function advanceProject(id) {
+      const p = AppState.projects.find(x => x.id === id);
+      if (!p || p.currentStep >= p.totalSteps) return;
+      p.currentStep++;
+      damageBoss(2);
+      addRewards(50, 25, "creativity", `Этап проекта: ${p.title}`);
+      if (p.currentStep === p.totalSteps) {
+        showToast(`🏆 ПРОЕКТ ЗАВЕРШЕН: ${p.title}!`);
+      }
+      saveData();
+      updateUI();
+    }
+
+    /* ==========================================================================
+       REWARD SHOP
+       ========================================================================== */
+    function buyReward(id) {
+      const r = AppState.rewards.find(x => x.id === id);
+      if (!r) return;
+      if (AppState.hero.coins < r.cost) {
+        return showToast("Недостаточно монет! Выполняйте квесты.");
+      }
+      AppState.hero.coins -= r.cost;
+      saveData();
+      showToast(`Куплено: ${r.title}! Наслаждайтесь заслуженным отдыхом.`);
+      updateUI();
+    }
+
+    function saveNewReward() {
+      const title = document.getElementById("newRewardTitle").value.trim();
+      const cost = parseInt(document.getElementById("newRewardCost").value, 10);
+      if (!title || !cost) return showToast("Заполните поля!");
+
+      AppState.rewards.push({
+        id: "r_" + Date.now(),
+        title,
+        cost
+      });
+      saveData();
+      closeModal("modal-add-reward");
+      document.getElementById("newRewardTitle").value = "";
+      document.getElementById("newRewardCost").value = "";
+      updateUI();
+    }
+
+    /* ==========================================================================
+       TIME TRACKING & FINANCES
+       ========================================================================== */
+    function saveTimeLog() {
+      const cat = document.getElementById("timeLogCategory").value;
+      const hours = parseFloat(document.getElementById("timeLogHours").value);
+      if (!hours || hours <= 0) return showToast("Укажите корректные часы!");
+
+      AppState.timeLogs.push({
+        date: getTodayKey(),
+        category: cat,
+        hours
+      });
+      saveData();
+      closeModal("modal-add-timelog");
+      document.getElementById("timeLogHours").value = "";
+      showToast("Время зафиксировано в статистике!");
+      updateUI();
+    }
+
+    function saveFinanceLog() {
+      const type = document.getElementById("finType").value;
+      const amount = parseFloat(document.getElementById("finAmount").value);
+      const desc = document.getElementById("finDesc").value.trim();
+      if (!amount || amount <= 0) return showToast("Укажите сумму!");
+
+      AppState.financeLogs.push({
+        date: getTodayKey(),
+        type,
+        amount,
+        desc: desc || "Без описания"
+      });
+      saveData();
+      closeModal("modal-add-finance");
+      document.getElementById("finAmount").value = "";
+      document.getElementById("finDesc").value = "";
+      showToast("Финансовая запись сохранена!");
+      updateUI();
+    }
+
+    /* ==========================================================================
+       POMODORO TIMER (Safari background proof via timestamps)
+       ========================================================================== */
+    let timerTargetEnd = null;
+    let timerDurationSeconds = 25 * 60;
+    let timerTicker = null;
+    let isTimerRunning = false;
+
+    function setTimerDuration(mins) {
+      if (isTimerRunning) return showToast("Сначала остановите текущий таймер!");
+      timerDurationSeconds = mins * 60;
+      updateTimerDisplay(timerDurationSeconds);
+    }
+
+    function toggleTimer() {
+      if (!isTimerRunning) {
+        // Start
+        timerTargetEnd = Date.now() + timerDurationSeconds * 1000;
+        isTimerRunning = true;
+        document.getElementById("timerActionBtn").innerText = "Пауза";
+        document.getElementById("timerStatusLabel").innerText = "Фокус";
+        timerTicker = setInterval(tickTimer, 250);
+      } else {
+        // Pause
+        pauseTimer();
+      }
+    }
+
+    function pauseTimer() {
+      if (!isTimerRunning) return;
+      const rem = Math.max(0, Math.round((timerTargetEnd - Date.now()) / 1000));
+      timerDurationSeconds = rem;
+      clearInterval(timerTicker);
+      isTimerRunning = false;
+      document.getElementById("timerActionBtn").innerText = "Старт";
+      document.getElementById("timerStatusLabel").innerText = "Пауза";
+    }
+
+    function resetTimer() {
+      clearInterval(timerTicker);
+      isTimerRunning = false;
+      timerDurationSeconds = 25 * 60;
+      updateTimerDisplay(timerDurationSeconds);
+      document.getElementById("timerActionBtn").innerText = "Старт";
+      document.getElementById("timerStatusLabel").innerText = "Готов";
+    }
+
+    function tickTimer() {
+      const now = Date.now();
+      const remaining = Math.round((timerTargetEnd - now) / 1000);
+
+      if (remaining <= 0) {
+        clearInterval(timerTicker);
+        isTimerRunning = false;
+        updateTimerDisplay(0);
+        document.getElementById("timerActionBtn").innerText = "Старт";
+        document.getElementById("timerStatusLabel").innerText = "Завершено";
+        showToast("🔔 Сессия фокуса завершена! +30 XP");
+        addRewards(30, 15, "discipline", "Pomodoro фокус-сессия");
+        AppState.timeLogs.push({
+          date: getTodayKey(),
+          category: "intelligence",
+          hours: 0.5
+        });
+        saveData();
+      } else {
+        updateTimerDisplay(remaining);
+      }
+    }
+
+    function updateTimerDisplay(totalSecs) {
+      const m = Math.floor(totalSecs / 60);
+      const s = totalSecs % 60;
+      document.getElementById("timerDisplay").innerText = 
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    /* ==========================================================================
+       CANVAS CHARTS RENDERING (Pure JS Zero-Dependency)
+       ========================================================================== */
+    let analyticsPeriodDays = 7;
+
+    function setAnalyticsPeriod(days, el) {
+      analyticsPeriodDays = days;
+      document.querySelectorAll("#view-stats .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+      renderAnalyticsCharts();
+    }
+
+    function getDatesRange(days) {
+      const list = [];
+      for (let i = days - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        list.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+      }
+      return list;
+    }
+
+    function renderAnalyticsCharts() {
+      const dates = getDatesRange(analyticsPeriodDays);
+
+      // Aggregate tasks completed per day
+      const taskCounts = dates.map(dt => {
+        return AppState.historyLog.filter(l => l.date === dt && l.type === "reward").length;
+      });
+
+      // Chart 1: Tasks Velocity Line Chart
+      drawLineChart("chartTasks", dates.map(d => d.slice(5)), taskCounts, "#10b981");
+      const sumTasks = taskCounts.reduce((a,b)=>a+b, 0);
+      document.getElementById("statTasksTotal").innerText = `${sumTasks} квестов`;
+
+      // Chart 2: Cumulative XP Growth
+      let runningXp = 0;
+      const xpValues = dates.map(dt => {
+        const dayXp = AppState.historyLog.filter(l => l.date === dt).reduce((acc, c) => acc + (c.xp || 0), 0);
+        runningXp += dayXp;
+        return runningXp;
+      });
+      drawLineChart("chartXp", dates.map(d => d.slice(5)), xpValues, "#6366f1");
+      document.getElementById("statXpTotal").innerText = `+${runningXp} XP`;
+
+      // Chart 3: Attributes Radar / Polar Chart
+      drawRadarChart("chartAttributes", AppState.attributes);
+
+      // Chart 4: Time Allocation Bars
+      const timeByCat = { intelligence: 0, wealth: 0, strength: 0, creativity: 0, social: 0 };
+      AppState.timeLogs.forEach(log => {
+        if (dates.includes(log.date) && timeByCat[log.category] !== undefined) {
+          timeByCat[log.category] += log.hours;
+        }
+      });
+      drawBarChart("chartTime", Object.keys(timeByCat), Object.values(timeByCat), "#f59e0b");
+
+      // GitHub Matrix
+      renderCalendarMatrix();
+
+      // Finance Balance
+      renderFinances();
+    }
+
+    function drawLineChart(canvasId, labels, data, color) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = 24;
+      const max = Math.max(...data, 5);
+
+      // Grid lines
+      ctx.strokeStyle = "#1a2538";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 3; i++) {
+        const y = pad + (h - pad * 2) * (i / 3);
+        ctx.beginPath();
+        ctx.moveTo(pad, y);
+        ctx.lineTo(w - pad, y);
+        ctx.stroke();
+      }
+
+      // Line & Area
+      const stepX = (w - pad * 2) / (data.length - 1 || 1);
+      ctx.beginPath();
+      data.forEach((val, i) => {
+        const x = pad + i * stepX;
+        const y = h - pad - (val / max) * (h - pad * 2);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Points
+      data.forEach((val, i) => {
+        const x = pad + i * stepX;
+        const y = h - pad - (val / max) * (h - pad * 2);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function drawBarChart(canvasId, labels, data, color) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = 24;
+      const max = Math.max(...data, 4);
+      const barW = (w - pad * 2) / data.length - 12;
+
+      data.forEach((val, i) => {
+        const x = pad + i * ((w - pad * 2) / data.length) + 6;
+        const barH = (val / max) * (h - pad * 2);
+        const y = h - pad - barH;
+
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(x, pad, barW, h - pad * 2);
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, barW, barH);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "9px sans-serif";
+        ctx.fillText(labels[i].slice(0, 4), x, h - 8);
+      });
+    }
+
+    function drawRadarChart(canvasId, attributes) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+
+      ctx.clearRect(0, 0, w, h);
+      const center = { x: w / 2, y: h / 2 };
+      const radius = Math.min(w, h) / 2.6;
+      const keys = Object.keys(attributes);
+      const total = keys.length;
+
+      // Concentric circles
+      ctx.strokeStyle = "#1a2538";
+      ctx.lineWidth = 1;
+      for (let r = 1; r <= 3; r++) {
+        ctx.beginPath();
+        for (let i = 0; i < total; i++) {
+          const angle = (i * 2 * Math.PI) / total - Math.PI / 2;
+          const x = center.x + (radius * (r / 3)) * Math.cos(angle);
+          const y = center.y + (radius * (r / 3)) * Math.sin(angle);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Attribute polygon
+      const maxAttr = Math.max(...Object.values(attributes), 50);
+      ctx.beginPath();
+      keys.forEach((k, i) => {
+        const val = attributes[k];
+        const angle = (i * 2 * Math.PI) / total - Math.PI / 2;
+        const dist = (val / maxAttr) * radius;
+        const x = center.x + dist * Math.cos(angle);
+        const y = center.y + dist * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(139, 92, 246, 0.25)";
+      ctx.fill();
+      ctx.strokeStyle = "#8b5cf6";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function renderCalendarMatrix() {
+      const container = document.getElementById("calendarMatrix");
+      container.innerHTML = "";
+      const dates = getDatesRange(28); // 4 weeks
+      const today = getTodayKey();
+
+      dates.forEach(d => {
+        const logs = AppState.historyLog.filter(l => l.date === d);
+        const cell = document.createElement("div");
+        let lvlClass = "";
+        if (logs.length >= 1) lvlClass = "lvl-1";
+        if (logs.length >= 3) lvlClass = "lvl-2";
+        if (logs.length >= 5) lvlClass = "lvl-3";
+        if (logs.length >= 7) lvlClass = "lvl-4";
+
+        cell.className = `cal-cell ${lvlClass} ${d === today ? 'today' : ''}`;
+        cell.innerText = d.slice(8);
+        cell.onclick = () => {
+          document.getElementById("matrixLogDetail").innerHTML = `
+            <strong>${d}:</strong> Выполнено действий: ${logs.length} | XP: ${logs.reduce((a,b)=>a+b.xp,0)}
+          `;
+        };
+        container.appendChild(cell);
+      });
+    }
+
+    function renderFinances() {
+      let income = 0, expense = 0;
+      AppState.financeLogs.forEach(l => {
+        if (l.type === "income") income += l.amount;
+        if (l.type === "expense") expense += l.amount;
+      });
+      document.getElementById("finIncomeText").innerText = `$${income}`;
+      document.getElementById("finExpenseText").innerText = `$${expense}`;
+      document.getElementById("finBalanceText").innerText = `$${income - expense}`;
+    }
+
+    /* ==========================================================================
+       VIEW RENDERING: HOME, QUESTS, HERO
+       ========================================================================== */
+    function updateUI() {
+      evaluateDailyStreak();
+
+      // Top HUD
+      const lvlData = calcLevel(AppState.hero.xp);
+      document.getElementById("heroName").innerText = AppState.hero.name;
+      document.getElementById("heroLevelBadge").innerText = `LVL ${lvlData.level}`;
+      document.getElementById("heroCoins").innerText = AppState.hero.coins;
+      document.getElementById("heroStreak").innerText = `${AppState.hero.streak} дн.`;
+
+      const rangeXp = lvlData.curReq - lvlData.prevReq;
+      const currentProgressXp = AppState.hero.xp - lvlData.prevReq;
+      const pct = Math.min(100, Math.max(0, (currentProgressXp / rangeXp) * 100));
+      document.getElementById("heroXpFill").style.width = `${pct}%`;
+      document.getElementById("heroXpText").innerText = `${currentProgressXp} / ${rangeXp} XP`;
+
+      // Render Active View
+      renderHomeView();
+      renderQuestsView();
+      renderGoalsView();
+      renderHeroView();
+      renderAnalyticsCharts();
+    }
+
+    function renderHomeView() {
+      const today = getTodayKey();
+      document.getElementById("currentDateStr").innerText = today;
+
+      const dailyTasks = AppState.tasks.filter(t => t.type === "daily");
+      const doneToday = dailyTasks.filter(t => t.completedDate === today);
+      document.getElementById("homeDailyDoneCount").innerText = `${doneToday.length} / ${dailyTasks.length}`;
+
+      const todayXp = AppState.historyLog.filter(l => l.date === today).reduce((acc, c) => acc + (c.xp || 0), 0);
+      document.getElementById("homeTodayXp").innerText = `+${todayXp}`;
+
+      const todayHours = AppState.timeLogs.filter(l => l.date === today).reduce((acc, c) => acc + c.hours, 0);
+      document.getElementById("homeFocusHours").innerText = `${todayHours.toFixed(1)} ч`;
+
+      // Urgent Task list (up to 3)
+      const listEl = document.getElementById("homeUrgentList");
+      listEl.innerHTML = "";
+      const pending = AppState.tasks.filter(t => t.completedDate !== today).slice(0, 3);
+      if (pending.length === 0) {
+        listEl.innerHTML = `<div class="muted" style="font-size:0.8rem; padding: 10px; text-align: center;">Все важные задачи выполнены! 🔥</div>`;
+        return;
+      }
+      pending.forEach(t => {
+        listEl.appendChild(createTaskCardEl(t, today));
+      });
+    }
+
+    function renderQuestsView() {
+      const today = getTodayKey();
+      const search = (document.getElementById("taskSearchInput").value || "").toLowerCase();
+
+      // Tasks
+      const tasksContainer = document.getElementById("tasksListContainer");
+      tasksContainer.innerHTML = "";
+      const activeTasks = AppState.tasks.filter(t => t.completedDate !== today && t.title.toLowerCase().includes(search));
+      if (activeTasks.length === 0) {
+        tasksContainer.innerHTML = `<div class="muted" style="font-size:0.8rem; text-align:center; padding: 20px;">Нет активных задач</div>`;
+      } else {
+        activeTasks.forEach(t => tasksContainer.appendChild(createTaskCardEl(t, today)));
+      }
+
+      // Habits
+      const habitsContainer = document.getElementById("habitsListContainer");
+      habitsContainer.innerHTML = "";
+      AppState.habits.forEach(h => {
+        const isDone = h.history.includes(today);
+        const card = document.createElement("div");
+        card.className = `item-card ${isDone ? 'completed' : ''}`;
+        card.innerHTML = `
+          <div class="item-left">
+            <div class="check-circle" onclick="toggleHabit('${h.id}')">
+              ${isDone ? '✓' : ''}
+            </div>
+            <div class="item-info">
+              <span class="item-title">${sanitize(h.title)}</span>
+              <span class="item-meta muted">Дней подряд: ${h.history.length}</span>
+            </div>
+          </div>
+          <span class="badge badge-purple">+20 XP</span>
+        `;
+        habitsContainer.appendChild(card);
+      });
+
+      // Archive
+      const archiveContainer = document.getElementById("archiveListContainer");
+      archiveContainer.innerHTML = "";
+      const archived = AppState.tasks.filter(t => t.completedDate === today);
+      archived.forEach(t => archiveContainer.appendChild(createTaskCardEl(t, today)));
+    }
+
+    function createTaskCardEl(t, today) {
+      const isDone = t.completedDate === today;
+      const el = document.createElement("div");
+      el.className = `item-card ${isDone ? 'completed' : ''}`;
+      el.innerHTML = `
+        <div class="item-left">
+          <div class="check-circle" onclick="toggleTask('${t.id}')">
+            ${isDone ? '✓' : ''}
+          </div>
+          <div class="item-info">
+            <span class="item-title">${sanitize(t.title)}</span>
+            <div class="item-meta">
+              <span class="badge badge-gold">+${t.xp} XP</span>
+              <span class="muted">${t.category}</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-secondary" onclick="deleteTask('${t.id}')">✕</button>
+      `;
+      return el;
+    }
+
+    function renderGoalsView() {
+      // Boss
+      document.getElementById("bossTitle").innerText = AppState.boss.title;
+      document.getElementById("bossHpText").innerText = `HP: ${AppState.boss.currentHp} / ${AppState.boss.maxHp}`;
+      document.getElementById("bossRewardTag").innerText = `+${AppState.boss.rewardCoins} 🪙`;
+      const hpPct = (AppState.boss.currentHp / AppState.boss.maxHp) * 100;
+      document.getElementById("bossHpFill").style.width = `${hpPct}%`;
+
+      // Projects
+      const projContainer = document.getElementById("projectsListContainer");
+      projContainer.innerHTML = "";
+      if (AppState.projects.length === 0) {
+        projContainer.innerHTML = `<div class="muted" style="font-size:0.8rem; text-align:center; padding:12px;">Проектов пока нет</div>`;
+        return;
+      }
+      AppState.projects.forEach(p => {
+        const pct = Math.round((p.currentStep / p.totalSteps) * 100);
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.innerHTML = `
+          <div style="flex:1;">
+            <div style="font-weight:700; font-size:0.9rem;">${sanitize(p.title)}</div>
+            <div class="muted" style="font-size:0.75rem; margin: 4px 0;">Шаг ${p.currentStep} из ${p.totalSteps} (${pct}%)</div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+          </div>
+          <button class="btn btn-sm" onclick="advanceProject('${p.id}')" ${p.currentStep >= p.totalSteps ? 'disabled' : ''}>＋ Шаг</button>
+        `;
+        projContainer.appendChild(card);
+      });
+    }
+
+    function renderHeroView() {
+      // Attributes Grid
+      const grid = document.getElementById("heroAttributesGrid");
+      grid.innerHTML = "";
+      Object.entries(AppState.attributes).forEach(([attr, val]) => {
+        const box = document.createElement("div");
+        box.className = "attribute-box";
+        box.innerHTML = `
+          <div class="attr-header">
+            <span>${attr.toUpperCase()}</span>
+            <span style="color:var(--accent);">${val}</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: ${Math.min(100, val)}%;"></div>
+          </div>
+        `;
+        grid.appendChild(box);
+      });
+
+      // Shop
+      const shop = document.getElementById("rewardShopContainer");
+      shop.innerHTML = "";
+      AppState.rewards.forEach(r => {
+        const item = document.createElement("div");
+        item.className = "item-card";
+        item.innerHTML = `
+          <div>
+            <div style="font-weight:600; font-size:0.88rem;">${sanitize(r.title)}</div>
+            <span class="badge badge-gold">${r.cost} 🪙</span>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="buyReward('${r.id}')">Купить</button>
+        `;
+        shop.appendChild(item);
+      });
+
+      // Achievements
+      const achContainer = document.getElementById("achievementsContainer");
+      achContainer.innerHTML = "";
+      const totalQuests = AppState.historyLog.filter(l => l.type === "reward").length;
+      const achievements = [
+        { title: "Первый Шаг", desc: "Выполнить 1 квест", unlocked: totalQuests >= 1 },
+        { title: "Настоящий Воин", desc: "Выполнить 10 квестов", unlocked: totalQuests >= 10 },
+        { title: "Железная Воля", desc: "Серия активности 7 дней", unlocked: AppState.hero.streak >= 7 },
+        { title: "Мастер Дел", desc: "Выполнить 50 квестов", unlocked: totalQuests >= 50 }
+      ];
+      const unlockedCount = achievements.filter(a => a.unlocked).length;
+      document.getElementById("achievementsCounter").innerText = `${unlockedCount} / ${achievements.length}`;
+
+      achievements.forEach(a => {
+        const el = document.createElement("div");
+        el.className = "item-card";
+        el.style.opacity = a.unlocked ? "1" : "0.4";
+        el.innerHTML = `
+          <div>
+            <div style="font-weight:700; font-size:0.85rem;">${a.unlocked ? '🏆' : '🔒'} ${a.title}</div>
+            <div class="muted" style="font-size:0.7rem;">${a.desc}</div>
+          </div>
+          <span class="badge ${a.unlocked ? 'badge-green' : 'badge-gold'}">${a.unlocked ? 'Открыто' : 'Закрыто'}</span>
+        `;
+        achContainer.appendChild(el);
+      });
+
+      document.getElementById("settingHeroName").value = AppState.hero.name;
+    }
+
+    function updateHeroProfile() {
+      const name = document.getElementById("settingHeroName").value.trim();
+      if (name) {
+        AppState.hero.name = name;
+        saveData();
+        showToast("Имя персонажа обновлено!");
+        updateUI();
+      }
+    }
+
+    /* ==========================================================================
+       NAVIGATION & TABS
+       ========================================================================== */
+    function switchTab(tabId) {
+      document.querySelectorAll(".view-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+
+      const target = document.getElementById(`view-${tabId}`);
+      if (target) target.classList.add("active");
+
+      // Match navigation button state
+      const btns = document.querySelectorAll(".bottom-nav .nav-btn");
+      const map = { home: 0, quests: 1, goals: 2, stats: 3, hero: 4 };
+      if (btns[map[tabId]]) btns[map[tabId]].classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      updateUI();
+    }
+
+    function switchQuestSubTab(sub, el) {
+      document.querySelectorAll("#view-quests .segment-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+      document.getElementById("subtab-tasks").style.display = sub === "tasks" ? "block" : "none";
+      document.getElementById("subtab-habits").style.display = sub === "habits" ? "block" : "none";
+      document.getElementById("subtab-archive").style.display = sub === "archive" ? "block" : "none";
+      renderQuestsView();
+    }
+
+    /* ==========================================================================
+       DATA EXPORT, IMPORT & RESET
+       ========================================================================== */
+    function exportDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState, null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = `Productivity_RPG_Backup_${getTodayKey()}.json`;
+      a.click();
+      showToast("Резервная копия скачана!");
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.hero || !parsed.attributes) throw new Error("Неверная структура данных");
+          AppState = parsed;
+          saveData();
+          showToast("Данные успешно восстановлены!");
+          updateUI();
+        } catch (err) {
+          showToast("Ошибка: поврежденный JSON файл!");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function exportStatsCSV() {
+      let csv = "Date,Type,Title,XP,Coins,Category\n";
+      AppState.historyLog.forEach(l => {
+        csv += `"${l.date}","${l.type}","${l.title.replace(/"/g, '""')}",${l.xp},${l.coins},"${l.category}"\n`;
+      });
+      const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = `Productivity_Stats_${getTodayKey()}.csv`;
+      a.click();
+    }
+
+    function resetAllProgress() {
+      if (confirm("Вы уверены? Весь накопленный опыт, привычки и история будут удалены безвозвратно!")) {
+        localStorage.removeItem(STORAGE_KEY);
+        AppState = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        saveData();
+        showToast("Прогресс сброшен.");
+        updateUI();
+      }
+    }
+
+    /* ==========================================================================
+       UI UTILS & MODALS
+       ========================================================================== */
+    function openModal(id) {
+      document.getElementById(id).classList.add("active");
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("active");
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = msg;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // Modal background click close
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) overlay.classList.remove("active");
+      });
+    });
+
+    // Initial Launch
+    window.addEventListener("DOMContentLoaded", () => {
+      updateUI();
+      renderAnalyticsCharts();
+    });
   </script>
 </body>
 </html>
