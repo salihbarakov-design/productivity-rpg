@@ -5,23 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="LevelUp World">
-  <meta name="theme-color" content="#070a12">
-  <title>Productivity RPG: World Edition</title>
+  <meta name="apple-mobile-web-app-title" content="Dark RPG">
+  <title>Productivity RPG: Dark Fantasy</title>
   <style>
     :root {
-      --bg: #070a12;
-      --panel: #0f172a;
-      --card: #182234;
-      --card-border: #223249;
-      --accent: #6366f1;
-      --accent-gold: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-green: #10b981;
-      --accent-purple: #8b5cf6;
-      --accent-cyan: #06b6d4;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg: #06080d;
+      --bg-panel: #0d121c;
+      --bg-card: #141c2b;
+      --border-dark: #222f46;
+      --border-light: #374b6e;
+      --accent-red: #dc2626;
+      --accent-crimson: #991b1b;
+      --accent-gold: #d97706;
+      --accent-gold-bright: #fbbf24;
+      --accent-purple: #7c3aed;
+      --accent-cyan: #0891b2;
+      --text: #f1f5f9;
+      --text-muted: #8493a8;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -35,2011 +35,1480 @@
     }
 
     body {
-      background-color: var(--bg);
+      background: radial-gradient(circle at 50% 10%, #101726 0%, var(--bg) 100%);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Cinzel", "Segoe UI", Roboto, serif;
       min-height: 100vh;
-      padding-top: calc(var(--safe-top) + 10px);
-      padding-bottom: calc(var(--safe-bottom) + 76px);
-      padding-left: 12px;
-      padding-right: 12px;
+      padding-top: calc(var(--safe-top) + 8px);
+      padding-bottom: calc(var(--safe-bottom) + 72px);
+      padding-left: 10px;
+      padding-right: 10px;
       overflow-x: hidden;
     }
 
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.02em; }
-    .muted { color: var(--text-muted); }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    /* Metal Frame Styling */
+    .frame-box {
+      background: linear-gradient(180deg, rgba(20, 28, 43, 0.95) 0%, rgba(13, 18, 28, 0.98) 100%);
+      border: 1px solid var(--border-dark);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.7);
+      border-radius: 12px;
+      position: relative;
     }
-    .badge-gold { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
-    .badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
-    .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .frame-box::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 10px;
+      pointer-events: none;
+    }
 
     /* Top HUD */
-    .hud-header {
-      background: var(--panel);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-    .hud-top {
+    .hud-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 10px 14px;
+      margin-bottom: 10px;
     }
-    .hero-meta {
+    .hero-hud-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .hero-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      border: 2px solid rgba(255,255,255,0.15);
-      cursor: pointer;
+    .badge-lvl {
+      background: linear-gradient(135deg, var(--accent-crimson), #450a0a);
+      border: 1px solid #ef4444;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: #fecaca;
     }
-    .hero-resources {
+    .res-group {
       display: flex;
-      align-items: center;
       gap: 12px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
     }
-    .progress-bar-bg {
-      height: 8px;
-      background: #090e17;
-      border-radius: 99px;
+    .res-gold { color: var(--accent-gold-bright); }
+    .res-streak { color: #f97316; }
+
+    .xp-meter {
+      height: 6px;
+      background: #090d14;
+      border-radius: 3px;
       overflow: hidden;
-      border: 1px solid #1a2538;
-      position: relative;
+      margin-top: 6px;
+      border: 1px solid #1a2537;
     }
-    .progress-bar-fill {
+    .xp-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--accent), #a855f7);
-      border-radius: 99px;
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+      width: 0%;
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Cards */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .card-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Views */
-    .views-container > .view-pane { display: none; }
-    .views-container > .view-pane.active { display: block; animation: fadeIn 0.2s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(11, 16, 26, 0.94);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-around;
-      padding-top: 7px;
-      padding-bottom: calc(var(--safe-bottom) + 7px);
-      z-index: 1000;
-    }
-    .nav-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      font-size: 0.62rem;
-      font-weight: 600;
-      cursor: pointer;
-      width: 16.6%;
-    }
-    .nav-btn svg { width: 19px; height: 19px; stroke-width: 2; stroke: currentColor; fill: none; }
-    .nav-btn.active { color: var(--accent); }
-    .nav-btn.active svg { stroke: var(--accent); }
-
-    /* Interactive World Map */
-    .map-viewport-wrapper {
+    /* Battle Stage Scene */
+    .battle-stage-container {
       position: relative;
       width: 100%;
-      height: 480px;
-      background: #060911;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
+      height: 290px;
+      border-radius: 14px;
       overflow: hidden;
-      touch-action: none;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.8);
+      background: #05070c;
     }
-    #worldMapCanvas {
+    #battleCanvas {
       width: 100%;
       height: 100%;
       display: block;
-      cursor: grab;
     }
-    .map-hud-overlay {
+    .battle-hud-top {
       position: absolute;
-      top: 10px;
+      top: 8px;
       left: 10px;
       right: 10px;
       display: flex;
       justify-content: space-between;
       pointer-events: none;
     }
-    .map-biome-tag {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(8px);
-      padding: 6px 12px;
+    .boss-stat-panel {
+      background: rgba(8, 12, 18, 0.85);
+      border: 1px solid rgba(220, 38, 38, 0.4);
+      padding: 6px 10px;
+      border-radius: 8px;
+      width: 52%;
+      backdrop-filter: blur(4px);
+    }
+    .hero-stat-panel {
+      background: rgba(8, 12, 18, 0.85);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 6px 10px;
+      border-radius: 8px;
+      width: 44%;
+      backdrop-filter: blur(4px);
+    }
+    .bar-wrap {
+      height: 8px;
+      background: #090d14;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      margin-top: 4px;
+    }
+    .hp-fill-boss {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444, #991b1b);
+      width: 100%;
+      transition: width 0.2s ease-out;
+    }
+    .hp-fill-hero {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #047857);
+      width: 100%;
+      transition: width 0.2s ease-out;
+    }
+    .battle-combat-log {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      right: 10px;
+      font-size: 0.72rem;
+      background: rgba(6, 9, 14, 0.85);
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-dark);
+      color: #cbd5e1;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Views System */
+    .view-pane { display: none; }
+    .view-pane.active { display: block; animation: viewIn 0.22s ease-out; }
+    @keyframes viewIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Action Deck */
+    .action-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .btn-action {
+      background: linear-gradient(180deg, #1f2a3e 0%, #121927 100%);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      padding: 10px 6px;
       border-radius: 10px;
-      pointer-events: auto;
       font-size: 0.75rem;
       font-weight: 700;
-    }
-    .map-controls-dock {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      pointer-events: auto;
-    }
-    .map-dock-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    /* Segments, Lists, Buttons */
-    .segment-bar {
-      display: flex;
-      background: var(--panel);
-      padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 12px;
       gap: 4px;
-      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
-    .segment-item {
-      flex: 1;
-      padding: 6px 4px;
-      text-align: center;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .segment-item.active {
-      background: var(--card);
-      color: var(--text);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    .btn-action:active { transform: scale(0.97); }
+    .btn-action.attack-btn {
+      background: linear-gradient(180deg, #991b1b 0%, #450a0a 100%);
+      border-color: #ef4444;
+      color: #fff;
     }
 
-    .item-card {
-      background: var(--panel);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+    /* Task & Habit Lists */
+    .quest-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
       padding: 11px 12px;
+      border-radius: 10px;
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      transition: all 0.2s;
     }
-    .item-card.completed { opacity: 0.55; }
-    .item-card.completed .item-title { text-decoration: line-through; }
-    .item-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-    .check-circle {
-      width: 24px;
-      height: 24px;
-      border-radius: 8px;
-      border: 2px solid var(--accent);
-      background: transparent;
+    .quest-card.done {
+      opacity: 0.45;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .quest-card.done .quest-name { text-decoration: line-through; }
+    .check-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 2px solid var(--border-light);
+      background: #090d15;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 900;
+      color: #10b981;
       cursor: pointer;
       flex-shrink: 0;
     }
-    .item-card.completed .check-circle { background: var(--accent-green); border-color: var(--accent-green); }
-
-    .btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.82rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-secondary { background: var(--panel); border: 1px solid var(--card-border); color: var(--text); }
-    .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); }
-    .btn-sm { padding: 5px 9px; font-size: 0.7rem; border-radius: 6px; }
-    .btn-block { width: 100%; }
-
-    /* Modals & Inputs */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.78);
-      backdrop-filter: blur(6px);
-      z-index: 2000;
-      display: none;
-      align-items: flex-end;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal-sheet {
-      background: var(--panel);
-      width: 100%;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      border-top: 1px solid var(--card-border);
-      padding: 18px 16px calc(var(--safe-bottom) + 20px) 16px;
-      max-height: 86vh;
-      overflow-y: auto;
-      animation: slideUp 0.22s ease-out;
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .form-group { margin-bottom: 12px; }
-    .form-label { display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
-    .input-control, select.input-control, textarea.input-control {
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      outline: none;
-      font-family: inherit;
+    .quest-card.done .check-box {
+      background: #10b981;
+      color: #06090e;
+      border-color: #10b981;
     }
 
-    .chart-box { width: 100%; height: 190px; position: relative; margin-top: 6px; }
-    canvas { width: 100% !important; height: 100% !important; }
-
-    /* Matrix */
-    .calendar-matrix { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .cal-cell {
-      aspect-ratio: 1;
-      border-radius: 6px;
-      background: #101622;
-      border: 1px solid #182234;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.68rem;
-      cursor: pointer;
-    }
-    .cal-cell.today { border: 2px solid var(--accent); font-weight: 700; }
-    .cal-cell.lvl-1 { background: #1e3a5f; }
-    .cal-cell.lvl-2 { background: #2563eb; }
-    .cal-cell.lvl-3 { background: #3b82f6; }
-    .cal-cell.lvl-4 { background: #60a5fa; color: #000; }
-
-    /* Build selector cards */
-    .build-grid {
+    /* Attributes Layout */
+    .stats-table {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
+      margin-bottom: 12px;
     }
-    .build-card {
-      background: var(--panel);
-      border: 1px solid var(--card-border);
+    .stat-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-meta { font-size: 0.72rem; }
+    .stat-name { font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+    .stat-val { font-size: 0.95rem; font-weight: 800; color: #f8fafc; }
+    .btn-upgrade {
+      background: #374151;
+      color: #fbbf24;
+      border: 1px solid #4b5563;
+      border-radius: 4px;
+      padding: 3px 7px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-upgrade:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Bottom Navigation */
+    .nav-dock {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 13, 20, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border-dark);
+      display: flex;
+      justify-content: space-around;
+      padding-top: 6px;
+      padding-bottom: calc(var(--safe-bottom) + 6px);
+      z-index: 1000;
+    }
+    .nav-item {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      width: 20%;
+    }
+    .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .nav-item.active { color: #f8fafc; }
+    .nav-item.active svg { stroke: #ef4444; }
+
+    /* Item Grid in Inventory/Shop */
+    .gear-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .gear-slot {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
       border-radius: 10px;
-      padding: 10px;
+      padding: 10px 6px;
+      text-align: center;
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 4px;
+      min-height: 80px;
+      justify-content: center;
     }
-    .build-card.active {
-      border-color: var(--accent);
-      background: rgba(99, 102, 241, 0.1);
+    .gear-slot.equipped {
+      border-color: #fbbf24;
+      background: rgba(251, 191, 36, 0.05);
     }
 
-    #toast-container {
+    /* Floating Toast */
+    #toast-shelf {
       position: fixed;
-      top: calc(var(--safe-top) + 14px);
+      top: calc(var(--safe-top) + 10px);
       left: 12px;
       right: 12px;
       z-index: 3000;
+      pointer-events: none;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      pointer-events: none;
     }
-    .toast {
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid var(--accent);
-      backdrop-filter: blur(8px);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
-      animation: toastIn 0.2s ease-out forwards;
+    .dark-toast {
+      background: rgba(13, 18, 28, 0.96);
+      border: 1px solid #ef4444;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #f8fafc;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.8);
+      animation: toastAnim 0.25s ease-out forwards;
     }
-    @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastAnim {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal Form Sheets */
+    .modal-curtain {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(6px);
+      z-index: 2500;
+      display: none;
+      align-items: flex-end;
+    }
+    .modal-curtain.active { display: flex; }
+    .sheet-card {
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border-light);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      width: 100%;
+      padding: 18px 16px calc(var(--safe-bottom) + 20px) 16px;
+      max-height: 86vh;
+      overflow-y: auto;
+    }
+    .input-box {
+      width: 100%;
+      background: #090e17;
+      border: 1px solid var(--border-dark);
+      padding: 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.88rem;
+      margin-top: 4px;
+      outline: none;
+    }
+    .btn-main {
+      background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+      border: 1px solid #ef4444;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
 
-  <div id="toast-container"></div>
+  <div id="toast-shelf"></div>
 
   <!-- HUD STATUS BAR -->
-  <div class="hud-header">
-    <div class="hud-top">
-      <div class="hero-meta">
-        <div class="hero-avatar" id="heroAvatar" onclick="switchTab('hero')">⚔️</div>
-        <div>
-          <h2 style="font-size: 1rem;" id="heroName">Герой</h2>
-          <div style="display:flex; gap: 4px; align-items:center;">
-            <span class="badge badge-purple" id="heroLevelBadge">LVL 1</span>
-            <span class="badge badge-cyan" id="heroBuildBadge">Berserker</span>
-          </div>
-        </div>
+  <div class="frame-box hud-bar">
+    <div>
+      <div class="hero-hud-name">
+        <span id="heroNameTxt">Странник Бездны</span>
+        <span class="badge-lvl" id="heroLvlBadge">LVL 1</span>
       </div>
-      <div class="hero-resources">
-        <div style="display:flex; align-items:center; gap:3px; color: var(--accent-gold);">
-          <span>🪙</span><span id="heroCoins">0</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:3px; color: #f97316;">
-          <span>🔥</span><span id="heroStreak">0 дн.</span>
-        </div>
+      <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+        Опыт: <span id="xpCountTxt" style="color:#cbd5e1;">0 / 100</span>
+      </div>
+      <div class="xp-meter" style="width: 140px;">
+        <div class="xp-fill" id="xpMeterFill"></div>
       </div>
     </div>
-    <div style="display:flex; flex-direction:column; gap:4px;">
-      <div style="display:flex; justify-content:space-between; font-size:0.72rem;">
-        <span class="muted">XP Прогресс</span>
-        <span id="heroXpText">0 / 100</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="heroXpFill" style="width: 0%;"></div>
-      </div>
+    <div class="res-group">
+      <div class="res-gold">🪙 <span id="coinsCountTxt">0</span></div>
+      <div class="res-streak">🔥 <span id="streakCountTxt">0 дн.</span></div>
     </div>
   </div>
 
-  <div class="views-container">
-
-    <!-- 1. HOME DASHBOARD -->
-    <div class="view-pane active" id="view-home">
-      <div class="card">
-        <div class="card-title">
-          <span>Сводка за Сегодня</span>
-          <span class="badge badge-gold" id="currentDateStr">2026</span>
-        </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Квесты дня</div>
-            <div style="font-size: 1.05rem; font-weight: 700;" id="homeDailyDoneCount">0 / 0</div>
+  <!-- 1. BATTLE VIEW & MAIN GAMEPLAY -->
+  <div class="view-pane active" id="view-battle">
+    <!-- Battle Stage with Canvas Rendered Models -->
+    <div class="battle-stage-container">
+      <canvas id="battleCanvas"></canvas>
+      <div class="battle-hud-top">
+        <div class="hero-stat-panel">
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:800;">
+            <span>ГЕРОЙ</span>
+            <span id="heroHpText">100/100</span>
           </div>
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Опыт (XP)</div>
-            <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent);" id="homeTodayXp">+0</div>
+          <div class="bar-wrap"><div class="hp-fill-hero" id="heroHpFill"></div></div>
+        </div>
+        <div class="boss-stat-panel">
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:800;">
+            <span id="bossNameTxt">Hollow King</span>
+            <span id="bossHpText">200/200</span>
           </div>
-          <div style="flex:1; background: var(--panel); padding: 8px; border-radius: 8px; text-align: center;">
-            <div class="muted" style="font-size: 0.65rem;">Мир открыт</div>
-            <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-cyan);" id="homeExplorationPct">0%</div>
-          </div>
-        </div>
-        <button class="btn btn-block" onclick="openModal('modal-add-task')">＋ Быстрый Квест</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>Ближайшие Задачи</span>
-          <button class="btn btn-sm btn-secondary" onclick="switchTab('quests')">Все →</button>
-        </div>
-        <div id="homeUrgentList"></div>
-      </div>
-
-      <!-- Pomodoro -->
-      <div class="card">
-        <div class="card-title">
-          <span>Pomodoro Фокус</span>
-          <span class="badge badge-purple" id="timerStatusLabel">Готов</span>
-        </div>
-        <div style="font-size: 2.6rem; font-weight: 800; text-align:center; margin: 10px 0; font-variant-numeric: tabular-nums;" id="timerDisplay">25:00</div>
-        <div style="display: flex; justify-content: center; gap: 8px;">
-          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(15)">15м</button>
-          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(25)">25м</button>
-          <button class="btn btn-secondary btn-sm" onclick="setTimerDuration(50)">50м</button>
-          <button class="btn btn-sm" id="timerActionBtn" onclick="toggleTimer()">Старт</button>
-          <button class="btn btn-danger btn-sm" onclick="resetTimer()">Сброс</button>
+          <div class="bar-wrap"><div class="hp-fill-boss" id="bossHpFill"></div></div>
         </div>
       </div>
+      <div class="battle-combat-log" id="combatLogTxt">Битва началась. Сокрушите босса продуктивными действиями!</div>
     </div>
 
-    <!-- 2. WORLD MAP (NEW 2D Canvas Interactive Exploration) -->
-    <div class="view-pane" id="view-world">
-      <div class="card" style="padding: 10px;">
-        <div class="map-viewport-wrapper" id="mapWrapper">
-          <canvas id="worldMapCanvas"></canvas>
-          <div class="map-hud-overlay">
-            <div class="map-biome-tag" id="mapBiomeNameTag">Земля: Forgotten Outskirts</div>
-            <div class="map-biome-tag" id="mapDiscoveredTag">Исследовано: 1/8</div>
-          </div>
-          <div class="map-controls-dock">
-            <button class="map-dock-btn" onclick="mapZoom(1.2)">＋</button>
-            <button class="map-dock-btn" onclick="mapZoom(0.8)">−</button>
-            <button class="map-dock-btn" onclick="mapCenterHero()">🎯</button>
-          </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items:center; margin-top: 10px;">
-          <div style="font-size: 0.75rem;" class="muted">Перемещайте карту пальцем. Нажимайте на локации.</div>
-          <button class="btn btn-sm btn-secondary" onclick="openBiomeSelector()">Биомы (8)</button>
-        </div>
-      </div>
-
-      <!-- Current Location Mission Card -->
-      <div class="card" id="locationDetailCard">
-        <div class="card-title">
-          <span id="locNodeTitle">Текущая позиция: Лагерь Странника</span>
-          <span class="badge badge-green" id="locNodeStatus">Безопасно</span>
-        </div>
-        <p class="muted" style="font-size: 0.78rem; margin-bottom: 10px;" id="locNodeDesc">
-          Здесь можно восстановить силы и сверить журнал приключений.
-        </p>
-        <div id="locNodeActionArea">
-          <!-- Dynamic Action / Fight / Loot -->
-        </div>
-      </div>
+    <!-- Battle Actions Deck -->
+    <div class="action-controls">
+      <button class="btn-action attack-btn" onclick="performCombatAttack()">
+        <span>⚔️ УДАР КЛИНКОМ</span>
+        <small style="font-size:0.6rem; opacity:0.8;">Атака босса</small>
+      </button>
+      <button class="btn-action" onclick="performSkillSpecial()">
+        <span>🔮 СПОСОБНОСТЬ</span>
+        <small style="font-size:0.6rem; opacity:0.8;">Магический выпад</small>
+      </button>
+      <button class="btn-action" onclick="cycleBossSelector()">
+        <span>👑 СМЕНА БОССА</span>
+        <small style="font-size:0.6rem; opacity:0.8;">Каталог (10)</small>
+      </button>
     </div>
 
-    <!-- 3. QUESTS & HABITS -->
-    <div class="view-pane" id="view-quests">
-      <div class="segment-bar">
-        <div class="segment-item active" onclick="switchQuestSubTab('tasks', this)">Задачи</div>
-        <div class="segment-item" onclick="switchQuestSubTab('habits', this)">Привычки</div>
-        <div class="segment-item" onclick="switchQuestSubTab('archive', this)">Архив</div>
+    <!-- Urgent Quests Directly Linking to Combat Damage -->
+    <div class="frame-box" style="padding: 12px; margin-bottom: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.85rem; font-weight:800;">БОЕВЫЕ ПОРУЧЕНИЯ (КВЕСТЫ)</span>
+        <button class="btn-upgrade" onclick="openModal('modal-task')">＋ Задание</button>
       </div>
-
-      <div id="subtab-tasks">
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <input type="text" id="taskSearchInput" class="input-control" placeholder="Поиск задания..." oninput="renderQuestsView()">
-          <button class="btn" onclick="openModal('modal-add-task')">＋</button>
-        </div>
-        <div id="tasksListContainer"></div>
-      </div>
-
-      <div id="subtab-habits" style="display: none;">
-        <button class="btn btn-block" style="margin-bottom: 10px;" onclick="openModal('modal-add-habit')">＋ Новая привычка</button>
-        <div id="habitsListContainer"></div>
-      </div>
-
-      <div id="subtab-archive" style="display: none;">
-        <div id="archiveListContainer"></div>
-      </div>
+      <div id="battleTasksContainer"></div>
     </div>
-
-    <!-- 4. GOALS & PROJECTS -->
-    <div class="view-pane" id="view-goals">
-      <div class="card" style="background: linear-gradient(135deg, rgba(239,68,68,0.1), var(--card)); border-color: rgba(239,68,68,0.3);">
-        <div class="card-title">
-          <span>Мировой Рейд-Босс</span>
-          <span class="badge badge-gold" id="bossRewardTag">+500 XP</span>
-        </div>
-        <h3 id="bossTitle">Архидемон Прокрастинации</h3>
-        <p class="muted" style="font-size: 0.75rem; margin: 4px 0;" id="bossDesc">Каждый выполненный квест наносит урон боссу.</p>
-        <div style="height: 10px; background: #1a0f12; border-radius:99px; overflow:hidden; border:1px solid rgba(239,68,68,0.3); margin: 8px 0;">
-          <div style="height:100%; background: linear-gradient(90deg, #f87171, #ef4444); width: 100%; transition: width 0.3s;" id="bossHpFill"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight:700;">
-          <span id="bossHpText">HP: 20 / 20</span>
-          <span id="bossPhaseText">Фаза 1/3</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>Крупные Проекты & Этапы</span>
-          <button class="btn btn-sm" onclick="openModal('modal-add-project')">＋ Проект</button>
-        </div>
-        <div id="projectsListContainer"></div>
-      </div>
-    </div>
-
-    <!-- 5. STATS & ANALYTICS -->
-    <div class="view-pane" id="view-stats">
-      <div class="segment-bar">
-        <div class="segment-item active" onclick="setAnalyticsPeriod(7, this)">7 Дней</div>
-        <div class="segment-item" onclick="setAnalyticsPeriod(30, this)">30 Дней</div>
-        <div class="segment-item" onclick="setAnalyticsPeriod(90, this)">90 Дней</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>Динамика Задач</span>
-          <span class="badge badge-green" id="statTasksTotal">0 шт</span>
-        </div>
-        <div class="chart-box"><canvas id="chartTasks"></canvas></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>Рост Опыта</span>
-          <span class="badge badge-purple" id="statXpTotal">+0 XP</span>
-        </div>
-        <div class="chart-box"><canvas id="chartXp"></canvas></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>Баланс Атрибутов</span></div>
-        <div class="chart-box"><canvas id="chartAttributes"></canvas></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>Матрица Активности (4 недели)</span></div>
-        <div class="calendar-matrix" id="calendarMatrix"></div>
-        <div id="matrixLogDetail" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-muted);">
-          Нажмите на ячейку для деталей.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>Часы по Сферам</span>
-          <button class="btn btn-sm btn-secondary" onclick="openModal('modal-add-timelog')">＋ Записать</button>
-        </div>
-        <div class="chart-box"><canvas id="chartTime"></canvas></div>
-      </div>
-
-      <button class="btn btn-secondary btn-block" style="margin-bottom: 14px;" onclick="exportStatsCSV()">Экспорт статистики в CSV</button>
-    </div>
-
-    <!-- 6. HERO, BUILDS, FORGE & JOURNAL -->
-    <div class="view-pane" id="view-hero">
-      <div class="segment-bar">
-        <div class="segment-item active" onclick="switchHeroSubTab('builds', this)">Билды</div>
-        <div class="segment-item" onclick="switchHeroSubTab('forge', this)">Кузница</div>
-        <div class="segment-item" onclick="switchHeroSubTab('journal', this)">Журнал</div>
-        <div class="segment-item" onclick="switchHeroSubTab('settings', this)">Опции</div>
-      </div>
-
-      <!-- Sub: Builds & Classes -->
-      <div id="subtab-hero-builds">
-        <div class="card">
-          <div class="card-title"><span>Специализация Персонажа</span></div>
-          <div class="build-grid" id="buildSelectionGrid"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><span>Атрибуты Героя</span></div>
-          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 8px;" id="heroAttributesGrid"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">
-            <span>Лавка Наград</span>
-            <button class="btn btn-sm" onclick="openModal('modal-add-reward')">＋</button>
-          </div>
-          <div id="rewardShopContainer"></div>
-        </div>
-      </div>
-
-      <!-- Sub: Forge & Equipment -->
-      <div id="subtab-hero-forge" style="display: none;">
-        <div class="card">
-          <div class="card-title">
-            <span>Кузница Снаряжения</span>
-            <span class="badge badge-gold" id="forgeMaterialText">🔩 0 Ресурсов</span>
-          </div>
-          <div id="forgeEquipmentContainer"></div>
-        </div>
-      </div>
-
-      <!-- Sub: Adventure Journal -->
-      <div id="subtab-hero-journal" style="display: none;">
-        <div class="card">
-          <div class="card-title">
-            <span>Хроника Приключений</span>
-            <button class="btn btn-sm" onclick="openModal('modal-add-journal-note')">＋ Заметка</button>
-          </div>
-          <div id="adventureJournalList"></div>
-        </div>
-      </div>
-
-      <!-- Sub: Settings & Backup -->
-      <div id="subtab-hero-settings" style="display: none;">
-        <div class="card">
-          <div class="card-title"><span>Профиль & Бэкап</span></div>
-          <div class="form-group">
-            <label class="form-label">Имя героя</label>
-            <div style="display:flex; gap: 8px;">
-              <input type="text" id="settingHeroName" class="input-control">
-              <button class="btn btn-sm" onclick="updateHeroProfile()">OK</button>
-            </div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-            <button class="btn btn-secondary btn-block" onclick="exportDataJSON()">Резервная копия (JSON)</button>
-            <button class="btn btn-secondary btn-block" onclick="document.getElementById('importFileInput').click()">Импорт из JSON</button>
-            <input type="file" id="importFileInput" style="display: none;" accept=".json" onchange="importDataJSON(event)">
-            <button class="btn btn-danger btn-block" onclick="resetAllProgress()">Сбросить прогресс</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
-  <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      <span>Главная</span>
+  <!-- 2. CHARACTER ATTRIBUTES & GEAR -->
+  <div class="view-pane" id="view-character">
+    <div class="frame-box" style="padding: 12px; margin-bottom: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+        <span style="font-size:0.85rem; font-weight:800;">АТРИБУТЫ ГЕРОЯ</span>
+        <span style="font-size:0.75rem; color:#fbbf24; font-weight:800;" id="freePointsTxt">Очки: 0</span>
+      </div>
+      <div class="stats-table" id="attributesGrid"></div>
+    </div>
+
+    <!-- Visible Equipment Slots -->
+    <div class="frame-box" style="padding: 12px;">
+      <div style="font-size:0.85rem; font-weight:800; margin-bottom: 8px;">НАДЕТОЕ СНАРЯЖЕНИЕ</div>
+      <div class="gear-grid" id="equippedGearGrid"></div>
+    </div>
+  </div>
+
+  <!-- 3. QUESTS & HABITS MANAGER -->
+  <div class="view-pane" id="view-quests">
+    <div class="frame-box" style="padding: 12px; margin-bottom: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:0.85rem; font-weight:800;">ВСЕ ЗАДАНИЯ</span>
+        <button class="btn-upgrade" onclick="openModal('modal-task')">＋ Добавить</button>
+      </div>
+      <div id="fullTasksContainer"></div>
+    </div>
+
+    <div class="frame-box" style="padding: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:0.85rem; font-weight:800;">ЕЖЕДНЕВНЫЕ ПРИВЫЧКИ</span>
+        <button class="btn-upgrade" onclick="openModal('modal-habit')">＋ Привычка</button>
+      </div>
+      <div id="habitsContainer"></div>
+    </div>
+  </div>
+
+  <!-- 4. ARMORY & SHOP -->
+  <div class="view-pane" id="view-armory">
+    <div class="frame-box" style="padding: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:0.85rem; font-weight:800;">АРСЕНАЛ И ТОВАРЫ</span>
+        <span style="font-size:0.75rem; color:var(--accent-gold-bright);" id="shopCoinsVal">🪙 0</span>
+      </div>
+      <div class="gear-grid" id="armoryItemsGrid"></div>
+    </div>
+  </div>
+
+  <!-- 5. SETTINGS & REPUTATION -->
+  <div class="view-pane" id="view-settings">
+    <div class="frame-box" style="padding: 12px;">
+      <div style="font-size:0.85rem; font-weight:800; margin-bottom:10px;">УПРАВЛЕНИЕ ДАННЫМИ</div>
+      <button class="btn-main" style="background:#1e293b; border-color:#334155; margin-bottom:8px;" onclick="exportDataJSON()">💾 Скачать резервную копию JSON</button>
+      <button class="btn-main" style="background:#1e293b; border-color:#334155; margin-bottom:8px;" onclick="document.getElementById('importFile').click()">📂 Восстановить из файла</button>
+      <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importDataJSON(event)">
+      <button class="btn-main" onclick="resetGameProgress()">⚠️ Полный сброс прогресса</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION DOCK -->
+  <div class="nav-dock">
+    <button class="nav-item active" onclick="switchMainTab('battle')">
+      <svg viewBox="0 0 24 24"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21l2-2"></path></svg>
+      <span>Битва</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('world')">
-      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-      <span>Мир</span>
+    <button class="nav-item" onclick="switchMainTab('character')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Герой</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('quests')">
+    <button class="nav-item" onclick="switchMainTab('quests')">
       <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
       <span>Квесты</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('goals')">
+    <button class="nav-item" onclick="switchMainTab('armory')">
       <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-      <span>Цели</span>
+      <span>Арсенал</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('stats')">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-      <span>Статы</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('hero')">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span>Герой</span>
+    <button class="nav-item" onclick="switchMainTab('settings')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span>Опции</span>
     </button>
   </div>
 
   <!-- MODALS -->
-  <div class="modal-overlay" id="modal-add-task">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Новый Квест</h3>
-      <div class="form-group">
-        <label class="form-label">Название задания</label>
-        <input type="text" id="newTaskTitle" class="input-control" placeholder="Например: Изучить Docker контейнеры">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Категория / Атрибут</label>
-        <select id="newTaskCategory" class="input-control">
-          <option value="discipline">Discipline (Дисциплина)</option>
-          <option value="intelligence">Intelligence (Учеба / Кодинг)</option>
-          <option value="strength">Strength (Спорт / Тело)</option>
-          <option value="wealth">Wealth (Финансы / Карьера)</option>
-          <option value="social">Social (Общение)</option>
-          <option value="creativity">Creativity (Творчество)</option>
-        </select>
-      </div>
-      <div style="display:flex; gap: 8px;">
-        <div class="form-group" style="flex:1;">
-          <label class="form-label">Тип</label>
-          <select id="newTaskType" class="input-control">
-            <option value="daily">Ежедневный</option>
-            <option value="weekly">Еженедельный</option>
-            <option value="once">Разовый</option>
-          </select>
-        </div>
-        <div class="form-group" style="flex:1;">
-          <label class="form-label">Сложность</label>
-          <select id="newTaskDiff" class="input-control">
-            <option value="easy">Легко (+20 XP)</option>
-            <option value="medium" selected>Средне (+40 XP)</option>
-            <option value="hard">Сложно (+80 XP)</option>
-          </select>
-        </div>
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-block" onclick="saveNewTask()">Создать Квест</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-task')">Отмена</button>
-      </div>
+  <div class="modal-curtain" id="modal-task">
+    <div class="sheet-card">
+      <h3 style="font-size:0.95rem; margin-bottom:8px;">Новое Поручение</h3>
+      <label style="font-size:0.75rem; color:#94a3b8;">Название</label>
+      <input type="text" id="taskTitleInput" class="input-box" placeholder="Например: 1 час сложного кодинга">
+      <label style="font-size:0.75rem; color:#94a3b8; display:block; margin-top:8px;">Связанный атрибут</label>
+      <select id="taskStatInput" class="input-box">
+        <option value="strength">Strength (Сила / Спорт)</option>
+        <option value="intelligence" selected>Intelligence (Интеллект / Учеба)</option>
+        <option value="vitality">Vitality (Выносливость / Здоровье)</option>
+        <option value="agility">Agility (Скорость / Дисциплина)</option>
+        <option value="luck">Luck (Карьера / Финансы)</option>
+      </select>
+      <button class="btn-main" onclick="createNewTask()">Утвердить Задание</button>
+      <button class="btn-main" style="background:#1e293b; border-color:#334155; margin-top:6px;" onclick="closeModal('modal-task')">Отмена</button>
     </div>
   </div>
 
-  <div class="modal-overlay" id="modal-add-habit">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Новая Привычка</h3>
-      <div class="form-group">
-        <label class="form-label">Название привычки</label>
-        <input type="text" id="newHabitTitle" class="input-control" placeholder="Например: Чтение книги 30 минут">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Категория</label>
-        <select id="newHabitCategory" class="input-control">
-          <option value="discipline">Discipline</option>
-          <option value="intelligence">Intelligence</option>
-          <option value="strength">Strength</option>
-          <option value="wealth">Wealth</option>
-          <option value="social">Social</option>
-          <option value="creativity">Creativity</option>
-        </select>
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-block" onclick="saveNewHabit()">Создать Привычку</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-habit')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-add-project">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Новый Проект</h3>
-      <div class="form-group">
-        <label class="form-label">Название</label>
-        <input type="text" id="projTitle" class="input-control" placeholder="Запуск нового сервиса">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Всего этапов</label>
-        <input type="number" id="projTotalSteps" class="input-control" value="5" min="1" max="50">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-block" onclick="saveNewProject()">Создать</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-project')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-add-reward">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Награда в Лавку</h3>
-      <div class="form-group">
-        <label class="form-label">Название</label>
-        <input type="text" id="newRewardTitle" class="input-control" placeholder="Билет в кино / Игра">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Стоимость (🪙)</label>
-        <input type="number" id="newRewardCost" class="input-control" placeholder="100">
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-block" onclick="saveNewReward()">Добавить</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-reward')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-add-journal-note">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Заметка в Журнал Приключений</h3>
-      <div class="form-group">
-        <label class="form-label">Текст заметки</label>
-        <textarea id="journalNoteText" class="input-control" rows="3" placeholder="Сегодня закрыл сложную цель и победил прокрастинацию..."></textarea>
-      </div>
-      <div style="display:flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-block" onclick="saveJournalNote()">Записать</button>
-        <button class="btn btn-secondary btn-block" onclick="closeModal('modal-add-journal-note')">Отмена</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-biome-picker">
-    <div class="modal-sheet">
-      <h3 style="margin-bottom: 10px;">Карта Биомов (8 Земель)</h3>
-      <div id="biomePickList"></div>
-      <button class="btn btn-secondary btn-block" style="margin-top: 10px;" onclick="closeModal('modal-biome-picker')">Закрыть</button>
+  <div class="modal-curtain" id="modal-habit">
+    <div class="sheet-card">
+      <h3 style="font-size:0.95rem; margin-bottom:8px;">Новая Привычка</h3>
+      <label style="font-size:0.75rem; color:#94a3b8;">Название</label>
+      <input type="text" id="habitTitleInput" class="input-box" placeholder="Например: Без сахара и фастфуда">
+      <button class="btn-main" onclick="createNewHabit()">Закрепить Привычку</button>
+      <button class="btn-main" style="background:#1e293b; border-color:#334155; margin-top:6px;" onclick="closeModal('modal-habit')">Отмена</button>
     </div>
   </div>
 
   <script>
     /* ==========================================================================
-       DATA MODEL & V3 SCHEMA (MIGRATION COMPATIBLE)
+       10 UNIQUE 2D BOSSES DATA SPECIFICATION
        ========================================================================== */
-    const STORAGE_KEY = "productivity_rpg_v3_world";
-
-    const BIOMES_DATA = [
-      { id: "b1", name: "Forgotten Outskirts", color: "#64748b", reqLvl: 1, boss: "Lesser Shade", desc: "Заброшенные дороги и древние руины начала пути." },
-      { id: "b2", name: "Crimson Forest", color: "#ef4444", reqLvl: 3, boss: "Bloodthorn Beast", desc: "Кровавый лес с агрессивными сущностями лени." },
-      { id: "b3", name: "Sunken Kingdom", color: "#06b6d4", reqLvl: 5, boss: "Leviathan of Doubt", desc: "Затонувшее подводное царство забытых знаний." },
-      { id: "b4", name: "Frostfall Peaks", color: "#38bdf8", reqLvl: 7, boss: "Yeti of Cold Fatigue", desc: "Ледяные горы, требующие непоколебимой выносливости." },
-      { id: "b5", name: "Clockwork Dominion", color: "#f59e0b", reqLvl: 10, boss: "Mechanic Overseer", desc: "Механический город точности, тайм-менеджмента и работы." },
-      { id: "b6", name: "Plague Cathedral", color: "#84cc16", reqLvl: 13, boss: "Toxic Lord of Excuses", desc: "Зараженные земли ядовитых привычек и прокрастинации." },
-      { id: "b7", name: "Abyssal Frontier", color: "#8b5cf6", reqLvl: 16, boss: "Void Ravager", desc: "Территория темной бездны и глубокой неопределенности." },
-      { id: "b8", name: "The End of Eternity", color: "#e11d48", reqLvl: 20, boss: "Chronos Arch-Fiend", desc: "Финал мира: величайшее испытание для истинного мастера." }
+    const BOSS_ROSTER = [
+      { id: "b_hollow", name: "Hollow King", maxHp: 200, color: "#64748b", accent: "#94a3b8", desc: "Древний монарх в расколотых латах с призрачным двуручником." },
+      { id: "b_butcher", name: "Crimson Butcher", maxHp: 260, color: "#991b1b", accent: "#ef4444", desc: "Массивный палач с чудовищным окровавленным тесаком." },
+      { id: "b_tyrant", name: "Clockwork Tyrant", maxHp: 320, color: "#b45309", accent: "#f59e0b", desc: "Механический голем с вращающимися шестернями и молотом." },
+      { id: "b_frost", name: "Frost Executioner", maxHp: 380, color: "#0369a1", accent: "#38bdf8", desc: "Бронированный рыцарь вечной мерзлоты с ледяным клеймором." },
+      { id: "b_leviathan", name: "Abyssal Leviathan", maxHp: 450, color: "#581c87", accent: "#a855f7", desc: "Многоглазый владыка бездны с пульсирующими щупальцами." },
+      { id: "b_saint", name: "Plague Saint", maxHp: 520, color: "#3f6212", accent: "#84cc16", desc: "Жуткий проповедник в маске с дымящейся ядовитой кадильницей." },
+      { id: "b_titan", name: "Broken Titan", maxHp: 600, color: "#44403c", accent: "#f97316", desc: "Древний колосс из базальта с пылающим лавовым ядром." },
+      { id: "b_doppel", name: "Mirror Doppelganger", maxHp: 680, color: "#1e1b4b", accent: "#6366f1", desc: "Искаженная темная проекция вашего собственного героя." },
+      { id: "b_stalker", name: "Shadow Stalker", maxHp: 760, color: "#0f172a", accent: "#ec4899", desc: "Ассасин пустоты с парными изогнутыми серповидными клинками." },
+      { id: "b_chronos", name: "Chronos Arch-Fiend", maxHp: 900, color: "#854d0e", accent: "#fbbf24", desc: "Повелитель утекающего времени с вращающимися лезвиями-стрелками." }
     ];
 
-    const BUILDS_PRESETS = {
-      berserker: { name: "Berserker", icon: "⚔️", desc: "+30% урона боссам от выполненных квестов" },
-      guardian: { name: "Guardian", icon: "🛡️", desc: "Серия активности не сгорает при пропуске 1 дня" },
-      assassin: { name: "Assassin", icon: "🗡️", desc: "20% шанс удвоить получаемые монеты за квест" },
-      arcanist: { name: "Arcanist", icon: "🔮", desc: "+25% XP за выполнение учебных и кодинг задач" },
-      explorer: { name: "Explorer", icon: "🧭", desc: "Двойной шанс найти кузнечные ресурсы на карте" },
-      strategist: { name: "Strategist", icon: "♟️", desc: "+15% монет и XP за завершение Pomodoro-таймеров" }
-    };
+    /* CATALOG OF VISIBLE ARMORY GEAR */
+    const ARMORY_CATALOG = [
+      { id: "w_greatsword", type: "weapon", name: "Паладинский Двуручник", bonusStr: 8, cost: 60, icon: "🗡️", visual: "greatsword" },
+      { id: "w_daggers", type: "weapon", name: "Кинжалы Тени", bonusAgi: 10, cost: 80, icon: "🗡️", visual: "daggers" },
+      { id: "w_magma", type: "weapon", name: "Магматический Клинок", bonusStr: 14, cost: 150, icon: "🔥", visual: "magma" },
+      { id: "a_iron", type: "armor", name: "Стальные Латы", bonusDef: 8, cost: 70, icon: "🛡️", visual: "iron" },
+      { id: "a_shadow", type: "armor", name: "Мантия Ткача Теней", bonusInt: 10, cost: 90, icon: "🔮", visual: "shadow" },
+      { id: "a_titan", type: "armor", name: "Пластины Колосса", bonusVit: 15, cost: 160, icon: "💎", visual: "titan" }
+    ];
 
-    const DEFAULT_DATA = {
-      version: 3,
-      hero: {
-        name: "Герой",
-        xp: 0,
-        coins: 120,
-        streak: 0,
-        lastActiveDate: null,
-        build: "berserker",
-        materials: 5
-      },
-      attributes: {
-        discipline: 10,
-        intelligence: 10,
-        strength: 10,
-        wealth: 10,
-        social: 10,
-        creativity: 10
-      },
-      equipment: [
-        { id: "eq1", name: "Клинок Дисциплины", slot: "weapon", level: 1, maxLvl: 10, bonus: "+10% атака босса" },
-        { id: "eq2", name: "Доспех Фокуса", slot: "armor", level: 1, maxLvl: 10, bonus: "+15% защита серии" },
-        { id: "eq3", name: "Амулет Внимания", slot: "amulet", level: 1, maxLvl: 10, bonus: "+10% XP таймера" }
-      ],
-      worldState: {
-        currentBiomeId: "b1",
-        currentNodeId: "n_b1_0",
-        discoveredBiomes: ["b1"],
-        completedNodes: [],
-        discoveredSecrets: 0,
-        camera: { x: 0, y: 0, zoom: 1 }
-      },
-      tasks: [
-        { id: "t1", title: "30 мин кодинга / учебы", category: "intelligence", type: "daily", diff: "easy", xp: 25, coins: 10, completedDate: null },
-        { id: "t2", title: "Тренировка / Зарядка", category: "strength", type: "daily", diff: "medium", xp: 45, coins: 20, completedDate: null },
-        { id: "t3", title: "Закрыть рабочий спринт", category: "wealth", type: "daily", diff: "hard", xp: 80, coins: 35, completedDate: null }
-      ],
-      habits: [
-        { id: "h1", title: "2 литра чистой воды", category: "discipline", history: [] }
-      ],
-      boss: {
-        title: "Архидемон Прокрастинации",
-        maxHp: 20,
-        currentHp: 20,
-        rewardCoins: 500,
-        phase: 1
-      },
-      projects: [],
-      rewards: [
-        { id: "r1", title: "Просмотр фильма / сериала", cost: 80 },
-        { id: "r2", title: "Покупка желаемой вещи", cost: 1000 }
-      ],
-      timeLogs: [],
-      financeLogs: [],
-      historyLog: [],
-      adventureJournal: [
-        { id: "j1", date: "2026-10-02", type: "world", title: "Экспедиция начата", text: "Герой ступил на заброшенные дороги Forgotten Outskirts." }
-      ]
-    };
+    /* APP STATE & DATA STORAGE */
+    const GAME_KEY = "dark_rpg_prod_v4";
+    let State = loadState();
 
-    let AppState = loadAndMigrateData();
-
-    function loadAndMigrateData() {
+    function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("productivity_rpg_v2_data");
-        if (!raw) return JSON.parse(JSON.stringify(DEFAULT_DATA));
-        const parsed = JSON.parse(raw);
-        // Automatic Deep Merge to guarantee v3 schema
-        return {
-          ...DEFAULT_DATA,
-          ...parsed,
-          hero: { ...DEFAULT_DATA.hero, ...(parsed.hero || {}) },
-          worldState: { ...DEFAULT_DATA.worldState, ...(parsed.worldState || {}) },
-          equipment: parsed.equipment && parsed.equipment.length ? parsed.equipment : DEFAULT_DATA.equipment,
-          adventureJournal: parsed.adventureJournal || DEFAULT_DATA.adventureJournal
-        };
+        const raw = localStorage.getItem(GAME_KEY);
+        if (!raw) return initDefaultState();
+        return JSON.parse(raw);
       } catch (e) {
-        console.error("Storage error:", e);
-        return JSON.parse(JSON.stringify(DEFAULT_DATA));
+        return initDefaultState();
       }
     }
 
-    function saveData() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
-      } catch (e) {
-        showToast("Ошибка сохранения в LocalStorage!");
-      }
+    function initDefaultState() {
+      return {
+        hero: {
+          name: "Странник Бездны",
+          xp: 0,
+          coins: 100,
+          streak: 1,
+          lastDate: getTodayDateString(),
+          freePoints: 3,
+          curHp: 100,
+          equipped: {
+            weapon: "w_greatsword",
+            armor: "a_iron"
+          }
+        },
+        attributes: {
+          strength: 12,
+          vitality: 10,
+          defense: 10,
+          agility: 10,
+          intelligence: 10,
+          luck: 10
+        },
+        currentBossIndex: 0,
+        bossHp: BOSS_ROSTER[0].maxHp,
+        tasks: [
+          { id: "t_1", title: "1 час непрерывной фокусировки", stat: "intelligence", done: false },
+          { id: "t_2", title: "Физическая тренировка 40 минут", stat: "strength", done: false },
+          { id: "t_3", title: "Разобрать рабочий почтовый ящик", stat: "agility", done: false }
+        ],
+        habits: [
+          { id: "h_1", title: "2 литра чистой воды за день", streak: 3, doneToday: false }
+        ],
+        inventory: ["w_greatsword", "a_iron"]
+      };
     }
 
-    function getTodayKey() {
+    function saveState() {
+      localStorage.setItem(GAME_KEY, JSON.stringify(State));
+    }
+
+    function getTodayDateString() {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
 
-    function sanitize(str) {
-      const temp = document.createElement("div");
-      temp.textContent = str;
-      return temp.innerHTML;
-    }
-
     /* ==========================================================================
-       PROGRESSION & ATTRIBUTES
+       CANVAS 2D PROCEDURAL SKELETON ANIMATOR (HERO & 10 BOSSES)
        ========================================================================== */
-    function calcLevel(xp) {
-      let lvl = 1;
-      while (true) {
-        const req = Math.floor(100 * Math.pow(lvl, 1.35));
-        if (xp < req) return { level: lvl, curReq: req, prevReq: lvl === 1 ? 0 : Math.floor(100 * Math.pow(lvl - 1, 1.35)) };
-        lvl++;
-      }
-    }
+    let canvas, ctx;
+    let animFrame;
+    let animTime = 0;
+    let heroActionState = "idle"; // "idle" | "attack" | "hit"
+    let bossActionState = "idle";
+    let heroAnimTimer = 0;
+    let bossAnimTimer = 0;
+    let screenShake = 0;
+    let floatingTexts = [];
 
-    function evaluateDailyStreak() {
-      const today = getTodayKey();
-      if (!AppState.hero.lastActiveDate) {
-        AppState.hero.lastActiveDate = today;
-        AppState.hero.streak = 1;
-        saveData();
-        return;
-      }
-      if (AppState.hero.lastActiveDate === today) return;
-
-      const last = new Date(AppState.hero.lastActiveDate);
-      const cur = new Date(today);
-      const diffDays = Math.round((cur - last) / (1000 * 60 * 60 * 24));
-
-      if (diffDays === 1) {
-        AppState.hero.streak += 1;
-      } else if (diffDays > 1) {
-        if (AppState.hero.build === "guardian" && diffDays === 2) {
-          showToast("🛡️ Guardian спас вашу серию дней!");
-        } else {
-          AppState.hero.streak = 1;
-        }
-      }
-      AppState.hero.lastActiveDate = today;
-      saveData();
-    }
-
-    function addRewards(xp, coins, category, sourceTitle) {
-      let finalXp = xp;
-      let finalCoins = coins;
-
-      // Class Build Modifiers
-      if (AppState.hero.build === "arcanist" && (category === "intelligence" || category === "discipline")) {
-        finalXp = Math.round(finalXp * 1.25);
-      }
-      if (AppState.hero.build === "assassin" && Math.random() < 0.25) {
-        finalCoins *= 2;
-        showToast("🗡️ Критический дроп монет от Assassin!");
-      }
-
-      const prevLvl = calcLevel(AppState.hero.xp).level;
-      AppState.hero.xp += finalXp;
-      AppState.hero.coins = Math.max(0, AppState.hero.coins + finalCoins);
-
-      if (category && AppState.attributes[category] !== undefined) {
-        AppState.attributes[category] += Math.max(1, Math.floor(finalXp / 15));
-      }
-
-      // Chance of finding forge materials
-      const matChance = AppState.hero.build === "explorer" ? 0.6 : 0.3;
-      if (Math.random() < matChance) {
-        AppState.hero.materials = (AppState.hero.materials || 0) + 1;
-        showToast("🔩 Найден ресурс для кузницы!");
-      }
-
-      AppState.historyLog.push({
-        date: getTodayKey(),
-        timestamp: Date.now(),
-        type: "reward",
-        title: sourceTitle,
-        xp: finalXp,
-        coins: finalCoins,
-        category: category || "general"
-      });
-
-      evaluateDailyStreak();
-      checkBiomeUnlocks();
-      saveData();
-
-      const newLvl = calcLevel(AppState.hero.xp).level;
-      if (newLvl > prevLvl) {
-        showToast(`🎉 УРОВЕНЬ ${newLvl} ДОСТИГНУТ!`);
-        addJournalEntry("level", `Повышение уровня до ${newLvl}`, `Герой обретает новую силу на просторах мира.`);
-      } else {
-        showToast(`+${finalXp} XP | +${finalCoins} 🪙`);
-      }
-      updateUI();
-    }
-
-    function revertReward(sourceTitle) {
-      const idx = AppState.historyLog.slice().reverse().findIndex(l => l.title === sourceTitle);
-      if (idx !== -1) {
-        const realIdx = AppState.historyLog.length - 1 - idx;
-        const entry = AppState.historyLog[realIdx];
-        AppState.hero.xp = Math.max(0, AppState.hero.xp - entry.xp);
-        AppState.hero.coins = Math.max(0, AppState.hero.coins - entry.coins);
-        if (entry.category && AppState.attributes[entry.category]) {
-          AppState.attributes[entry.category] = Math.max(10, AppState.attributes[entry.category] - Math.floor(entry.xp / 15));
-        }
-        AppState.historyLog.splice(realIdx, 1);
-        saveData();
-        showToast(`Отменено: -${entry.xp} XP / -${entry.coins} 🪙`);
-        updateUI();
-      }
-    }
-
-    function checkBiomeUnlocks() {
-      const lvl = calcLevel(AppState.hero.xp).level;
-      BIOMES_DATA.forEach(b => {
-        if (lvl >= b.reqLvl && !AppState.worldState.discoveredBiomes.includes(b.id)) {
-          AppState.worldState.discoveredBiomes.push(b.id);
-          showToast(`🗺️ Открыт новый биом: ${b.name}!`);
-          addJournalEntry("world", `Открыт биом ${b.name}`, `Стали доступны новые тропы приключений и босс ${b.boss}.`);
-        }
-      });
-    }
-
-    /* ==========================================================================
-       WORLD MAP ENGINE (Procedural 2D Graphs, Nodes, Interaction)
-       ========================================================================== */
-    let mapNodes = [];
-    let mapEdges = [];
-    let mapCanvas, mapCtx;
-    let isDraggingMap = false;
-    let dragStart = { x: 0, y: 0 };
-    let heroMapVisualPos = { x: 0, y: 0 };
-
-    function generateWorldGraph(biomeId) {
-      const nodes = [];
-      const edges = [];
-      const biome = BIOMES_DATA.find(b => b.id === biomeId) || BIOMES_DATA[0];
-
-      // Fixed seed structure for seamless persistence
-      const layout = [
-        { id: `n_${biomeId}_0`, type: "camp", title: "Лагерь Странника", x: 80, y: 240, desc: "Точка отдыха и планирования." },
-        { id: `n_${biomeId}_1`, type: "quest", title: "Аванпост Прогресса", x: 230, y: 160, desc: "Требует фокуса и закрытия задачи.", reqCat: "intelligence" },
-        { id: `n_${biomeId}_2`, type: "chest", title: "Сундук Руин", x: 250, y: 320, desc: "Древние сокровища за выполнение привычек.", rewardCoins: 80 },
-        { id: `n_${biomeId}_3`, type: "elite", title: "Элитный Страж", x: 420, y: 200, desc: "Грозный враг. Требует закрытия сложного квеста.", hp: 3 },
-        { id: `n_${biomeId}_4`, type: "secret", title: "Тайный Грот", x: 440, y: 340, desc: "Секретный тайник с материалами.", rewardMat: 3 },
-        { id: `n_${biomeId}_5`, type: "boss", title: `Логово: ${biome.boss}`, x: 620, y: 240, desc: "Владыка биома. Нанесите урон продуктивностью.", hp: 5 }
-      ];
-
-      edges.push({ from: layout[0].id, to: layout[1].id });
-      edges.push({ from: layout[0].id, to: layout[2].id });
-      edges.push({ from: layout[1].id, to: layout[3].id });
-      edges.push({ from: layout[2].id, to: layout[4].id });
-      edges.push({ from: layout[3].id, to: layout[5].id });
-      edges.push({ from: layout[4].id, to: layout[5].id });
-
-      return { nodes: layout, edges };
-    }
-
-    function initMapCanvas() {
-      mapCanvas = document.getElementById("worldMapCanvas");
-      if (!mapCanvas) return;
-      mapCtx = mapCanvas.getContext("2d");
+    function initCanvasRenderer() {
+      canvas = document.getElementById("battleCanvas");
+      ctx = canvas.getContext("2d");
 
       function resize() {
-        const wrap = document.getElementById("mapWrapper");
-        if (!wrap) return;
+        const wrap = canvas.parentElement;
         const dpr = window.devicePixelRatio || 1;
-        mapCanvas.width = wrap.clientWidth * dpr;
-        mapCanvas.height = wrap.clientHeight * dpr;
-        mapCtx.scale(dpr, dpr);
-        drawWorldMap();
+        canvas.width = wrap.clientWidth * dpr;
+        canvas.height = wrap.clientHeight * dpr;
+        ctx.scale(dpr, dpr);
       }
       window.addEventListener("resize", resize);
       resize();
-
-      // Touch & Mouse Dragging / Panning
-      const wrap = document.getElementById("mapWrapper");
-      wrap.addEventListener("pointerdown", (e) => {
-        isDraggingMap = true;
-        dragStart = { x: e.clientX - AppState.worldState.camera.x, y: e.clientY - AppState.worldState.camera.y };
-      });
-      window.addEventListener("pointermove", (e) => {
-        if (!isDraggingMap) return;
-        AppState.worldState.camera.x = e.clientX - dragStart.x;
-        AppState.worldState.camera.y = e.clientY - dragStart.y;
-        drawWorldMap();
-      });
-      window.addEventListener("pointerup", () => {
-        if (isDraggingMap) {
-          isDraggingMap = false;
-          saveData();
-        }
-      });
-
-      // Click on Nodes
-      mapCanvas.addEventListener("click", (e) => {
-        const rect = mapCanvas.getBoundingClientRect();
-        const clickX = (e.clientX - rect.left - AppState.worldState.camera.x) / AppState.worldState.camera.zoom;
-        const clickY = (e.clientY - rect.top - AppState.worldState.camera.y) / AppState.worldState.camera.zoom;
-
-        const clicked = mapNodes.find(n => Math.hypot(n.x - clickX, n.y - clickY) < 24);
-        if (clicked) {
-          onSelectMapNode(clicked);
-        }
-      });
+      requestAnimationFrame(renderLoop);
     }
 
-    function mapZoom(delta) {
-      AppState.worldState.camera.zoom = Math.min(2.0, Math.max(0.6, AppState.worldState.camera.zoom * delta));
-      saveData();
-      drawWorldMap();
-    }
+    function renderLoop(timestamp) {
+      animTime += 0.05;
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
 
-    function mapCenterHero() {
-      const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
-      if (!cur) return;
-      const wrap = document.getElementById("mapWrapper");
-      AppState.worldState.camera.x = wrap.clientWidth / 2 - cur.x * AppState.worldState.camera.zoom;
-      AppState.worldState.camera.y = wrap.clientHeight / 2 - cur.y * AppState.worldState.camera.zoom;
-      saveData();
-      drawWorldMap();
-    }
-
-    function drawWorldMap() {
-      if (!mapCtx) return;
-      const wrap = document.getElementById("mapWrapper");
-      const w = wrap.clientWidth;
-      const h = wrap.clientHeight;
-      const cam = AppState.worldState.camera;
-      const currentBiome = BIOMES_DATA.find(b => b.id === AppState.worldState.currentBiomeId) || BIOMES_DATA[0];
-
-      mapCtx.clearRect(0, 0, w, h);
-      mapCtx.save();
-      mapCtx.translate(cam.x, cam.y);
-      mapCtx.scale(cam.zoom, cam.zoom);
-
-      // Background Grid & Fantasy Vignette
-      mapCtx.strokeStyle = "#131c2d";
-      mapCtx.lineWidth = 1;
-      for (let x = -400; x <= 1200; x += 60) {
-        mapCtx.beginPath(); mapCtx.moveTo(x, -200); mapCtx.lineTo(x, 800); mapCtx.stroke();
-      }
-      for (let y = -200; y <= 800; y += 60) {
-        mapCtx.beginPath(); mapCtx.moveTo(-400, y); mapCtx.lineTo(1200, y); mapCtx.stroke();
+      ctx.save();
+      // Screen Shake
+      if (screenShake > 0) {
+        const sx = (Math.random() - 0.5) * screenShake * 6;
+        const sy = (Math.random() - 0.5) * screenShake * 6;
+        ctx.translate(sx, sy);
+        screenShake = Math.max(0, screenShake - 0.1);
       }
 
-      // Draw Edges (Roads)
-      mapEdges.forEach(e => {
-        const fromNode = mapNodes.find(n => n.id === e.from);
-        const toNode = mapNodes.find(n => n.id === e.to);
-        if (!fromNode || !toNode) return;
+      ctx.clearRect(0, 0, w, h);
 
-        const isPassed = AppState.worldState.completedNodes.includes(toNode.id);
-        mapCtx.strokeStyle = isPassed ? currentBiome.color : "#2a374f";
-        mapCtx.lineWidth = isPassed ? 3.5 : 2;
-        mapCtx.setLineDash(isPassed ? [] : [6, 4]);
+      // Arena Background: Dark Gothic Citadel
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, "#080c14");
+      bgGrad.addColorStop(0.7, "#0f1726");
+      bgGrad.addColorStop(1, "#05070a");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
 
-        mapCtx.beginPath();
-        mapCtx.moveTo(fromNode.x, fromNode.y);
-        mapCtx.lineTo(toNode.x, toNode.y);
-        mapCtx.stroke();
-        mapCtx.setLineDash([]);
-      });
+      // Ground Runes & Stone Slabs
+      ctx.strokeStyle = "rgba(220, 38, 38, 0.15)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h - 30, w * 0.45, 24, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
-      // Draw Nodes
-      mapNodes.forEach(node => {
-        const isCurrent = node.id === AppState.worldState.currentNodeId;
-        const isCompleted = AppState.worldState.completedNodes.includes(node.id);
+      // Render Hero (Left Position)
+      const heroX = w * 0.24;
+      const heroY = h - 45;
+      drawHeroCharacter(ctx, heroX, heroY, animTime, heroActionState);
 
-        // Node Glow
-        if (isCurrent) {
-          mapCtx.fillStyle = "rgba(99, 102, 241, 0.25)";
-          mapCtx.beginPath();
-          mapCtx.arc(node.x, node.y, 24, 0, Math.PI * 2);
-          mapCtx.fill();
-        }
+      // Render Boss (Right Position)
+      const currentBoss = BOSS_ROSTER[State.currentBossIndex];
+      const bossX = w * 0.76;
+      const bossY = h - 45;
+      drawProceduralBoss(ctx, bossX, bossY, animTime, bossActionState, currentBoss);
 
-        // Base Circle
-        mapCtx.fillStyle = isCompleted ? "#10b981" : "#1e293b";
-        mapCtx.strokeStyle = isCurrent ? varColor("--accent") : (isCompleted ? "#10b981" : currentBiome.color);
-        mapCtx.lineWidth = isCurrent ? 3 : 2;
+      // Render Floating Combat Damage Numbers
+      drawFloatingTexts(ctx);
 
-        mapCtx.beginPath();
-        mapCtx.arc(node.x, node.y, 16, 0, Math.PI * 2);
-        mapCtx.fill();
-        mapCtx.stroke();
+      ctx.restore();
 
-        // Node Icons
-        let icon = "📍";
-        if (node.type === "camp") icon = "🏕️";
-        if (node.type === "chest") icon = "📦";
-        if (node.type === "elite") icon = "⚔️";
-        if (node.type === "secret") icon = "💎";
-        if (node.type === "boss") icon = "👑";
-
-        mapCtx.font = "14px sans-serif";
-        mapCtx.textAlign = "center";
-        mapCtx.textBaseline = "middle";
-        mapCtx.fillText(icon, node.x, node.y + 1);
-
-        // Node Title Tag
-        mapCtx.font = "10px sans-serif";
-        mapCtx.fillStyle = "#cbd5e1";
-        mapCtx.fillText(node.title, node.x, node.y + 26);
-      });
-
-      // Draw Hero Token
-      const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
-      if (cur) {
-        mapCtx.font = "20px sans-serif";
-        mapCtx.fillText("🛡️", cur.x, cur.y - 20);
+      // Action Timers countdown
+      if (heroActionState !== "idle") {
+        heroAnimTimer -= 0.05;
+        if (heroAnimTimer <= 0) heroActionState = "idle";
+      }
+      if (bossActionState !== "idle") {
+        bossAnimTimer -= 0.05;
+        if (bossAnimTimer <= 0) bossActionState = "idle";
       }
 
-      mapCtx.restore();
+      requestAnimationFrame(renderLoop);
     }
 
-    function varColor(cssVar) {
-      return getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim() || "#6366f1";
-    }
+    /* HERO 2D COMPOSITE MODEL RENDERING WITH VISIBLE GEAR */
+    function drawHeroCharacter(ctx, x, y, t, state) {
+      ctx.save();
+      let offsetX = 0;
+      let offsetY = Math.sin(t * 2) * 3; // Breathing
+      let hitFlash = false;
 
-    function onSelectMapNode(node) {
-      document.getElementById("locNodeTitle").innerText = node.title;
-      document.getElementById("locNodeDesc").innerText = node.desc;
+      if (state === "attack") {
+        offsetX = 28; // Lunging forward
+        offsetY = -4;
+      } else if (state === "hit") {
+        offsetX = -16; // Recoil back
+        hitFlash = true;
+      }
 
-      const isCompleted = AppState.worldState.completedNodes.includes(node.id);
-      const isCurrent = AppState.worldState.currentNodeId === node.id;
-      const statusEl = document.getElementById("locNodeStatus");
-      const actionArea = document.getElementById("locNodeActionArea");
+      ctx.translate(x + offsetX, y + offsetY);
 
-      statusEl.innerText = isCompleted ? "Исследовано" : (isCurrent ? "Текущее место" : "Доступно");
-      statusEl.className = isCompleted ? "badge badge-green" : "badge badge-gold";
+      // Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 22, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-      actionArea.innerHTML = "";
-
-      if (!isCurrent) {
-        const moveBtn = document.createElement("button");
-        moveBtn.className = "btn btn-block";
-        moveBtn.innerText = "Переместиться сюда ➔";
-        moveBtn.onclick = () => {
-          AppState.worldState.currentNodeId = node.id;
-          saveData();
-          showToast(`Герой прибыл в: ${node.title}`);
-          onSelectMapNode(node);
-          drawWorldMap();
-        };
-        actionArea.appendChild(moveBtn);
+      // Flashing on Damage
+      if (hitFlash) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(-18, -75, 36, 75);
+        ctx.restore();
         return;
       }
 
-      if (node.type === "chest" && !isCompleted) {
-        const btn = document.createElement("button");
-        btn.className = "btn btn-block";
-        btn.innerText = `Открыть Сундук (+${node.rewardCoins} 🪙)`;
-        btn.onclick = () => {
-          AppState.worldState.completedNodes.push(node.id);
-          addRewards(40, node.rewardCoins, "wealth", `Сундук: ${node.title}`);
-          addJournalEntry("loot", `Открыт ${node.title}`, `Получено ${node.rewardCoins} золотых монет.`);
-          onSelectMapNode(node);
-          drawWorldMap();
-        };
-        actionArea.appendChild(btn);
-      } else if (node.type === "secret" && !isCompleted) {
-        const btn = document.createElement("button");
-        btn.className = "btn btn-block";
-        btn.innerText = `Исследовать Тайник (+${node.rewardMat} Ресурса)`;
-        btn.onclick = () => {
-          AppState.worldState.completedNodes.push(node.id);
-          AppState.worldState.discoveredSecrets = (AppState.worldState.discoveredSecrets || 0) + 1;
-          AppState.hero.materials = (AppState.hero.materials || 0) + node.rewardMat;
-          addRewards(60, 20, "creativity", `Секрет: ${node.title}`);
-          addJournalEntry("secret", `Найден тайник: ${node.title}`, `Добыты редкие компоненты для кузницы.`);
-          onSelectMapNode(node);
-          drawWorldMap();
-        };
-        actionArea.appendChild(btn);
-      } else if (node.type === "boss" && !isCompleted) {
-        const btn = document.createElement("button");
-        btn.className = "btn btn-danger btn-block";
-        btn.innerText = "Атаковать Босса Области (Мини-Бой)";
-        btn.onclick = () => {
-          AppState.worldState.completedNodes.push(node.id);
-          damageBoss(4);
-          addRewards(150, 80, "discipline", `Победа над ${node.title}`);
-          addJournalEntry("boss", `Повержен владыка ${node.title}`, `Земли биома освобождены. Герой получает славу и трофеи.`);
-          showToast("⚔️ Босс биома повержен!");
-          onSelectMapNode(node);
-          drawWorldMap();
-        };
-        actionArea.appendChild(btn);
-      } else if (!isCompleted && node.type === "quest") {
-        const btn = document.createElement("button");
-        btn.className = "btn btn-block";
-        btn.innerText = "Закрыть Испытание Локации";
-        btn.onclick = () => {
-          AppState.worldState.completedNodes.push(node.id);
-          addRewards(50, 25, node.reqCat || "intelligence", node.title);
-          onSelectMapNode(node);
-          drawWorldMap();
-        };
-        actionArea.appendChild(btn);
+      const eq = State.hero.equipped;
+
+      // 1. Animated Cloak (Back)
+      ctx.fillStyle = eq.armor === "a_shadow" ? "#312e81" : "#1e293b";
+      ctx.beginPath();
+      ctx.moveTo(-10, -50);
+      ctx.quadraticCurveTo(-24 + Math.sin(t * 3) * 5, -20, -16 + Math.cos(t * 2) * 6, -5);
+      ctx.lineTo(2, -5);
+      ctx.closePath();
+      ctx.fill();
+
+      // 2. Legs & Boots
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(-9, -20, 6, 20);
+      ctx.fillRect(3, -20, 6, 20);
+
+      // 3. Body Torso Armor
+      ctx.fillStyle = eq.armor === "a_titan" ? "#78350f" : (eq.armor === "a_shadow" ? "#1e1b4b" : "#334155");
+      ctx.fillRect(-11, -50, 22, 32);
+
+      // Armor Chest Emblem
+      ctx.strokeStyle = eq.armor === "a_titan" ? "#f59e0b" : "#60a5fa";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-5, -44);
+      ctx.lineTo(0, -36);
+      ctx.lineTo(5, -44);
+      ctx.stroke();
+
+      // 4. Head & Hood / Helmet
+      ctx.fillStyle = "#1e293b";
+      ctx.beginPath();
+      ctx.arc(0, -58, 11, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glowing Eyes
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(-4, -60, 3, 2);
+      ctx.fillRect(2, -60, 3, 2);
+
+      // 5. Weapon in Right Hand (Visible Equipment Transformation)
+      ctx.save();
+      ctx.translate(10, -36);
+      if (state === "attack") {
+        ctx.rotate(0.9 + Math.sin(t * 10) * 0.4);
       } else {
-        actionArea.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center;">Зона полностью зачищена и безопасна.</div>`;
-      }
-    }
-
-    function openBiomeSelector() {
-      const list = document.getElementById("biomePickList");
-      list.innerHTML = "";
-      const heroLvl = calcLevel(AppState.hero.xp).level;
-
-      BIOMES_DATA.forEach(b => {
-        const isUnlocked = AppState.worldState.discoveredBiomes.includes(b.id);
-        const card = document.createElement("div");
-        card.className = "item-card";
-        card.style.opacity = isUnlocked ? "1" : "0.5";
-        card.innerHTML = `
-          <div>
-            <div style="font-weight:700; font-size:0.85rem; color:${b.color};">${b.name}</div>
-            <div class="muted" style="font-size:0.7rem;">Босс: ${b.boss} | Требуется: LVL ${b.reqLvl}</div>
-          </div>
-          <button class="btn btn-sm ${isUnlocked ? 'btn-secondary' : ''}" ${!isUnlocked ? 'disabled' : ''}>
-            ${isUnlocked ? (AppState.worldState.currentBiomeId === b.id ? 'Здесь' : 'Перейти') : '🔒 Закрыто'}
-          </button>
-        `;
-        if (isUnlocked) {
-          card.onclick = () => {
-            AppState.worldState.currentBiomeId = b.id;
-            const graph = generateWorldGraph(b.id);
-            mapNodes = graph.nodes;
-            mapEdges = graph.edges;
-            AppState.worldState.currentNodeId = mapNodes[0].id;
-            saveData();
-            closeModal("modal-biome-picker");
-            mapCenterHero();
-            drawWorldMap();
-            updateUI();
-          };
-        }
-        list.appendChild(card);
-      });
-      openModal("modal-biome-picker");
-    }
-
-    /* ==========================================================================
-       BUILDS & FORGE
-       ========================================================================== */
-    function renderBuildsView() {
-      const grid = document.getElementById("buildSelectionGrid");
-      grid.innerHTML = "";
-      Object.entries(BUILDS_PRESETS).forEach(([key, val]) => {
-        const isCurrent = AppState.hero.build === key;
-        const box = document.createElement("div");
-        box.className = `build-card ${isCurrent ? 'active' : ''}`;
-        box.innerHTML = `
-          <div style="font-size:1.1rem;">${val.icon} <strong>${val.name}</strong></div>
-          <div class="muted" style="font-size:0.68rem;">${val.desc}</div>
-        `;
-        box.onclick = () => {
-          AppState.hero.build = key;
-          saveData();
-          showToast(`Специализация изменена на: ${val.name}`);
-          renderBuildsView();
-          updateUI();
-        };
-        grid.appendChild(box);
-      });
-
-      document.getElementById("heroBuildBadge").innerText = BUILDS_PRESETS[AppState.hero.build]?.name || "Hero";
-    }
-
-    function renderForgeView() {
-      const cont = document.getElementById("forgeEquipmentContainer");
-      cont.innerHTML = "";
-      document.getElementById("forgeMaterialText").innerText = `🔩 ${AppState.hero.materials || 0} Ресурсов`;
-
-      AppState.equipment.forEach(eq => {
-        const costMat = eq.level * 2;
-        const costCoins = eq.level * 50;
-        const canUpgrade = (AppState.hero.materials >= costMat) && (AppState.hero.coins >= costCoins) && (eq.level < eq.maxLvl);
-
-        const card = document.createElement("div");
-        card.className = "item-card";
-        card.innerHTML = `
-          <div style="flex:1;">
-            <div style="font-weight:700; font-size:0.88rem;">${eq.name} <span class="badge badge-purple">+${eq.level}</span></div>
-            <div class="muted" style="font-size:0.72rem;">Эффект: ${eq.bonus}</div>
-            <div style="font-size:0.68rem; color:var(--accent-gold); margin-top:3px;">
-              ${eq.level < eq.maxLvl ? `Цена улучшения: ${costMat} 🔩 + ${costCoins} 🪙` : 'МАКСИМАЛЬНЫЙ УРОВЕНЬ'}
-            </div>
-          </div>
-          ${eq.level < eq.maxLvl ? `
-            <button class="btn btn-sm" onclick="upgradeEquipment('${eq.id}')" ${!canUpgrade ? 'disabled' : ''}>Заточить</button>
-          ` : ''}
-        `;
-        cont.appendChild(card);
-      });
-    }
-
-    function upgradeEquipment(id) {
-      const eq = AppState.equipment.find(x => x.id === id);
-      if (!eq) return;
-      const costMat = eq.level * 2;
-      const costCoins = eq.level * 50;
-
-      if (AppState.hero.materials < costMat || AppState.hero.coins < costCoins) {
-        return showToast("Не хватает ресурсов или монет!");
+        ctx.rotate(-0.3 + Math.sin(t * 2) * 0.1);
       }
 
-      AppState.hero.materials -= costMat;
-      AppState.hero.coins -= costCoins;
-      eq.level++;
-      saveData();
-      showToast(`Успешно улучшено: ${eq.name} +${eq.level}!`);
-      addJournalEntry("craft", `Кузница: ${eq.name} +${eq.level}`, `Экипировка усилена для битв на дальних рубежах.`);
-      renderForgeView();
-      updateUI();
+      if (eq.weapon === "w_magma") {
+        // Magma Blade
+        ctx.fillStyle = "#ea580c";
+        ctx.fillRect(-3, -42, 6, 42);
+        ctx.fillStyle = "#facc15";
+        ctx.fillRect(-1.5, -40, 3, 38);
+      } else if (eq.weapon === "w_daggers") {
+        // Dual Curved Daggers
+        ctx.fillStyle = "#cbd5e1";
+        ctx.fillRect(-2, -26, 4, 26);
+      } else {
+        // Paladin Greatsword
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillRect(-3.5, -48, 7, 48);
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillRect(-1, -44, 2, 40);
+        // Crossguard
+        ctx.fillStyle = "#d97706";
+        ctx.fillRect(-9, -10, 18, 4);
+      }
+      ctx.restore();
+
+      // Attack Slash Visual Effect
+      if (state === "attack") {
+        ctx.strokeStyle = "rgba(96, 165, 250, 0.85)";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(20, -36, 46, -0.6, 0.8);
+        ctx.stroke();
+      }
+
+      ctx.restore();
     }
 
-    /* ==========================================================================
-       ADVENTURE JOURNAL
-       ========================================================================== */
-    function addJournalEntry(type, title, text) {
-      AppState.adventureJournal.unshift({
-        id: "j_" + Date.now(),
-        date: getTodayKey(),
-        type,
-        title,
-        text
-      });
-      if (AppState.adventureJournal.length > 50) AppState.adventureJournal.pop();
-      saveData();
-    }
+    /* 10 FULLY UNIQUE 2D PROCEDURAL BOSSES */
+    function drawProceduralBoss(ctx, x, y, t, state, bData) {
+      ctx.save();
+      let offsetX = 0;
+      let offsetY = Math.sin(t * 1.8) * 4;
 
-    function renderJournalView() {
-      const list = document.getElementById("adventureJournalList");
-      list.innerHTML = "";
-      if (AppState.adventureJournal.length === 0) {
-        list.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center;">Журнал пуст. Время совершать подвиги!</div>`;
+      if (state === "attack") offsetX = -26;
+      else if (state === "hit") offsetX = 18;
+
+      ctx.translate(x + offsetX, y + offsetY);
+
+      // Boss Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 32, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Flashing on Hit
+      if (state === "hit") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(-28, -105, 56, 105);
+        ctx.restore();
         return;
       }
-      AppState.adventureJournal.forEach(j => {
-        const item = document.createElement("div");
-        item.className = "item-card";
-        item.style.flexDirection = "column";
-        item.style.alignItems = "flex-start";
-        item.innerHTML = `
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.7rem;" class="muted">
-            <span>${j.date}</span>
-            <span class="badge badge-cyan">${j.type.toUpperCase()}</span>
-          </div>
-          <div style="font-weight:700; font-size:0.85rem; margin: 3px 0;">${sanitize(j.title)}</div>
-          <div style="font-size:0.75rem; color:#cbd5e1;">${sanitize(j.text)}</div>
-        `;
-        list.appendChild(item);
-      });
+
+      // Procedural Model Splitting for each Boss
+      switch (bData.id) {
+        case "b_hollow": // 1. Hollow King
+          ctx.fillStyle = "#334155";
+          ctx.fillRect(-16, -70, 32, 50);
+          ctx.fillStyle = "#e2e8f0";
+          ctx.fillRect(-10, -92, 20, 20); // Skull
+          ctx.fillStyle = "#fbbf24"; // Crown
+          ctx.beginPath();
+          ctx.moveTo(-12, -92); ctx.lineTo(-6, -104); ctx.lineTo(0, -94); ctx.lineTo(6, -104); ctx.lineTo(12, -92);
+          ctx.fill();
+          // Blade
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillRect(-26, -95, 8, 85);
+          break;
+
+        case "b_butcher": // 2. Crimson Butcher
+          ctx.fillStyle = "#7f1d1d";
+          ctx.fillRect(-24, -75, 48, 55); // Fat hulking torso
+          ctx.fillStyle = "#450a0a";
+          ctx.fillRect(-20, -55, 40, 40); // Bloody Apron
+          ctx.fillStyle = "#dc2626";
+          ctx.beginPath(); ctx.arc(0, -85, 14, 0, Math.PI * 2); ctx.fill(); // Head
+          // Massive Cleaver
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillRect(-34, -70, 16, 45);
+          break;
+
+        case "b_tyrant": // 3. Clockwork Tyrant
+          ctx.fillStyle = "#78350f";
+          ctx.fillRect(-20, -80, 40, 60);
+          // Rotating Gear
+          ctx.strokeStyle = "#fbbf24";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(0, -50, 16, t * 2, t * 2 + Math.PI * 1.5);
+          ctx.stroke();
+          // Hammer
+          ctx.fillStyle = "#b45309";
+          ctx.fillRect(-32, -95, 14, 24);
+          ctx.fillRect(-26, -75, 6, 60);
+          break;
+
+        case "b_frost": // 4. Frost Executioner
+          ctx.fillStyle = "#0c4a6e";
+          ctx.fillRect(-18, -80, 36, 60);
+          ctx.fillStyle = "#38bdf8";
+          // Ice Spikes on Shoulders
+          ctx.beginPath(); ctx.moveTo(-24, -80); ctx.lineTo(-34, -100); ctx.lineTo(-14, -80); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(24, -80); ctx.lineTo(34, -100); ctx.lineTo(14, -80); ctx.fill();
+          // Frost Claymore
+          ctx.fillStyle = "#e0f2fe";
+          ctx.fillRect(-28, -105, 8, 95);
+          break;
+
+        case "b_leviathan": // 5. Abyssal Leviathan
+          ctx.fillStyle = "#3b0764";
+          ctx.beginPath(); ctx.arc(0, -60, 26, 0, Math.PI*2); ctx.fill();
+          // Multiple glowing eyes
+          ctx.fillStyle = "#c084fc";
+          for (let i = -12; i <= 12; i += 8) {
+            ctx.fillRect(i, -62, 4, 4);
+          }
+          // Animated Tentacles
+          ctx.strokeStyle = "#7e22ce";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(-18, -40); ctx.quadraticCurveTo(-38 + Math.sin(t*3)*8, -15, -28, 0); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(18, -40); ctx.quadraticCurveTo(38 + Math.cos(t*3)*8, -15, 28, 0); ctx.stroke();
+          break;
+
+        case "b_saint": // 6. Plague Saint
+          ctx.fillStyle = "#365314";
+          ctx.fillRect(-14, -75, 28, 65);
+          // Plague Mask (Long Beak)
+          ctx.fillStyle = "#fef08a";
+          ctx.beginPath(); ctx.moveTo(0, -84); ctx.lineTo(-18, -74); ctx.lineTo(0, -70); ctx.fill();
+          // Incense Censer with Green Smoke
+          ctx.strokeStyle = "#a3e635";
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(-22, -30 + Math.sin(t*3)*4, 7, 0, Math.PI*2); ctx.stroke();
+          break;
+
+        case "b_titan": // 7. Broken Titan
+          ctx.fillStyle = "#292524";
+          ctx.fillRect(-26, -85, 52, 65);
+          // Molten Core Fissure
+          ctx.fillStyle = "#f97316";
+          ctx.fillRect(-6, -65, 12, 30);
+          // Stone Fists
+          ctx.fillStyle = "#44403c";
+          ctx.fillRect(-36, -45, 14, 24);
+          ctx.fillRect(22, -45, 14, 24);
+          break;
+
+        case "b_doppel": // 8. Mirror Doppelganger
+          ctx.fillStyle = "#0f172a";
+          ctx.fillRect(-12, -65, 24, 45);
+          ctx.fillStyle = "#6366f1"; // Purple Glowing Aura
+          ctx.beginPath(); ctx.arc(0, -74, 12, 0, Math.PI*2); ctx.fill();
+          ctx.strokeStyle = "#818cf8"; ctx.lineWidth = 2;
+          ctx.strokeRect(-14, -67, 28, 49);
+          break;
+
+        case "b_stalker": // 9. Shadow Stalker
+          ctx.fillStyle = "#020617";
+          ctx.fillRect(-10, -70, 20, 50);
+          ctx.fillStyle = "#f43f5e";
+          ctx.fillRect(-4, -78, 8, 3); // Slit Visor
+          // Dual Scythes
+          ctx.strokeStyle = "#e11d48";
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(-20, -50, 16, 0.4, 2.5); ctx.stroke();
+          break;
+
+        case "b_chronos": // 10. Chronos Arch-Fiend
+          ctx.fillStyle = "#713f12";
+          ctx.fillRect(-16, -75, 32, 55);
+          // Giant Clockface Dial
+          ctx.strokeStyle = "#facc15";
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(0, -50, 24, 0, Math.PI*2); ctx.stroke();
+          // Spinning Clock Blades
+          ctx.fillStyle = "#fef08a";
+          ctx.save();
+          ctx.translate(0, -50);
+          ctx.rotate(t * 3);
+          ctx.fillRect(-2, -22, 4, 44);
+          ctx.restore();
+          break;
+      }
+
+      ctx.restore();
     }
 
-    function saveJournalNote() {
-      const txt = document.getElementById("journalNoteText").value.trim();
-      if (!txt) return showToast("Заполните текст заметки!");
-      addJournalEntry("note", "Заметка Путника", txt);
-      closeModal("modal-add-journal-note");
-      document.getElementById("journalNoteText").value = "";
-      renderJournalView();
-      showToast("Заметка записана в свиток!");
+    function addDamageText(text, x, y, color = "#ef4444") {
+      floatingTexts.push({ text, x, y, color, life: 1.0 });
+    }
+
+    function drawFloatingTexts(ctx) {
+      for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        const ft = floatingTexts[i];
+        ctx.fillStyle = ft.color;
+        ctx.font = "bold 16px -apple-system, sans-serif";
+        ctx.globalAlpha = ft.life;
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.globalAlpha = 1.0;
+        ft.y -= 1.2;
+        ft.life -= 0.03;
+        if (ft.life <= 0) floatingTexts.splice(i, 1);
+      }
     }
 
     /* ==========================================================================
-       QUESTS, POMODORO, BOSS, STATS
+       COMBAT CALCULATIONS & ENGINE
        ========================================================================== */
-    function toggleTask(id) {
-      const task = AppState.tasks.find(t => t.id === id);
-      if (!task) return;
-      const today = getTodayKey();
+    function performCombatAttack() {
+      if (State.bossHp <= 0) return;
 
-      if (task.completedDate === today) {
-        task.completedDate = null;
-        revertReward(task.title);
-      } else {
-        task.completedDate = today;
-        let dmg = 1;
-        if (AppState.hero.build === "berserker") dmg = 2;
-        damageBoss(dmg);
-        addRewards(task.xp, task.coins, task.category, task.title);
-      }
-      saveData();
-      renderQuestsView();
-      renderHomeView();
+      heroActionState = "attack";
+      heroAnimTimer = 0.35;
+
+      const baseDmg = State.attributes.strength * 1.5;
+      const isCrit = Math.random() < (State.attributes.luck * 0.02);
+      const finalDmg = Math.round(isCrit ? baseDmg * 2.2 : baseDmg);
+
+      setTimeout(() => {
+        bossActionState = "hit";
+        bossAnimTimer = 0.25;
+        screenShake = isCrit ? 1.5 : 0.8;
+
+        State.bossHp = Math.max(0, State.bossHp - finalDmg);
+        const w = canvas.width / (window.devicePixelRatio || 1);
+        addDamageText(isCrit ? `CRIT! -${finalDmg}` : `-${finalDmg}`, w * 0.72, canvas.height * 0.4, isCrit ? "#fbbf24" : "#ef4444");
+
+        document.getElementById("combatLogTxt").innerText = isCrit
+          ? `КРИТИЧЕСКИЙ УДАР! Нанесено ${finalDmg} урона!`
+          : `Вы нанесли клинком ${finalDmg} урона боссу!`;
+
+        if (State.bossHp <= 0) {
+          handleBossDefeated();
+        } else {
+          // Boss Counter-attack
+          triggerBossRetaliation();
+        }
+        updateInterface();
+      }, 150);
     }
 
-    function toggleHabit(id) {
-      const habit = AppState.habits.find(h => h.id === id);
-      if (!habit) return;
-      const today = getTodayKey();
-      const idx = habit.history.indexOf(today);
+    function performSkillSpecial() {
+      if (State.bossHp <= 0) return;
 
-      if (idx >= 0) {
-        habit.history.splice(idx, 1);
-        revertReward(`Привычка: ${habit.title}`);
-      } else {
-        habit.history.push(today);
-        addRewards(20, 10, habit.category, `Привычка: ${habit.title}`);
-      }
-      saveData();
-      renderQuestsView();
+      heroActionState = "attack";
+      heroAnimTimer = 0.4;
+
+      const spellDmg = Math.round(State.attributes.intelligence * 2.4);
+      setTimeout(() => {
+        bossActionState = "hit";
+        bossAnimTimer = 0.3;
+        screenShake = 1.2;
+
+        State.bossHp = Math.max(0, State.bossHp - spellDmg);
+        const w = canvas.width / (window.devicePixelRatio || 1);
+        addDamageText(`🔮 -${spellDmg}`, w * 0.72, canvas.height * 0.35, "#c084fc");
+
+        document.getElementById("combatLogTxt").innerText = `Магический импульс сжег ${spellDmg} HP врага!`;
+        if (State.bossHp <= 0) handleBossDefeated();
+        else triggerBossRetaliation();
+
+        updateInterface();
+      }, 150);
     }
 
-    function saveNewTask() {
-      const title = document.getElementById("newTaskTitle").value.trim();
-      if (!title) return showToast("Введите название!");
-      const cat = document.getElementById("newTaskCategory").value;
-      const type = document.getElementById("newTaskType").value;
-      const diff = document.getElementById("newTaskDiff").value;
+    function triggerBossRetaliation() {
+      setTimeout(() => {
+        if (State.bossHp <= 0) return;
+        bossActionState = "attack";
+        bossAnimTimer = 0.35;
 
-      let xp = 20, coins = 5;
-      if (diff === "medium") { xp = 40; coins = 15; }
-      if (diff === "hard") { xp = 80; coins = 30; }
+        setTimeout(() => {
+          heroActionState = "hit";
+          heroAnimTimer = 0.25;
+          screenShake = 0.6;
 
-      AppState.tasks.push({
+          const bossRawDmg = 14;
+          const absorbed = Math.floor(State.attributes.defense * 0.4);
+          const finalHit = Math.max(2, bossRawDmg - absorbed);
+
+          State.hero.curHp = Math.max(1, State.hero.curHp - finalHit);
+          const w = canvas.width / (window.devicePixelRatio || 1);
+          addDamageText(`-${finalHit}`, w * 0.24, canvas.height * 0.45, "#f87171");
+
+          updateInterface();
+        }, 120);
+      }, 400);
+    }
+
+    function handleBossDefeated() {
+      const b = BOSS_ROSTER[State.currentBossIndex];
+      showToast(`🏆 ПОБЕДА! ${b.name} повержен!`);
+      const rewardCoins = 60 + State.currentBossIndex * 25;
+      const rewardXp = 80 + State.currentBossIndex * 35;
+      gainExperience(rewardXp);
+      State.hero.coins += rewardCoins;
+
+      document.getElementById("combatLogTxt").innerText = `Босс повержен! Награда: +${rewardXp} XP, +${rewardCoins} 🪙`;
+
+      // Advance Boss
+      setTimeout(() => {
+        State.currentBossIndex = (State.currentBossIndex + 1) % BOSS_ROSTER.length;
+        State.bossHp = BOSS_ROSTER[State.currentBossIndex].maxHp;
+        State.hero.curHp = State.attributes.vitality * 10;
+        updateInterface();
+      }, 1200);
+    }
+
+    function cycleBossSelector() {
+      State.currentBossIndex = (State.currentBossIndex + 1) % BOSS_ROSTER.length;
+      State.bossHp = BOSS_ROSTER[State.currentBossIndex].maxHp;
+      showToast(`Враг сменен на: ${BOSS_ROSTER[State.currentBossIndex].name}`);
+      updateInterface();
+    }
+
+    /* ==========================================================================
+       PROGRESSION & ATTRIBUTE UPGRADES
+       ========================================================================== */
+    function gainExperience(amount) {
+      State.hero.xp += amount;
+      const req = getXpReq(getHeroLevel());
+      if (State.hero.xp >= req) {
+        State.hero.freePoints += 2;
+        showToast("🌟 ПОВЫШЕНИЕ УРОВНЯ! +2 очка характеристик!");
+      }
+      saveState();
+      updateInterface();
+    }
+
+    function getHeroLevel() {
+      return Math.floor(Math.pow(State.hero.xp / 100, 1 / 1.35)) + 1;
+    }
+
+    function getXpReq(lvl) {
+      return Math.floor(100 * Math.pow(lvl, 1.35));
+    }
+
+    function upgradeAttribute(statKey) {
+      if (State.hero.freePoints <= 0) return;
+      State.hero.freePoints--;
+      State.attributes[statKey]++;
+      if (statKey === "vitality") {
+        State.hero.curHp += 10;
+      }
+      saveState();
+      showToast(`Характеристика ${statKey.toUpperCase()} увеличена!`);
+      updateInterface();
+    }
+
+    /* ==========================================================================
+       QUESTS & HABITS
+       ========================================================================== */
+    function toggleTaskComplete(id) {
+      const t = State.tasks.find(x => x.id === id);
+      if (!t) return;
+
+      if (!t.done) {
+        t.done = true;
+        gainExperience(40);
+        State.hero.coins += 15;
+        // Direct Combat Strike on quest complete
+        performCombatAttack();
+        showToast(`Квест закрыт! +40 XP, +15 🪙 и сокрушительный удар!`);
+      } else {
+        t.done = false;
+        State.hero.xp = Math.max(0, State.hero.xp - 40);
+        State.hero.coins = Math.max(0, State.hero.coins - 15);
+      }
+      saveState();
+      updateInterface();
+    }
+
+    function createNewTask() {
+      const title = document.getElementById("taskTitleInput").value.trim();
+      const stat = document.getElementById("taskStatInput").value;
+      if (!title) return;
+
+      State.tasks.unshift({
         id: "t_" + Date.now(),
         title,
-        category: cat,
-        type,
-        diff,
-        xp,
-        coins,
-        completedDate: null
+        stat,
+        done: false
       });
-
-      saveData();
-      closeModal("modal-add-task");
-      document.getElementById("newTaskTitle").value = "";
-      showToast("Квест добавлен!");
-      updateUI();
+      document.getElementById("taskTitleInput").value = "";
+      closeModal("modal-task");
+      saveState();
+      showToast("Квест занесен в свиток!");
+      updateInterface();
     }
 
-    function saveNewHabit() {
-      const title = document.getElementById("newHabitTitle").value.trim();
-      if (!title) return showToast("Введите название!");
-      const cat = document.getElementById("newHabitCategory").value;
+    function createNewHabit() {
+      const title = document.getElementById("habitTitleInput").value.trim();
+      if (!title) return;
 
-      AppState.habits.push({ id: "h_" + Date.now(), title, category: cat, history: [] });
-      saveData();
-      closeModal("modal-add-habit");
-      document.getElementById("newHabitTitle").value = "";
+      State.habits.unshift({
+        id: "h_" + Date.now(),
+        title,
+        streak: 1,
+        doneToday: false
+      });
+      document.getElementById("habitTitleInput").value = "";
+      closeModal("modal-habit");
+      saveState();
       showToast("Привычка создана!");
-      updateUI();
+      updateInterface();
     }
 
-    function damageBoss(amount) {
-      if (AppState.boss.currentHp <= 0) return;
-      AppState.boss.currentHp = Math.max(0, AppState.boss.currentHp - amount);
-      if (AppState.boss.currentHp === 0) {
-        showToast(`⚔️ МИРОВОЙ БОСС ПОВЕРЖЕН! Получено ${AppState.boss.rewardCoins} 🪙!`);
-        AppState.hero.coins += AppState.boss.rewardCoins;
-        addJournalEntry("boss", `Победа над мировым боссом: ${AppState.boss.title}`, "Великое зло отступило.");
-        AppState.boss.maxHp = Math.round(AppState.boss.maxHp * 1.3);
-        AppState.boss.currentHp = AppState.boss.maxHp;
-        AppState.boss.rewardCoins = Math.round(AppState.boss.rewardCoins * 1.25);
-      }
-      saveData();
-    }
-
-    function saveNewProject() {
-      const title = document.getElementById("projTitle").value.trim();
-      const steps = parseInt(document.getElementById("projTotalSteps").value, 10) || 5;
-      if (!title) return showToast("Введите название!");
-
-      AppState.projects.push({ id: "p_" + Date.now(), title, totalSteps: steps, currentStep: 0 });
-      saveData();
-      closeModal("modal-add-project");
-      document.getElementById("projTitle").value = "";
-      updateUI();
-    }
-
-    function advanceProject(id) {
-      const p = AppState.projects.find(x => x.id === id);
-      if (!p || p.currentStep >= p.totalSteps) return;
-      p.currentStep++;
-      damageBoss(2);
-      addRewards(50, 25, "creativity", `Этап проекта: ${p.title}`);
-      if (p.currentStep === p.totalSteps) {
-        showToast(`🏆 ПРОЕКТ ЗАВЕРШЕН: ${p.title}!`);
-        addJournalEntry("goal", `Завершен проект: ${p.title}`, "Все намеченные этапы закрыты с триумфом.");
-      }
-      saveData();
-      updateUI();
-    }
-
-    /* Pomodoro Safari-Safe */
-    let timerTargetEnd = null;
-    let timerDurationSeconds = 25 * 60;
-    let timerTicker = null;
-    let isTimerRunning = false;
-
-    function setTimerDuration(mins) {
-      if (isTimerRunning) return showToast("Остановите таймер!");
-      timerDurationSeconds = mins * 60;
-      updateTimerDisplay(timerDurationSeconds);
-    }
-
-    function toggleTimer() {
-      if (!isTimerRunning) {
-        timerTargetEnd = Date.now() + timerDurationSeconds * 1000;
-        isTimerRunning = true;
-        document.getElementById("timerActionBtn").innerText = "Пауза";
-        document.getElementById("timerStatusLabel").innerText = "Фокус";
-        timerTicker = setInterval(tickTimer, 250);
+    function toggleHabitToday(id) {
+      const h = State.habits.find(x => x.id === id);
+      if (!h) return;
+      h.doneToday = !h.doneToday;
+      if (h.doneToday) {
+        h.streak++;
+        gainExperience(25);
+        State.hero.coins += 10;
+        showToast("Привычка соблюдена! +25 XP");
       } else {
-        const rem = Math.max(0, Math.round((timerTargetEnd - Date.now()) / 1000));
-        timerDurationSeconds = rem;
-        clearInterval(timerTicker);
-        isTimerRunning = false;
-        document.getElementById("timerActionBtn").innerText = "Старт";
-        document.getElementById("timerStatusLabel").innerText = "Пауза";
+        h.streak = Math.max(0, h.streak - 1);
       }
+      saveState();
+      updateInterface();
     }
 
-    function resetTimer() {
-      clearInterval(timerTicker);
-      isTimerRunning = false;
-      timerDurationSeconds = 25 * 60;
-      updateTimerDisplay(timerDurationSeconds);
-      document.getElementById("timerActionBtn").innerText = "Старт";
-      document.getElementById("timerStatusLabel").innerText = "Готов";
-    }
+    /* ==========================================================================
+       ARMORY & INVENTORY
+       ========================================================================== */
+    function buyOrEquipItem(itemId) {
+      const item = ARMORY_CATALOG.find(i => i.id === itemId);
+      if (!item) return;
 
-    function tickTimer() {
-      const remaining = Math.round((timerTargetEnd - Date.now()) / 1000);
-      if (remaining <= 0) {
-        clearInterval(timerTicker);
-        isTimerRunning = false;
-        updateTimerDisplay(0);
-        document.getElementById("timerActionBtn").innerText = "Старт";
-        document.getElementById("timerStatusLabel").innerText = "Завершено";
-        showToast("🔔 Фокус-сессия окончена! +35 XP");
-        addRewards(35, 15, "discipline", "Pomodoro фокус-сессия");
+      const isOwned = State.inventory.includes(itemId);
+      if (isOwned) {
+        // Equip
+        State.hero.equipped[item.type] = itemId;
+        showToast(`Экипировано: ${item.name}! Внешность обновлена.`);
       } else {
-        updateTimerDisplay(remaining);
+        // Buy
+        if (State.hero.coins < item.cost) {
+          showToast("Недостаточно золота!");
+          return;
+        }
+        State.hero.coins -= item.cost;
+        State.inventory.push(itemId);
+        State.hero.equipped[item.type] = itemId;
+        showToast(`Куплено и надето: ${item.name}!`);
       }
+      saveState();
+      updateInterface();
     }
 
-    function updateTimerDisplay(totalSecs) {
-      const m = Math.floor(totalSecs / 60);
-      const s = totalSecs % 60;
-      document.getElementById("timerDisplay").innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    /* ==========================================================================
+       UI CONTROLLERS & RENDERING
+       ========================================================================== */
+    function updateInterface() {
+      const lvl = getHeroLevel();
+      const req = getXpReq(lvl);
+      document.getElementById("heroNameTxt").innerText = State.hero.name;
+      document.getElementById("heroLvlBadge").innerText = `LVL ${lvl}`;
+      document.getElementById("xpCountTxt").innerText = `${State.hero.xp} / ${req} XP`;
+      document.getElementById("xpMeterFill").style.width = `${Math.min(100, (State.hero.xp / req) * 100)}%`;
+      document.getElementById("coinsCountTxt").innerText = State.hero.coins;
+      document.getElementById("shopCoinsVal").innerText = `🪙 ${State.hero.coins}`;
+      document.getElementById("streakCountTxt").innerText = `${State.hero.streak} дн.`;
+      document.getElementById("freePointsTxt").innerText = `Очки: ${State.hero.freePoints}`;
+
+      // HP Bars
+      const maxHeroHp = State.attributes.vitality * 10;
+      document.getElementById("heroHpText").innerText = `${State.hero.curHp}/${maxHeroHp}`;
+      document.getElementById("heroHpFill").style.width = `${(State.hero.curHp / maxHeroHp) * 100}%`;
+
+      const curBoss = BOSS_ROSTER[State.currentBossIndex];
+      document.getElementById("bossNameTxt").innerText = curBoss.name;
+      document.getElementById("bossHpText").innerText = `${State.bossHp}/${curBoss.maxHp}`;
+      document.getElementById("bossHpFill").style.width = `${(State.bossHp / curBoss.maxHp) * 100}%`;
+
+      // Render Attributes
+      renderAttributes();
+
+      // Render Task Decks
+      renderTasks();
+
+      // Render Armory
+      renderArmory();
     }
 
-    /* Charts (Canvas) */
-    let analyticsPeriodDays = 7;
-    function setAnalyticsPeriod(days, el) {
-      analyticsPeriodDays = days;
-      document.querySelectorAll("#view-stats .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
-      el.classList.add("active");
-      renderAnalyticsCharts();
-    }
-
-    function getDatesRange(days) {
-      const list = [];
-      for (let i = days - 1; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        list.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
-      }
-      return list;
-    }
-
-    function renderAnalyticsCharts() {
-      const dates = getDatesRange(analyticsPeriodDays);
-      const taskCounts = dates.map(dt => AppState.historyLog.filter(l => l.date === dt && l.type === "reward").length);
-
-      drawLineChart("chartTasks", dates.map(d => d.slice(5)), taskCounts, "#10b981");
-      document.getElementById("statTasksTotal").innerText = `${taskCounts.reduce((a,b)=>a+b, 0)} квестов`;
-
-      let runningXp = 0;
-      const xpValues = dates.map(dt => {
-        runningXp += AppState.historyLog.filter(l => l.date === dt).reduce((acc, c) => acc + (c.xp || 0), 0);
-        return runningXp;
-      });
-      drawLineChart("chartXp", dates.map(d => d.slice(5)), xpValues, "#6366f1");
-      document.getElementById("statXpTotal").innerText = `+${runningXp} XP`;
-
-      drawRadarChart("chartAttributes", AppState.attributes);
-      renderCalendarMatrix();
-    }
-
-    function drawLineChart(canvasId, labels, data, color) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, w, h);
-
-      const pad = 20;
-      const max = Math.max(...data, 4);
-      const stepX = (w - pad * 2) / (data.length - 1 || 1);
-
-      ctx.beginPath();
-      data.forEach((val, i) => {
-        const x = pad + i * stepX;
-        const y = h - pad - (val / max) * (h - pad * 2);
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-    }
-
-    function drawRadarChart(canvasId, attributes) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, w, h);
-
-      const center = { x: w / 2, y: h / 2 };
-      const radius = Math.min(w, h) / 2.6;
-      const keys = Object.keys(attributes);
-      const total = keys.length;
-      const maxAttr = Math.max(...Object.values(attributes), 50);
-
-      ctx.beginPath();
-      keys.forEach((k, i) => {
-        const angle = (i * 2 * Math.PI) / total - Math.PI / 2;
-        const dist = (attributes[k] / maxAttr) * radius;
-        const x = center.x + dist * Math.cos(angle);
-        const y = center.y + dist * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.closePath();
-      ctx.fillStyle = "rgba(139, 92, 246, 0.25)";
-      ctx.fill();
-      ctx.strokeStyle = "#8b5cf6";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    function renderCalendarMatrix() {
-      const container = document.getElementById("calendarMatrix");
-      container.innerHTML = "";
-      const dates = getDatesRange(28);
-      const today = getTodayKey();
-
-      dates.forEach(d => {
-        const logs = AppState.historyLog.filter(l => l.date === d);
-        const cell = document.createElement("div");
-        let lvlClass = "";
-        if (logs.length >= 1) lvlClass = "lvl-1";
-        if (logs.length >= 3) lvlClass = "lvl-2";
-        if (logs.length >= 5) lvlClass = "lvl-3";
-
-        cell.className = `cal-cell ${lvlClass} ${d === today ? 'today' : ''}`;
-        cell.innerText = d.slice(8);
-        cell.onclick = () => {
-          document.getElementById("matrixLogDetail").innerHTML = `
-            <strong>${d}:</strong> Активностей: ${logs.length} | XP: ${logs.reduce((a,b)=>a+b.xp,0)}
-          `;
-        };
-        container.appendChild(cell);
-      });
-    }
-
-    /* General UI Update */
-    function updateUI() {
-      evaluateDailyStreak();
-
-      const lvlData = calcLevel(AppState.hero.xp);
-      document.getElementById("heroName").innerText = AppState.hero.name;
-      document.getElementById("heroLevelBadge").innerText = `LVL ${lvlData.level}`;
-      document.getElementById("heroCoins").innerText = AppState.hero.coins;
-      document.getElementById("heroStreak").innerText = `${AppState.hero.streak} дн.`;
-
-      const rangeXp = lvlData.curReq - lvlData.prevReq;
-      const currentProgressXp = AppState.hero.xp - lvlData.prevReq;
-      const pct = Math.min(100, Math.max(0, (currentProgressXp / rangeXp) * 100));
-      document.getElementById("heroXpFill").style.width = `${pct}%`;
-      document.getElementById("heroXpText").innerText = `${currentProgressXp} / ${rangeXp} XP`;
-
-      // Home View Data
-      const today = getTodayKey();
-      document.getElementById("currentDateStr").innerText = today;
-      const dailyTasks = AppState.tasks.filter(t => t.type === "daily");
-      const doneToday = dailyTasks.filter(t => t.completedDate === today);
-      document.getElementById("homeDailyDoneCount").innerText = `${doneToday.length} / ${dailyTasks.length}`;
-
-      const todayXp = AppState.historyLog.filter(l => l.date === today).reduce((acc, c) => acc + (c.xp || 0), 0);
-      document.getElementById("homeTodayXp").innerText = `+${todayXp}`;
-
-      const totalBiomes = BIOMES_DATA.length;
-      const discBiomes = (AppState.worldState.discoveredBiomes || []).length;
-      document.getElementById("homeExplorationPct").innerText = `${Math.round((discBiomes / totalBiomes) * 100)}%`;
-
-      // Map tags
-      const curBiome = BIOMES_DATA.find(b => b.id === AppState.worldState.currentBiomeId) || BIOMES_DATA[0];
-      document.getElementById("mapBiomeNameTag").innerText = `Земля: ${curBiome.name}`;
-      document.getElementById("mapDiscoveredTag").innerText = `Исследовано: ${discBiomes}/${totalBiomes}`;
-
-      // Urgent Tasks Home
-      const listEl = document.getElementById("homeUrgentList");
-      listEl.innerHTML = "";
-      const pending = AppState.tasks.filter(t => t.completedDate !== today).slice(0, 3);
-      if (pending.length === 0) {
-        listEl.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center; padding:10px;">Все срочные дела выполнены! 🔥</div>`;
-      } else {
-        pending.forEach(t => listEl.appendChild(createTaskCardEl(t, today)));
-      }
-
-      // Boss Card
-      document.getElementById("bossTitle").innerText = AppState.boss.title;
-      document.getElementById("bossHpText").innerText = `HP: ${AppState.boss.currentHp} / ${AppState.boss.maxHp}`;
-      document.getElementById("bossRewardTag").innerText = `+${AppState.boss.rewardCoins} 🪙`;
-      document.getElementById("bossHpFill").style.width = `${(AppState.boss.currentHp / AppState.boss.maxHp) * 100}%`;
-
-      // Attributes Grid
-      const attrGrid = document.getElementById("heroAttributesGrid");
-      attrGrid.innerHTML = "";
-      Object.entries(AppState.attributes).forEach(([attr, val]) => {
+    function renderAttributes() {
+      const grid = document.getElementById("attributesGrid");
+      grid.innerHTML = "";
+      Object.entries(State.attributes).forEach(([k, v]) => {
         const box = document.createElement("div");
-        box.style.background = "var(--panel)";
-        box.style.padding = "8px";
-        box.style.borderRadius = "8px";
-        box.style.fontSize = "0.75rem";
-        box.innerHTML = `<strong>${attr.toUpperCase()}</strong>: <span style="color:var(--accent);">${val}</span>`;
-        attrGrid.appendChild(box);
-      });
-
-      renderQuestsView();
-      renderBuildsView();
-      renderForgeView();
-      renderJournalView();
-      renderAnalyticsCharts();
-    }
-
-    function renderQuestsView() {
-      const today = getTodayKey();
-      const search = (document.getElementById("taskSearchInput")?.value || "").toLowerCase();
-
-      const tasksContainer = document.getElementById("tasksListContainer");
-      tasksContainer.innerHTML = "";
-      const activeTasks = AppState.tasks.filter(t => t.completedDate !== today && t.title.toLowerCase().includes(search));
-      if (activeTasks.length === 0) {
-        tasksContainer.innerHTML = `<div class="muted" style="font-size:0.75rem; text-align:center; padding:16px;">Список квестов пуст</div>`;
-      } else {
-        activeTasks.forEach(t => tasksContainer.appendChild(createTaskCardEl(t, today)));
-      }
-
-      const habitsContainer = document.getElementById("habitsListContainer");
-      habitsContainer.innerHTML = "";
-      AppState.habits.forEach(h => {
-        const isDone = h.history.includes(today);
-        const card = document.createElement("div");
-        card.className = `item-card ${isDone ? 'completed' : ''}`;
-        card.innerHTML = `
-          <div class="item-left">
-            <div class="check-circle" onclick="toggleHabit('${h.id}')">${isDone ? '✓' : ''}</div>
-            <div>
-              <div style="font-size:0.85rem; font-weight:600;">${sanitize(h.title)}</div>
-              <div class="muted" style="font-size:0.7rem;">Серия: ${h.history.length} дн.</div>
-            </div>
+        box.className = "stat-row";
+        box.innerHTML = `
+          <div class="stat-meta">
+            <div class="stat-name">${k}</div>
+            <div class="stat-val">${v}</div>
           </div>
-          <span class="badge badge-purple">+20 XP</span>
+          <button class="btn-upgrade" onclick="upgradeAttribute('${k}')" ${State.hero.freePoints > 0 ? '' : 'disabled'}>＋</button>
         `;
-        habitsContainer.appendChild(card);
+        grid.appendChild(box);
       });
     }
 
-    function createTaskCardEl(t, today) {
-      const isDone = t.completedDate === today;
-      const el = document.createElement("div");
-      el.className = `item-card ${isDone ? 'completed' : ''}`;
-      el.innerHTML = `
-        <div class="item-left">
-          <div class="check-circle" onclick="toggleTask('${t.id}')">${isDone ? '✓' : ''}</div>
-          <div>
-            <div style="font-size:0.85rem; font-weight:600;">${sanitize(t.title)}</div>
-            <div style="display:flex; gap:6px; font-size:0.68rem; margin-top:2px;">
-              <span class="badge badge-gold">+${t.xp} XP</span>
-              <span class="muted">${t.category}</span>
+    function renderTasks() {
+      const bCont = document.getElementById("battleTasksContainer");
+      const fCont = document.getElementById("fullTasksContainer");
+      bCont.innerHTML = "";
+      fCont.innerHTML = "";
+
+      State.tasks.forEach(t => {
+        const card = document.createElement("div");
+        card.className = `quest-card ${t.done ? 'done' : ''}`;
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="check-box" onclick="toggleTaskComplete('${t.id}')">${t.done ? '✓' : ''}</div>
+            <div>
+              <div class="quest-name" style="font-size:0.82rem; font-weight:700;">${t.title}</div>
+              <small style="font-size:0.65rem; color:#94a3b8;">${t.stat.toUpperCase()}</small>
             </div>
           </div>
-        </div>
-      `;
-      return el;
+          <span style="font-size:0.7rem; font-weight:700; color:#fbbf24;">+40 XP</span>
+        `;
+        fCont.appendChild(card);
+      });
+
+      // Show first 2 in battle HUD
+      State.tasks.slice(0, 2).forEach(t => {
+        const el = document.createElement("div");
+        el.className = `quest-card ${t.done ? 'done' : ''}`;
+        el.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="check-box" onclick="toggleTaskComplete('${t.id}')">${t.done ? '✓' : ''}</div>
+            <span class="quest-name" style="font-size:0.8rem; font-weight:700;">${t.title}</span>
+          </div>
+          <span style="font-size:0.7rem; color:#ef4444; font-weight:800;">АТАКА</span>
+        `;
+        bCont.appendChild(el);
+      });
+
+      // Habits
+      const hCont = document.getElementById("habitsContainer");
+      hCont.innerHTML = "";
+      State.habits.forEach(h => {
+        const card = document.createElement("div");
+        card.className = `quest-card ${h.doneToday ? 'done' : ''}`;
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="check-box" onclick="toggleHabitToday('${h.id}')">${h.doneToday ? '✓' : ''}</div>
+            <div>
+              <div class="quest-name" style="font-size:0.82rem; font-weight:700;">${h.title}</div>
+              <small style="font-size:0.65rem; color:#f97316;">Серия: ${h.streak} дн.</small>
+            </div>
+          </div>
+          <span style="font-size:0.7rem; font-weight:700; color:#fbbf24;">+25 XP</span>
+        `;
+        hCont.appendChild(card);
+      });
     }
 
-    /* Navigation & Tabs */
-    function switchTab(tabId) {
+    function renderArmory() {
+      const gGrid = document.getElementById("armoryItemsGrid");
+      const eqGrid = document.getElementById("equippedGearGrid");
+      gGrid.innerHTML = "";
+      eqGrid.innerHTML = "";
+
+      ARMORY_CATALOG.forEach(item => {
+        const isOwned = State.inventory.includes(item.id);
+        const isEquipped = State.hero.equipped[item.type] === item.id;
+
+        const slot = document.createElement("div");
+        slot.className = `gear-slot ${isEquipped ? 'equipped' : ''}`;
+        slot.innerHTML = `
+          <div style="font-size:1.4rem;">${item.icon}</div>
+          <div style="font-size:0.7rem; font-weight:700;">${item.name}</div>
+          <div style="font-size:0.62rem; color:#fbbf24;">
+            ${isEquipped ? 'НАДЕТО' : (isOwned ? 'В ИНВЕНТАРЕ' : `${item.cost} 🪙`)}
+          </div>
+        `;
+        slot.onclick = () => buyOrEquipItem(item.id);
+        gGrid.appendChild(slot);
+
+        if (isEquipped) {
+          const eqSlot = slot.cloneNode(true);
+          eqGrid.appendChild(eqSlot);
+        }
+      });
+    }
+
+    /* Tabs Navigation */
+    function switchMainTab(tabId) {
       document.querySelectorAll(".view-pane").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".bottom-nav .nav-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
 
       const target = document.getElementById(`view-${tabId}`);
       if (target) target.classList.add("active");
 
-      const map = { home: 0, world: 1, quests: 2, goals: 3, stats: 4, hero: 5 };
-      const btns = document.querySelectorAll(".bottom-nav .nav-btn");
+      const map = { battle: 0, character: 1, quests: 2, armory: 3, settings: 4 };
+      const btns = document.querySelectorAll(".nav-dock .nav-item");
       if (btns[map[tabId]]) btns[map[tabId]].classList.add("active");
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      if (tabId === "world") {
-        setTimeout(() => {
-          if (!mapNodes.length) {
-            const graph = generateWorldGraph(AppState.worldState.currentBiomeId);
-            mapNodes = graph.nodes;
-            mapEdges = graph.edges;
-          }
-          initMapCanvas();
-          mapCenterHero();
-          drawWorldMap();
-          const cur = mapNodes.find(n => n.id === AppState.worldState.currentNodeId) || mapNodes[0];
-          if (cur) onSelectMapNode(cur);
-        }, 50);
-      }
-      updateUI();
     }
 
-    function switchHeroSubTab(sub, el) {
-      document.querySelectorAll("#view-hero .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
-      el.classList.add("active");
-      document.getElementById("subtab-hero-builds").style.display = sub === "builds" ? "block" : "none";
-      document.getElementById("subtab-hero-forge").style.display = sub === "forge" ? "block" : "none";
-      document.getElementById("subtab-hero-journal").style.display = sub === "journal" ? "block" : "none";
-      document.getElementById("subtab-hero-settings").style.display = sub === "settings" ? "block" : "none";
+    function openModal(id) { document.getElementById(id).classList.add("active"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+
+    function showToast(msg) {
+      const shelf = document.getElementById("toast-shelf");
+      const t = document.createElement("div");
+      t.className = "dark-toast";
+      t.innerText = msg;
+      shelf.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = "0";
+        setTimeout(() => t.remove(), 250);
+      }, 2400);
     }
 
-    function switchQuestSubTab(sub, el) {
-      document.querySelectorAll("#view-quests .segment-bar .segment-item").forEach(i => i.classList.remove("active"));
-      el.classList.add("active");
-      document.getElementById("subtab-tasks").style.display = sub === "tasks" ? "block" : "none";
-      document.getElementById("subtab-habits").style.display = sub === "habits" ? "block" : "none";
-      document.getElementById("subtab-archive").style.display = sub === "archive" ? "block" : "none";
-    }
-
-    /* Backup / Import */
+    /* JSON Backup & Restore */
     function exportDataJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState, null, 2));
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(State, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
-      a.download = `Productivity_RPG_World_${getTodayKey()}.json`;
+      a.download = `DarkRPG_Backup_${getTodayDateString()}.json`;
       a.click();
+      showToast("Резервная копия скачана!");
     }
 
     function importDataJSON(event) {
@@ -2049,76 +1518,38 @@
       reader.onload = function(e) {
         try {
           const parsed = JSON.parse(e.target.result);
-          AppState = { ...DEFAULT_DATA, ...parsed };
-          saveData();
-          showToast("Мир и данные восстановлены!");
-          updateUI();
+          State = parsed;
+          saveState();
+          showToast("Данные успешно восстановлены!");
+          updateInterface();
         } catch (err) {
-          showToast("Ошибка чтения файла JSON!");
+          showToast("Ошибка чтения JSON!");
         }
       };
       reader.readAsText(file);
     }
 
-    function exportStatsCSV() {
-      let csv = "Date,Type,Title,XP,Coins\n";
-      AppState.historyLog.forEach(l => {
-        csv += `"${l.date}","${l.type}","${l.title.replace(/"/g, '""')}",${l.xp},${l.coins}\n`;
-      });
-      const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-      const a = document.createElement("a");
-      a.href = dataStr;
-      a.download = `Productivity_Logs_${getTodayKey()}.csv`;
-      a.click();
-    }
-
-    function resetAllProgress() {
-      if (confirm("Сбросить весь прогресс и карту мира?")) {
-        localStorage.removeItem(STORAGE_KEY);
-        AppState = JSON.parse(JSON.stringify(DEFAULT_DATA));
-        saveData();
-        updateUI();
+    function resetGameProgress() {
+      if (confirm("Вы уверены? Весь накопленный опыт, снаряжение и боссы будут сброшены!")) {
+        localStorage.removeItem(GAME_KEY);
+        State = initDefaultState();
+        saveState();
+        updateInterface();
+        showToast("Прогресс сброшен до нуля.");
       }
     }
 
-    function updateHeroProfile() {
-      const name = document.getElementById("settingHeroName").value.trim();
-      if (name) {
-        AppState.hero.name = name;
-        saveData();
-        showToast("Имя обновлено!");
-        updateUI();
-      }
-    }
-
-    function openModal(id) { document.getElementById(id).classList.add("active"); }
-    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
-
-    function showToast(msg) {
-      const container = document.getElementById("toast-container");
-      const toast = document.createElement("div");
-      toast.className = "toast";
-      toast.innerText = msg;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = "0";
-        setTimeout(() => toast.remove(), 250);
-      }, 2400);
-    }
-
-    document.querySelectorAll(".modal-overlay").forEach(overlay => {
-      overlay.addEventListener("click", (e) => {
-        if (e.target === overlay) overlay.classList.remove("active");
+    // Modal curtain auto-close
+    document.querySelectorAll(".modal-curtain").forEach(c => {
+      c.addEventListener("click", (e) => {
+        if (e.target === c) c.classList.remove("active");
       });
     });
 
     window.addEventListener("DOMContentLoaded", () => {
-      const graph = generateWorldGraph(AppState.worldState.currentBiomeId);
-      mapNodes = graph.nodes;
-      mapEdges = graph.edges;
-      updateUI();
+      initCanvasRenderer();
+      updateInterface();
     });
   </script>
 </body>
 </html>
-
